@@ -4,4 +4,4 @@ build-bnbnav-frontend-Desktop_6-Debug/
 moc_*
 *.o
 .qmake.stash
-db.js
+data.json
