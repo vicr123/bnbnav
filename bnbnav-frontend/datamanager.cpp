@@ -25,12 +25,14 @@
 #include "node.h"
 #include "road.h"
 #include "edge.h"
+#include "player.h"
 #include "datagatherer.h"
 
 struct DataManagerPrivate {
     QMap<QString, Node*> nodes;
     QMap<QString, Edge*> edges;
     QMap<QString, Road*> roads;
+    QMap<QString, Player*> players;
 };
 
 DataManager* DataManager::instance() {
@@ -48,6 +50,10 @@ QMap<QString, Edge*> DataManager::edges() {
 
 QMap<QString, Road*> DataManager::roads() {
     return instance()->d->roads;
+}
+
+QList<Player*> DataManager::players() {
+    return instance()->d->players.values();
 }
 
 Edge* DataManager::edgeForNodes(Node* from, Node* to) {
@@ -125,6 +131,12 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         } else if (type == "nodeRemoved") {
             d->nodes.remove(id);
             emit removedNode();
+        } else if (type == "playerMove") {
+            if (!d->players.contains(id)) {
+                d->players.insert(id, new Player(id));
+            }
+            d->players.value(id)->update(object);
+            emit playerUpdate();
         }
     });
 }

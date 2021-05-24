@@ -31,6 +31,7 @@
 #include "edge.h"
 #include "node.h"
 #include "road.h"
+#include "player.h"
 #include "statemanager.h"
 
 struct MapWidgetPrivate {
@@ -68,6 +69,18 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     connect(DataManager::instance(), &DataManager::newEdge, this, [ = ] {
         update();
     });
+    connect(DataManager::instance(), &DataManager::removedEdge, this, [ = ] {
+        update();
+    });
+    connect(DataManager::instance(), &DataManager::removedNode, this, [ = ] {
+        update();
+    });
+    connect(DataManager::instance(), &DataManager::removedRoad, this, [ = ] {
+        update();
+    });
+    connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ] {
+        update();
+    });
     connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
         update();
     });
@@ -89,6 +102,10 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     painter.setTransform(currentTransform());
     painter.setRenderHint(QPainter::Antialiasing);
 
+    QFont font = painter.font();
+    font.setPixelSize(5);
+    painter.setFont(font);
+
     for (Edge* edge : DataManager::edges().values()) {
         //Draw the edge
         Node* from = edge->from();
@@ -100,6 +117,25 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         }
 
         painter.drawLine(from->x(), from->z(), to->x(), to->z());
+    }
+
+    //Draw players
+    for (Player* player : DataManager::players()) {
+        painter.setPen(Qt::white);
+        painter.setBrush(Qt::red);
+        QRectF circle;
+        circle.setSize(QSizeF(5, 5));
+        circle.moveCenter(QPointF(player->x(), player->z()));
+        painter.drawEllipse(circle);
+
+        painter.setPen(Qt::black);
+
+        QRectF text;
+        text.setHeight(painter.fontMetrics().height());
+        text.setWidth(painter.fontMetrics().horizontalAdvance(player->name()));
+        text.moveCenter(circle.center());
+        text.moveTop(circle.bottom() + 1);
+        painter.drawText(text, player->name());
     }
 
     if (StateManager::currentState() == StateManager::Edit) {

@@ -25,6 +25,7 @@
 class Node;
 class Edge;
 class Road;
+class Player;
 
 struct DataManagerPrivate;
 class DataManager : public QObject {
@@ -35,6 +36,7 @@ class DataManager : public QObject {
         static QMap<QString, Node*> nodes();
         static QMap<QString, Edge*> edges();
         static QMap<QString, Road*> roads();
+        static QList<Player*> players();
 
         static Edge* edgeForNodes(Node* from, Node* to);
         static QSet<QString> roadsConnectedToNode(Node* node);
@@ -48,6 +50,7 @@ class DataManager : public QObject {
         void removedRoad();
         void removedEdge();
         void loadError();
+        void playerUpdate();
 
     private:
         explicit DataManager(QObject* parent = nullptr);

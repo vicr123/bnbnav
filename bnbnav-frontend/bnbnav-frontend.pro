@@ -18,6 +18,7 @@ SOURCES += \
     newroaddialog.cpp \
     node.cpp \
     nodeconnectdialog.cpp \
+    player.cpp \
     road.cpp \
     statemanager.cpp \
     topwidget.cpp
@@ -31,6 +32,7 @@ HEADERS += \
     newroaddialog.h \
     node.h \
     nodeconnectdialog.h \
+    player.h \
     road.h \
     statemanager.h \
     topwidget.h
