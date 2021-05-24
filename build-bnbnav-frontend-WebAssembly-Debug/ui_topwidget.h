@@ -12,6 +12,7 @@
 #include <QtCore/QVariant>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QHBoxLayout>
+#include <QtWidgets/QLabel>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QWidget>
@@ -22,6 +23,7 @@ class Ui_TopWidget
 {
 public:
     QHBoxLayout *horizontalLayout;
+    QLabel *panLabel;
     QSpacerItem *horizontalSpacer;
     QPushButton *editModeButton;
 
@@ -32,7 +34,13 @@ public:
         TopWidget->resize(400, 94);
         horizontalLayout = new QHBoxLayout(TopWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
-        horizontalSpacer = new QSpacerItem(293, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+        panLabel = new QLabel(TopWidget);
+        panLabel->setObjectName(QString::fromUtf8("panLabel"));
+        panLabel->setText(QString::fromUtf8("x: 0   y: 0"));
+
+        horizontalLayout->addWidget(panLabel);
+
+        horizontalSpacer = new QSpacerItem(230, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 

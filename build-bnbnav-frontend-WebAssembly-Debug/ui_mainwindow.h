@@ -24,7 +24,7 @@ class Ui_MainWindow
 public:
     QWidget *centralwidget;
     QVBoxLayout *verticalLayout;
-    TopWidget *widget;
+    TopWidget *topWidget;
     QSpacerItem *verticalSpacer;
 
     void setupUi(QMainWindow *MainWindow)
@@ -38,10 +38,10 @@ public:
         verticalLayout->setSpacing(0);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        widget = new TopWidget(centralwidget);
-        widget->setObjectName(QString::fromUtf8("widget"));
+        topWidget = new TopWidget(centralwidget);
+        topWidget->setObjectName(QString::fromUtf8("topWidget"));
 
-        verticalLayout->addWidget(widget);
+        verticalLayout->addWidget(topWidget);
 
         verticalSpacer = new QSpacerItem(20, 587, QSizePolicy::Minimum, QSizePolicy::Expanding);
 
