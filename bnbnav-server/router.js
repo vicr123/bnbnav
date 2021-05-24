@@ -42,7 +42,8 @@ router.post("/nodes/add", async (req, res) => {
         id: id
     });
 });
-router.delete("/nodes/{id}", async (req, res) => {
+router.delete("/nodes/:id", async (req, res) => {
+    let id = req.params
     if (!db.data.nodes[req.params.id]) {
         res.sendStatus(404);
         return;
