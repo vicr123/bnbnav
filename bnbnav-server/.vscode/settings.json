@@ -1,0 +1,11 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "bnbnav",
+            "database": "${workspaceFolder:bnbnav-server}/database.db"
+        }
+    ],
+    "sqltools.useNodeRuntime": true
+}

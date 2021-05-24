@@ -1,0 +1,6 @@
+node_modules/
+build-bnbnav-frontend-Desktop-Debug/
+build-bnbnav-frontend-Desktop_6-Debug/
+moc_*
+*.o
+.qmake.stash
