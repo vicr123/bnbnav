@@ -33,7 +33,7 @@ TopWidget::~TopWidget() {
 }
 
 void TopWidget::setPan(int x, int y) {
-    ui->panLabel->setText(QStringLiteral("x: %1   y: %2").arg(x, y));
+    ui->panLabel->setText(QStringLiteral("x: %1 y: %2").arg(x).arg(y));
 }
 
 void TopWidget::on_editModeButton_toggled(bool checked) {
