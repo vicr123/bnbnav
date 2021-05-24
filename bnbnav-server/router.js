@@ -53,7 +53,7 @@ router.delete("/nodes/:id", async (req, res) => {
         let edge = db.data.edges[edgeId];
         if (edge.node1 == req.params.id || edge.node2 == req.params.id) {
             delete db.data.edges[edgeId];
-            ws.broadcasts({
+            ws.broadcast({
                 type: "edgeRemoved",
                 id: edgeId
             })
