@@ -1,5 +1,7 @@
 package com.vicr123.bnbnav;
 
+import com.vicr123.bnbnav.commands.AddRoadNodeCommand;
+import kong.unirest.Unirest;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BnbnavPlugin extends JavaPlugin {
@@ -9,9 +11,19 @@ public class BnbnavPlugin extends JavaPlugin {
         return plugin;
     }
 
+    public static final String API_BASE = "http://localhost:5813/api";
+    public static final String AUTH_TOKEN = "%NJJ8r5Dv5s8^qhurgFAXSCJS!%7#BQ$";
+
     @Override
     public void onEnable() {
         plugin = getPlugin(BnbnavPlugin.class);
+
+        Unirest.config()
+                .defaultBaseUrl(API_BASE)
+                .setDefaultHeader("Authorization", "Bearer " + AUTH_TOKEN);
+
+        this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand());
+
         getLogger().info("bnbnav is ready!");
     }
 
