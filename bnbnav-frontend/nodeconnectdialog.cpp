@@ -94,6 +94,7 @@ void NodeConnectDialog::on_okButton_clicked() {
 
                 this->accept();
             });
+            return;
         }
 
         this->accept();
