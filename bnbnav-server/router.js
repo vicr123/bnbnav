@@ -43,6 +43,11 @@ router.post("/nodes/add", async (req, res) => {
     });
 });
 router.delete("/nodes/{id}", async (req, res) => {
+    if (!db.data.nodes[req.params.id]) {
+        res.sendStatus(404);
+        return;
+    }
+
     for (let edgeId of Object.keys(db.data.edges)) {
         let edge = db.data.edges[edge];
         if (edge.node1 == req.params.id || edge.node2 == req.params.id) {

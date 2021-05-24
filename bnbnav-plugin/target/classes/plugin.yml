@@ -1,0 +1,6 @@
+name: BnbNav
+version: 1.0
+main: com.vicr123.bnbnav.BnbnavPlugin
+commands:
+  addroadnode:
+    description: Adds a node to the map
