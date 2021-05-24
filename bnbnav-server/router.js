@@ -125,5 +125,21 @@ router.post("/edges/add", async (req, res) => {
         id: id.toString()
     });
 });
+router.post("/player/:player", async (req, res) => {
+    ws.broadcast({
+        type: "playerMove",
+        ...req.body
+    });
+
+    res.sendStatus(200);
+});
+router.delete("/player/:player", async (req, res) => {
+    ws.broadcast({
+        type: "playerGone",
+        ...req.body
+    });
+
+    res.sendStatus(200);
+});
 
 module.exports = router;

@@ -3,6 +3,8 @@ package com.vicr123.bnbnav;
 import com.vicr123.bnbnav.commands.AddRoadNodeCommand;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BnbnavPlugin extends JavaPlugin {
@@ -29,11 +31,24 @@ public class BnbnavPlugin extends JavaPlugin {
 
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
 
+        getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), this::detectPlayers, 20, 1);
+
         getLogger().info("bnbnav is ready!");
+    }
+
+    void detectPlayers() {
+        for (Player player : getServer().getOnlinePlayers()) {
+            Location loc = player.getLocation();
+            String body = "{\"id\": \"" + player.getName() + "\", \"x\": " + loc.getX() + ", \"y\": " + loc.getY() + ", \"z\": " + loc.getZ() + "}";
+            unirest.post("/player/" + player.getName())
+                    .contentType("application/json")
+                    .body(body)
+                    .asEmptyAsync();
+        }
     }
 
     @Override
     public void onDisable() {
-    unirest.shutDown();
+        unirest.shutDown();
     }
 }
