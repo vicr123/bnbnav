@@ -45,6 +45,7 @@ class MapWidget : public QWidget {
         void mouseReleaseEvent(QMouseEvent* event);
         void mouseMoveEvent(QMouseEvent* event);
         void wheelEvent(QWheelEvent* event);
+        void contextMenuEvent(QContextMenuEvent* event);
 };
 
 #endif // MAPWIDGET_H

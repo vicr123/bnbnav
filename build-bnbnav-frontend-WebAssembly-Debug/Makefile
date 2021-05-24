@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = emcc
 CXX           = em++
-DEFINES       = -DBASE_URL=\"localhost:4000\" -DWS_URL=\"wss://bnbnav.aircs.racing/ws\" -DQT_QML_DEBUG -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DBASE_URL=\"bnbnav.aircs.racing\" -DWS_URL=\"wss://bnbnav.aircs.racing/ws\" -DQT_QML_DEBUG -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra $(DEFINES)
 INCPATH       = -I../bnbnav-frontend -I. -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. -I. -I/home/victor/.emscripten_ports/openssl/include -I/opt/qt5-wasm/mkspecs/wasm-emscripten
@@ -2193,14 +2193,22 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtCore/QMap \
+		/opt/qt5-wasm/include/QtWidgets/QMenu \
+		/opt/qt5-wasm/include/QtWidgets/qmenu.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qaction.h \
+		/opt/qt5-wasm/include/QtWidgets/qactiongroup.h \
 		/opt/qt5-wasm/include/QtGui/QMouseEvent \
 		/opt/qt5-wasm/include/QtGui/QPainterPath \
 		/opt/qt5-wasm/include/QtGui/qpainterpath.h \
+		../bnbnav-frontend/datagatherer.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
+		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
-		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
 		../bnbnav-frontend/datamanager.h \
-		/opt/qt5-wasm/include/QtCore/QObject \
 		../bnbnav-frontend/edge.h \
 		../bnbnav-frontend/node.h \
 		../bnbnav-frontend/road.h \

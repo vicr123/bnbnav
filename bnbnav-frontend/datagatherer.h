@@ -31,6 +31,7 @@ class DataGatherer : public QObject {
         ~DataGatherer();
 
         static void submit(QString path, QJsonObject object, std::function<void(QByteArray, bool)> callback);
+        static void del(QString path, std::function<void(bool)> callback);
 
     signals:
         void ready(QByteArray data, bool error);

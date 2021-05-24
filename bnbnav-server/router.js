@@ -42,6 +42,28 @@ router.post("/nodes/add", async (req, res) => {
         id: id
     });
 });
+router.delete("/nodes/{id}", async (req, res) => {
+    for (let edgeId of Object.keys(db.data.edges)) {
+        let edge = db.data.edges[edge];
+        if (edge.node1 == req.params.id || edge.node2 == req.params.id) {
+            delete db.data.edges[edgeId];
+            ws.broadcasts({
+                type: "edgeRemoved",
+                id: edgeId
+            })
+        }
+    }
+
+    delete db.data.nodes[req.params.id];
+    db.save();
+
+    ws.broadcast({
+        type: "nodeRemoved",
+        id: req.params.id
+    });
+
+    res.sendStatus(200);
+});
 router.post("/roads/add", async (req, res) => {
     if (req.body.name == null || req.body.type == null) {
         res.sendStatus(400);

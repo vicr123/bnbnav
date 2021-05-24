@@ -21,8 +21,11 @@
 
 #include <QPainter>
 #include <QMap>
+#include <QMenu>
 #include <QMouseEvent>
 #include <QPainterPath>
+#include <datagatherer.h>
+#include <QMessageBox>
 #include "nodeconnectdialog.h"
 #include "datamanager.h"
 #include "edge.h"
@@ -112,38 +115,42 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 }
 
 void MapWidget::mousePressEvent(QMouseEvent* event) {
-    d->dragging = true;
-    d->dragStart = event->globalPos();
-    d->dragInitial = event->globalPos();
+    if (event->button() == Qt::LeftButton) {
+        d->dragging = true;
+        d->dragStart = event->globalPos();
+        d->dragInitial = event->globalPos();
+    }
 }
 
 void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
-    if (d->dragging) {
-        d->dragging = false;
-        if ((d->dragInitial - d->dragStart).manhattanLength() < 5) {
-            //Treat this as a click!
-            if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
-                //TODO: more than one hover target
-                Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
-                Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
+    if (event->button() == Qt::LeftButton) {
+        if (d->dragging) {
+            d->dragging = false;
+            if ((d->dragInitial - d->dragStart).manhattanLength() < 5) {
+                //Treat this as a click!
+                if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
+                    //TODO: more than one hover target
+                    Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
+                    Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
 
-                if (hoverNode) {
-                    if (d->firstNode) {
-                        Node* first = d->firstNode;
-                        Node* second = hoverNode;
-                        d->firstNode = nullptr;
+                    if (hoverNode) {
+                        if (d->firstNode) {
+                            Node* first = d->firstNode;
+                            Node* second = hoverNode;
+                            d->firstNode = nullptr;
 
-                        if (first == second) return;
-                        if (DataManager::edgeForNodes(first, second)) return;
+                            if (first == second) return;
+                            if (DataManager::edgeForNodes(first, second)) return;
 
-                        //Connect these nodes!
-                        NodeConnectDialog dialog(first, second);
-                        dialog.exec();
-                    } else {
-                        d->firstNode = hoverNode;
+                            //Connect these nodes!
+                            NodeConnectDialog dialog(first, second);
+                            dialog.exec();
+                        } else {
+                            d->firstNode = hoverNode;
+                        }
+                    } else if (hoverEdge) {
+                        //TODO: Edit edge
                     }
-                } else if (hoverEdge) {
-                    //TODO: Edit edge
                 }
             }
         }
@@ -175,12 +182,35 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
         }
     }
 
-    emit pan(d->origin.x() / d->scale, d->origin.y() / d->scale);
+    emit pan(-d->origin.x() / d->scale, -d->origin.y() / d->scale);
     this->update();
 }
 
 void MapWidget::wheelEvent(QWheelEvent* event) {
     double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
     d->scale *= factor;
+    d->origin *= factor;
     this->update();
+}
+
+void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
+    QMenu* menu = new QMenu();
+
+    if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
+        Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
+        Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
+
+        if (hoverNode) {
+            menu->addAction(tr("Delete Node"), [ = ] {
+                DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
+                    if (error) {
+                        QMessageBox::warning(this, tr("Could not delete node"), tr("Could not delete the node."));
+                    }
+                });
+            });
+        }
+    }
+
+    menu->popup(event->globalPos());
+    connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
 }

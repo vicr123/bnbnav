@@ -50,7 +50,7 @@ DataGatherer::DataGatherer(QString path, QObject* parent) : QObject(parent) {
 #ifdef Q_OS_WASM
     QNetworkReply* reply = mgr->get(QNetworkRequest(QUrl(QStringLiteral("/api/%1").arg(path))));
 #else
-    QNetworkReply* reply = mgr->get(QNetworkRequest(QUrl(QStringLiteral("http://%1/api/%2").arg(BASE_URL, path))));
+    QNetworkReply* reply = mgr->get(QNetworkRequest(QUrl(QStringLiteral("https://%1/api/%2").arg(BASE_URL, path))));
 #endif
     connect(reply, &QNetworkReply::finished, [ = ] {
         if (reply->error() != QNetworkReply::NoError) {
@@ -73,7 +73,7 @@ void DataGatherer::submit(QString path, QJsonObject object, std::function<void (
 #ifdef Q_OS_WASM
     req.setUrl(QUrl(QStringLiteral("/api/%1").arg(path)));
 #else
-    req.setUrl(QUrl(QStringLiteral("http://%1/api/%2").arg(BASE_URL, path)));
+    req.setUrl(QUrl(QStringLiteral("https://%1/api/%2").arg(BASE_URL, path)));
 #endif
     QNetworkReply* reply = mgr->post(req, QJsonDocument(object).toJson());
     connect(reply, &QNetworkReply::finished, [ = ] {
@@ -83,6 +83,25 @@ void DataGatherer::submit(QString path, QJsonObject object, std::function<void (
         }
 
         callback(reply->readAll(), false);
+    });
+}
+
+void DataGatherer::del(QString path, std::function<void (bool)> callback) {
+    QNetworkAccessManager* mgr = new QNetworkAccessManager();
+    QNetworkRequest req;
+#ifdef Q_OS_WASM
+    req.setUrl(QUrl(QStringLiteral("/api/%1").arg(path)));
+#else
+    req.setUrl(QUrl(QStringLiteral("https://%1/api/%2").arg(BASE_URL, path)));
+#endif
+    QNetworkReply* reply = mgr->deleteResource(req);
+    connect(reply, &QNetworkReply::finished, [ = ] {
+        if (reply->error() != QNetworkReply::NoError) {
+            callback(true);
+            return;
+        }
+
+        callback(false);
     });
 }
 

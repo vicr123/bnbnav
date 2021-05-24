@@ -41,7 +41,7 @@ FORMS += \
     nodeconnectdialog.ui \
     topwidget.ui
 
-DEFINES += BASE_URL=\\\"localhost:4000\\\"
+DEFINES += BASE_URL=\\\"bnbnav.aircs.racing\\\"
 DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
 
 # Default rules for deployment.
