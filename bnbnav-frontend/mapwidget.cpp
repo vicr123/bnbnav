@@ -175,6 +175,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
         }
     }
 
+    emit pan(d->origin.x(), d->origin.y());
     this->update();
 }
 

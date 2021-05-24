@@ -33,6 +33,8 @@ class TopWidget : public QWidget {
         explicit TopWidget(QWidget* parent = nullptr);
         ~TopWidget();
 
+        void setPan(int x, int y);
+
     signals:
 
 

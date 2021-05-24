@@ -2,10 +2,13 @@ package com.vicr123.bnbnav;
 
 import com.vicr123.bnbnav.commands.AddRoadNodeCommand;
 import kong.unirest.Unirest;
+import kong.unirest.UnirestInstance;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class BnbnavPlugin extends JavaPlugin {
     private static BnbnavPlugin plugin;
+
+    UnirestInstance unirest;
 
     public static BnbnavPlugin getPlugin() { // getter for the static plugin instance
         return plugin;
@@ -18,17 +21,19 @@ public class BnbnavPlugin extends JavaPlugin {
     public void onEnable() {
         plugin = getPlugin(BnbnavPlugin.class);
 
-        Unirest.config()
+        unirest = Unirest.spawnInstance();
+
+        unirest.config()
                 .defaultBaseUrl(API_BASE)
                 .setDefaultHeader("Authorization", "Bearer " + AUTH_TOKEN);
 
-        this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand());
+        this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
 
         getLogger().info("bnbnav is ready!");
     }
 
     @Override
     public void onDisable() {
-
+    unirest.shutDown();
     }
 }

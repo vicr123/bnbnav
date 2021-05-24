@@ -1,6 +1,7 @@
 package com.vicr123.bnbnav.commands;
 
 import kong.unirest.Unirest;
+import kong.unirest.UnirestInstance;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -8,6 +9,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class AddRoadNodeCommand implements CommandExecutor {
+    UnirestInstance unirest;
+
+    public AddRoadNodeCommand(UnirestInstance unirest) {
+        this.unirest = unirest;
+    }
+
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         if (!(commandSender instanceof Player)) {
@@ -18,8 +25,7 @@ public class AddRoadNodeCommand implements CommandExecutor {
         Location location = ((Player) commandSender).getLocation();
         String body = "{\"x\": " + location.getBlockX() + ", \"y\": " + location.getBlockY()  +", \"z\": " + location.getBlockZ() + "}";
 
-//        String body = "{}";
-        Unirest.post("/nodes/add")
+        unirest.post("/nodes/add")
                 .contentType("application/json")
                 .body(body)
                 .asStringAsync((response) -> {

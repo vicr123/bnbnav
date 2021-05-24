@@ -33,6 +33,7 @@ class MapWidget : public QWidget {
         QTransform currentTransform();
 
     signals:
+        void pan(int x, int y);
 
     private:
         MapWidgetPrivate* d;

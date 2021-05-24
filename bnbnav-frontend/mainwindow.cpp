@@ -37,6 +37,8 @@ MainWindow::MainWindow(QWidget* parent)
     d->map->resize(this->size());
     d->map->show();
     d->map->lower();
+
+    connect(d->map, &MapWidget::pan, ui->topWidget, &TopWidget::setPan);
 }
 
 MainWindow::~MainWindow() {
