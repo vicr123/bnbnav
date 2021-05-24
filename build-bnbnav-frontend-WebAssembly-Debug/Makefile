@@ -14,7 +14,7 @@ EQ            = =
 
 CC            = emcc
 CXX           = em++
-DEFINES       = -DBASE_URL=\"localhost:4000\" -DQT_QML_DEBUG -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
+DEFINES       = -DBASE_URL=\"localhost:4000\" -DWS_URL=\"wss://bnbnav.aircs.racing/ws\" -DQT_QML_DEBUG -DQT_SVG_LIB -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_WEBSOCKETS_LIB -DQT_NETWORK_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra $(DEFINES)
 CXXFLAGS      = -pipe -g -std=gnu++11 -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra $(DEFINES)
 INCPATH       = -I../bnbnav-frontend -I. -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. -I. -I/home/victor/.emscripten_ports/openssl/include -I/opt/qt5-wasm/mkspecs/wasm-emscripten
@@ -1618,6 +1618,8 @@ datagatherer.o: ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datagathe
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QJsonDocument \
+		/opt/qt5-wasm/include/QtCore/qjsondocument.h \
 		/opt/qt5-wasm/include/QtNetwork/QNetworkAccessManager \
 		/opt/qt5-wasm/include/QtNetwork/qnetworkaccessmanager.h \
 		/opt/qt5-wasm/include/QtNetwork/qtnetworkglobal.h \
@@ -2192,6 +2194,8 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtCore/QMap \
 		/opt/qt5-wasm/include/QtGui/QMouseEvent \
+		/opt/qt5-wasm/include/QtGui/QPainterPath \
+		/opt/qt5-wasm/include/QtGui/qpainterpath.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
 		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
@@ -2350,7 +2354,20 @@ newroaddialog.o: ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/newroad
 		/opt/qt5-wasm/include/QtWidgets/QPushButton \
 		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
-		/opt/qt5-wasm/include/QtWidgets/QSpacerItem
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtCore/QJsonDocument \
+		/opt/qt5-wasm/include/QtCore/qjsondocument.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
+		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		../bnbnav-frontend/datagatherer.h \
+		/opt/qt5-wasm/include/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newroaddialog.o ../bnbnav-frontend/newroaddialog.cpp
 
 node.o: ../bnbnav-frontend/node.cpp ../bnbnav-frontend/node.h \
@@ -2580,8 +2597,18 @@ nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		/opt/qt5-wasm/include/QtCore/QSet \
-		../bnbnav-frontend/road.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
+		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		../bnbnav-frontend/datagatherer.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
+		../bnbnav-frontend/road.h \
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/newroaddialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nodeconnectdialog.o ../bnbnav-frontend/nodeconnectdialog.cpp
@@ -2838,6 +2865,9 @@ topwidget.o: ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/topwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
 		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
 		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
 		/opt/qt5-wasm/include/QtWidgets/QPushButton \
 		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \

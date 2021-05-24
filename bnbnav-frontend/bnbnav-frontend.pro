@@ -42,6 +42,7 @@ FORMS += \
     topwidget.ui
 
 DEFINES += BASE_URL=\\\"localhost:4000\\\"
+DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin

@@ -98,7 +98,7 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
 
 
     QWebSocket* ws = new QWebSocket("localhost:4000");
-    ws->open(QUrl("ws://localhost:4000/ws"));
+    ws->open(QUrl(WS_URL));
     connect(ws, &QWebSocket::aboutToClose, this, [ = ] {
         emit loadError();
     });
