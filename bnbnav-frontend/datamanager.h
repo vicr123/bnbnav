@@ -44,6 +44,9 @@ class DataManager : public QObject {
         void newNode();
         void newRoad();
         void newEdge();
+        void removedNode();
+        void removedRoad();
+        void removedEdge();
         void loadError();
 
     private:

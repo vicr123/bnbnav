@@ -116,6 +116,15 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         } else if (type == "newEdge") {
             d->edges.insert(id, new Edge(object));
             emit newEdge();
+        } else if (type == "edgeRemoved") {
+            d->edges.remove(id);
+            emit removedEdge();
+        } else if (type == "roadRemoved") {
+            d->roads.remove(id);
+            emit removedRoad();
+        } else if (type == "nodeRemoved") {
+            d->nodes.remove(id);
+            emit removedNode();
         }
     });
 }
