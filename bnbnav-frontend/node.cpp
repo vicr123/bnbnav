@@ -21,6 +21,8 @@
 
 #include <QRect>
 #include <QJsonObject>
+#include "datagatherer.h"
+#include "datamanager.h"
 
 struct NodePrivate {
     int x, y, z;
@@ -28,9 +30,7 @@ struct NodePrivate {
 
 Node::Node(QJsonObject definition, QObject* parent) : QObject(parent) {
     d = new NodePrivate();
-    d->x = definition.value("x").toInt();
-    d->y = definition.value("y").toInt();
-    d->z = definition.value("z").toInt();
+    redefine(definition);
 }
 
 Node::~Node() {
@@ -54,4 +54,42 @@ QRectF Node::nodeRect(double scale) {
     rect.setSize(QSizeF(15, 15) / scale);
     rect.moveCenter(QPointF(d->x, d->z));
     return rect;
+}
+
+void Node::setX(int x) {
+    d->x = x;
+}
+
+void Node::setZ(int z) {
+    d->z = z;
+}
+
+void Node::redefine(QJsonObject definition) {
+    d->x = definition.value("x").toInt();
+    d->y = definition.value("y").toInt();
+    d->z = definition.value("z").toInt();
+}
+
+void Node::submitUpdate(int x, int y, int z, std::function<void (bool)> callback) {
+    NodePrivate* oldPrivate = d;
+    d = new NodePrivate();
+    d->x = x;
+    d->y = y;
+    d->z = z;
+
+    DataGatherer::submit(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(this)), {
+        {"x", x},
+        {"y", y},
+        {"z", z}
+    }, [ = ](QByteArray data, bool error) {
+        if (error) {
+            delete d;
+            d = oldPrivate;
+            callback(true);
+            return;
+        }
+
+        delete oldPrivate;
+        callback(false);
+    });
 }

@@ -42,6 +42,47 @@ router.post("/nodes/add", async (req, res) => {
         id: id
     });
 });
+router.post("/nodes/:id", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.nodes[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    for (let edgeId of Object.keys(db.data.edges)) {
+        let edge = db.data.edges[edgeId];
+        if (edge.node1 == id || edge.node2 == id) {
+            delete db.data.edges[edgeId];
+            ws.broadcast({
+                type: "edgeRemoved",
+                id: edgeId
+            })
+        }
+    }
+
+    let node = JSON.parse(JSON.stringify(db.data.nodes[id]));
+    if (req.body.x != null) node.x = req.body.x;
+    if (req.body.y != null) node.y = req.body.y;
+    if (req.body.z != null) node.z = req.body.z;
+
+    if (Object.values(db.data.nodes).find(item => item.x == node.x && item.y == node.y && item.z == node.z)) {
+        res.sendStatus(400);
+        return;
+    }
+    
+    db.data.nodes[id] = node;
+    db.save();
+
+    ws.broadcast({
+        type: "nodeUpdated",
+        id: id,
+        x: node.x,
+        y: node.y,
+        z: node.z
+    });
+
+    res.sendStatus(200);
+});
 router.delete("/nodes/:id", async (req, res) => {
     let id = req.params.id
     if (!db.data.nodes[id]) {

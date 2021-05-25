@@ -49,6 +49,9 @@ class DataManager : public QObject {
         void removedNode();
         void removedRoad();
         void removedEdge();
+        void updatedNode();
+        void updatedRoad();
+        void updatedEdge();
         void loadError();
         void playerUpdate();
 

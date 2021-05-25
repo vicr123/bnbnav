@@ -34,6 +34,13 @@ class Node : public QObject {
         int z();
         QRectF nodeRect(double scale);
 
+        void setX(int x);
+        void setY(int y);
+        void setZ(int z);
+
+        void redefine(QJsonObject definition);
+        void submitUpdate(int x, int y, int z, std::function<void(bool)> callback);
+
     signals:
 
     private:

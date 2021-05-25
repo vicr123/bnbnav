@@ -44,6 +44,10 @@ struct MapWidgetPrivate {
 
     QList<QObject*> hoverTargets;
     Node* firstNode = nullptr;
+
+    Node* dragNode = nullptr;
+    QPoint initialNodeCoordinates;
+    QPoint dragNodeCoordinates;
 };
 
 MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
@@ -137,22 +141,40 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             painter.setBrush(Qt::white);
             if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
             if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
-            painter.drawRect(node->nodeRect(d->scale));
+
+            QRectF nodeRect = node->nodeRect(d->scale);
+            if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+            painter.drawRect(nodeRect);
         }
     }
 }
 
 void MapWidget::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
-        d->dragging = true;
-        d->dragStart = event->globalPos();
-        d->dragInitial = event->globalPos();
+        if (!d->hoverTargets.isEmpty() && qobject_cast<Node*>(d->hoverTargets.first())) {
+            d->dragNode = qobject_cast<Node*>(d->hoverTargets.first());
+            d->initialNodeCoordinates = QPoint(d->dragNode->x(), d->dragNode->z());
+            d->dragNodeCoordinates = d->initialNodeCoordinates;
+        } else {
+            d->dragging = true;
+            d->dragStart = event->globalPos();
+            d->dragInitial = event->globalPos();
+        }
     }
 }
 
 void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
-        if (d->dragging) {
+        if (d->dragNode) {
+            if (d->dragNodeCoordinates != d->initialNodeCoordinates) {
+                d->dragNode->submitUpdate(d->dragNodeCoordinates.x(), d->dragNode->y(), d->dragNodeCoordinates.y(), [ = ](bool error) {
+                    if (error) {
+                        QMessageBox::warning(this, tr("Could not update node"), tr("Could not update the node."));
+                    }
+                });
+            }
+            d->dragNode = nullptr;
+        } else if (d->dragging) {
             d->dragging = false;
             if ((d->dragInitial - d->dragStart).manhattanLength() < 5) {
                 //Treat this as a click!
@@ -186,7 +208,9 @@ void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
 }
 
 void MapWidget::mouseMoveEvent(QMouseEvent* event) {
-    if (d->dragging) {
+    if (d->dragNode) {
+        d->dragNodeCoordinates = toMapCoordinates(event->pos()).toPoint();
+    } else if (d->dragging) {
         d->origin += event->globalPos() - d->dragStart;
         d->dragStart = event->globalPos();
     } else {

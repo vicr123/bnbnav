@@ -131,6 +131,9 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         } else if (type == "nodeRemoved") {
             d->nodes.remove(id);
             emit removedNode();
+        } else if (type == "nodeUpdated") {
+            d->nodes.value(id)->redefine(object);
+            emit updatedNode();
         } else if (type == "playerMove") {
             if (!d->players.contains(id)) {
                 d->players.insert(id, new Player(id));
