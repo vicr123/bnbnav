@@ -87,7 +87,7 @@ router.post("/roads/add", async (req, res) => {
         type: "newRoad",
         id: id,
         name: req.body.name,
-        type: req.body.type
+        roadType: req.body.type
     });
 
     res.send({

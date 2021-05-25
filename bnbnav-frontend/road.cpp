@@ -29,7 +29,12 @@ struct RoadPrivate {
 Road::Road(QJsonObject definition, QObject* parent) : QObject(parent) {
     d = new RoadPrivate();
     d->name = definition.value("name").toString();
-    d->type = definition.value("type").toString();
+
+    if (definition.contains("roadType")) {
+        d->type = definition.value("roadType").toString();
+    } else {
+        d->type = definition.value("type").toString();
+    }
 }
 
 Road::~Road() {
