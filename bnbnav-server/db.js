@@ -13,8 +13,8 @@ class Database {
     uniqueId(item) {
         let id;
         do {
-            id = Math.floor(Math.random() * 200000);
-        } while (Object.keys(this.data[item]).reduce((acc, current) => acc || current.id == id.toString(), false));
+            id = Math.floor(Math.random() * 2000000000);
+        } while (Object.keys(this.data[item]).reduce((acc, current) => acc || (current.id == id.toString()), false));
 
         return id.toString();
     }
