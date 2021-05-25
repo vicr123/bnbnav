@@ -19,7 +19,10 @@
  * *************************************/
 #include "locationentrybox.h"
 
+#include "statemanager.h"
 #include <QRegularExpression>
+#include "player.h"
+#include "datamanager.h"
 
 LocationEntryBox::LocationEntryBox(QWidget* parent) : QLineEdit(parent) {
 
@@ -33,5 +36,16 @@ QPoint LocationEntryBox::location() {
         return QPoint(match.capturedTexts().at(1).toInt(), match.capturedTexts().at(2).toInt());
     }
 
+    QString playerTest = this->text();
+    if (this->text() == tr("My Location")) {
+        QString playerTest = StateManager::login();
+        if (playerTest.isEmpty()) return QPoint();
+    }
+
+    for (Player* player : DataManager::players()) {
+        if (player->name() == playerTest) {
+            return QPoint(player->x(), player->z());
+        }
+    }
     return QPoint();
 }
