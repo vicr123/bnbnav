@@ -178,7 +178,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
 void MapWidget::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
-        if (!d->hoverTargets.isEmpty() && qobject_cast<Node*>(d->hoverTargets.first())) {
+        if (!d->firstNode && !d->hoverTargets.isEmpty() && qobject_cast<Node*>(d->hoverTargets.first())) {
             d->dragNode = qobject_cast<Node*>(d->hoverTargets.first());
             d->initialNodeCoordinates = QPoint(d->dragNode->x(), d->dragNode->z());
             d->dragNodeCoordinates = d->initialNodeCoordinates;
