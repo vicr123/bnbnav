@@ -34,6 +34,7 @@ class Edge : public QObject {
         Node* from();
         Node* to();
         Road* road();
+        QLineF line();
 
     signals:
 

@@ -49,9 +49,9 @@ int Node::z() {
     return d->z;
 }
 
-QRectF Node::nodeRect() {
+QRectF Node::nodeRect(double scale) {
     QRectF rect;
-    rect.setSize(QSizeF(0.5, 0.5));
+    rect.setSize(QSizeF(15, 15) / scale);
     rect.moveCenter(QPointF(d->x, d->z));
     return rect;
 }

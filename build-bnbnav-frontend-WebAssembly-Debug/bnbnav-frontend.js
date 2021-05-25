@@ -691,8 +691,8 @@ var wasmMemory;
 // In the wasm backend, we polyfill the WebAssembly object,
 // so this creates a (non-native-wasm) table for us.
 var wasmTable = new WebAssembly.Table({
-  'initial': 10664,
-  'maximum': 10664 + 0,
+  'initial': 10666,
+  'maximum': 10666 + 0,
   'element': 'anyfunc'
 });
 
@@ -1293,11 +1293,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 9478192,
+    STACK_BASE = 9478704,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 4235312,
-    DYNAMIC_BASE = 9478192,
-    DYNAMICTOP_PTR = 4235136;
+    STACK_MAX = 4235824,
+    DYNAMIC_BASE = 9478704,
+    DYNAMICTOP_PTR = 4235648;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1831,7 +1831,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 4234288;
+// STATICTOP = STATIC_BASE + 4234800;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -8305,7 +8305,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 4235136;
+      return 4235648;
     }
 
   
@@ -12674,7 +12674,7 @@ var ASM_CONSTS = {
   }
   
   
-  var _fetch_work_queue=4235296;function __emscripten_get_fetch_work_queue() {
+  var _fetch_work_queue=4235808;function __emscripten_get_fetch_work_queue() {
       return _fetch_work_queue;
     }function _emscripten_start_fetch(fetch, successcb, errorcb, progresscb, readystatechangecb) {
     if (typeof noExitRuntime !== 'undefined') noExitRuntime = true; // If we are the main Emscripten runtime, we should not be closing down.
@@ -13294,10 +13294,10 @@ var ASM_CONSTS = {
     }
 
   
-  var ___tm_current=4235152;
+  var ___tm_current=4235664;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 4235200, 4), 4235200);
+  var ___tm_timezone=(stringToUTF8("GMT", 4235712, 4), 4235712);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.

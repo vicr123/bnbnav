@@ -23,6 +23,7 @@
 #include "node.h"
 #include "datamanager.h"
 #include <QJsonObject>
+#include <QLineF>
 
 struct EdgePrivate {
     QString road;
@@ -52,4 +53,8 @@ Node* Edge::to() {
 
 Road* Edge::road() {
     return DataManager::roads().value(d->road);
+}
+
+QLineF Edge::line() {
+    return QLineF(d->from->x(), d->from->z(), d->to->x(), d->to->z());
 }

@@ -32,7 +32,7 @@ class Node : public QObject {
         int x();
         int y();
         int z();
-        QRectF nodeRect();
+        QRectF nodeRect(double scale);
 
     signals:
 

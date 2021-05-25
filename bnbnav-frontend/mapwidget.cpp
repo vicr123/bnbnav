@@ -44,13 +44,6 @@ struct MapWidgetPrivate {
 
     QList<QObject*> hoverTargets;
     Node* firstNode = nullptr;
-
-    const QMap<QString, QColor> roadTypes = {
-        {"local", QColor(Qt::black)},
-        {"main", QColor(245, 179, 66)},
-        {"highway", QColor(173, 25, 9)},
-        {"motorway", QColor(105, 9, 173)}
-    };
 };
 
 MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
@@ -108,35 +101,14 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
     for (Edge* edge : DataManager::edges().values()) {
         //Draw the edge
-        Node* from = edge->from();
-        Node* to = edge->to();
+        QPen pen = edge->road()->pen(edge);
 
-        QLineF roadLine(from->x(), from->z(), to->x(), to->z());
-
-        QBrush col = d->roadTypes.value(edge->road()->type());
-        double thickness = 1;
-        if (edge->road()->type() == "motorway") {
-            QLineF perpendicular = roadLine;
-            perpendicular.setLength(0.5);
-            perpendicular = perpendicular.normalVector();
-
-            QLinearGradient grad(perpendicular.pointAt(-1), perpendicular.pointAt(1));
-            grad.setColorAt(0, QColor(100, 0, 0));
-            grad.setColorAt(0.2, QColor(100, 0, 0));
-            grad.setColorAt(0.2001, QColor(200, 200, 0));
-            grad.setColorAt(0.7999, QColor(200, 200, 0));
-            grad.setColorAt(0.8, QColor(100, 0, 0));
-            grad.setColorAt(1, QColor(100, 0, 0));
-            col = grad;
-            thickness = 2;
+        if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty() && d->hoverTargets.contains(edge)) {
+            pen.setColor(Qt::blue);
         }
-        if (StateManager::currentState() == StateManager::Edit && d->hoverTargets.contains(edge)) {
-            col = Qt::blue;
-        }
-        painter.setPen(QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
 
-        painter.drawLine(roadLine);
-
+        painter.setPen(pen);
+        painter.drawLine(edge->line());
     }
 
     //Draw players
@@ -161,11 +133,11 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     if (StateManager::currentState() == StateManager::Edit) {
         for (Node* node : DataManager::nodes().values()) {
             //Draw the node
-            painter.setPen(QPen(Qt::black, 0.1));
+            painter.setPen(QPen(Qt::black, 2 / d->scale));
             painter.setBrush(Qt::white);
             if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
             if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
-            painter.drawRect(node->nodeRect());
+            painter.drawRect(node->nodeRect(d->scale));
         }
     }
 }
@@ -223,17 +195,27 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
             d->hoverTargets.clear();
             QPointF mapPos = toMapCoordinates(event->pos());
             for (Node* node : DataManager::nodes().values()) {
-                if (node->nodeRect().contains(mapPos)) d->hoverTargets.append(node);
+                if (node->nodeRect(d->scale).contains(mapPos)) d->hoverTargets.append(node);
             }
 
             for (Edge* edge : DataManager::edges().values()) {
-                QPainterPath path;
-                path.moveTo(edge->from()->x(), edge->from()->y());
-                path.lineTo(edge->to()->x(), edge->to()->y());
-                path.lineTo(edge->to()->x(), edge->to()->y());
+                double width = edge->road()->pen(edge).widthF();
+                QLineF perpendicular = edge->line();
+                perpendicular.setLength(width);
+                perpendicular = perpendicular.normalVector();
 
-                QPainterPathStroker stroker(QPen(Qt::black, 1));
-                if (stroker.createStroke(path).toFillPolygon().contains(mapPos)) d->hoverTargets.append(edge);
+                QPolygonF poly;
+                poly.append(perpendicular.pointAt(-1));
+                poly.append(perpendicular.pointAt(1));
+
+                perpendicular = edge->line();
+                perpendicular.setPoints(perpendicular.p2(), perpendicular.p1());
+                perpendicular.setLength(width);
+                perpendicular = perpendicular.normalVector();
+                poly.append(perpendicular.pointAt(1));
+                poly.append(perpendicular.pointAt(-1));
+
+                if (poly.containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
             }
         }
     }
@@ -252,18 +234,31 @@ void MapWidget::wheelEvent(QWheelEvent* event) {
 void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
     QMenu* menu = new QMenu();
 
-    if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
-        Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
-        Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
+    if (StateManager::currentState() == StateManager::Edit) {
+        for (QObject* target : d->hoverTargets) {
+            Node* hoverNode = qobject_cast<Node*>(target);
+            Edge* hoverEdge = qobject_cast<Edge*>(target);
 
-        if (hoverNode) {
-            menu->addAction(tr("Delete Node"), [ = ] {
-                DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
-                    if (error) {
-                        QMessageBox::warning(this, tr("Could not delete node"), tr("Could not delete the node."));
-                    }
+            if (hoverNode) {
+                menu->addSection(tr("Node"));
+                menu->addAction(tr("Delete Node"), [ = ] {
+                    DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
+                        if (error) {
+                            QMessageBox::warning(this, tr("Could not delete node"), tr("Could not delete the node."));
+                        }
+                    });
                 });
-            });
+            } else if (hoverEdge) {
+                menu->addSection(tr("Edge"));
+                menu->addAction(hoverEdge->road()->name())->setEnabled(false);
+                menu->addAction(tr("Delete Edge"), [ = ] {
+                    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [ = ](bool error) {
+                        if (error) {
+                            QMessageBox::warning(this, tr("Could not delete edge"), tr("Could not delete the edge."));
+                        }
+                    });
+                });
+            }
         }
     }
 

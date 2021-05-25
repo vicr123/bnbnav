@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+class Edge;
 struct RoadPrivate;
 class Road : public QObject {
         Q_OBJECT
@@ -31,6 +32,7 @@ class Road : public QObject {
 
         QString name();
         QString type();
+        QPen pen(Edge* edge);
 
     signals:
 

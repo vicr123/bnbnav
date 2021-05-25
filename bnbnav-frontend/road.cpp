@@ -19,11 +19,20 @@
  * *************************************/
 #include "road.h"
 
+#include <QPen>
 #include <QJsonObject>
+#include "edge.h"
 
 struct RoadPrivate {
     QString name;
     QString type;
+
+    const QMap<QString, QColor> roadTypes = {
+        {"local", QColor(Qt::black)},
+        {"main", QColor(245, 179, 66)},
+        {"highway", QColor(173, 25, 9)},
+        {"motorway", QColor(105, 9, 173)}
+    };
 };
 
 Road::Road(QJsonObject definition, QObject* parent) : QObject(parent) {
@@ -47,4 +56,25 @@ QString Road::name() {
 
 QString Road::type() {
     return d->type;
+}
+
+QPen Road::pen(Edge* edge) {
+    QBrush col = d->roadTypes.value(d->type);
+    double thickness = 1;
+    if (d->type == "motorway") {
+        QLineF perpendicular = edge->line();
+        perpendicular.setLength(0.5);
+        perpendicular = perpendicular.normalVector();
+
+        QLinearGradient grad(perpendicular.pointAt(-1), perpendicular.pointAt(1));
+        grad.setColorAt(0, QColor(100, 0, 0));
+        grad.setColorAt(0.2, QColor(100, 0, 0));
+        grad.setColorAt(0.2001, QColor(200, 200, 0));
+        grad.setColorAt(0.7999, QColor(200, 200, 0));
+        grad.setColorAt(0.8, QColor(100, 0, 0));
+        grad.setColorAt(1, QColor(100, 0, 0));
+        col = grad;
+        thickness = 2;
+    }
+    return QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 }
