@@ -135,12 +135,26 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     font.setPointSizeF(20 / d->scale);
     painter.setFont(font);
 
-    for (Edge* edge : DataManager::edges().values()) {
+    QList<Edge*> edges = DataManager::edges().values();
+    //Sort edges by average Y height
+    std::sort(edges.begin(), edges.end(), [ = ](Edge * first, Edge * second) {
+        if (StateManager::currentRoute().contains(first) == StateManager::currentRoute().contains(second)) {
+            return first->averageY() < second->averageY();
+        } else if (StateManager::currentRoute().contains(first)) {
+            return false;
+        } else {
+            return true;
+        }
+    });
+    for (Edge* edge : edges) {
         //Draw the edge
         QPen pen = edge->road()->pen(edge);
 
         if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty() && d->hoverTargets.contains(edge)) {
             pen.setColor(Qt::blue);
+        }
+        if (StateManager::currentRoute().contains(edge)) {
+            pen.setColor(QColor(0, 150, 255));
         }
 
         painter.setPen(pen);

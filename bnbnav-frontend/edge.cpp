@@ -78,3 +78,37 @@ QPolygonF Edge::hitbox(double width) {
 
     return poly;
 }
+
+double Edge::length() {
+    return this->line().length();
+}
+
+QPointF Edge::closestPointTo(QPointF point) {
+    QLineF intersectionLine(point, point + QPointF(5, 0));
+    intersectionLine.setAngle(line().normalVector().angle());
+
+    QPointF intersectionPoint;
+    intersectionLine.intersects(line(), &intersectionPoint);
+
+    QLineF testLine(point, intersectionPoint);
+    testLine.setLength(testLine.length() + 20);
+    if (testLine.intersects(line(), nullptr) == QLineF::BoundedIntersection) {
+        return intersectionPoint;
+    } else {
+        return QPointF();
+    }
+}
+
+double Edge::distanceTo(QPointF point, bool* ok) {
+    QPointF closestPoint = closestPointTo(point);
+    if (closestPoint.isNull()) {
+        if (ok) *ok = false;
+        return 0;
+    }
+    *ok = true;
+    return QLineF(closestPoint, point).length();
+}
+
+double Edge::averageY() {
+    return (d->from->y() + d->to->y()) / 2.0;
+}

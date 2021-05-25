@@ -22,10 +22,16 @@
 
 #include "mapwidget.h"
 #include "loginwidget.h"
+#include "splashwidget.h"
+#include "datamanager.h"
+#include "statedialog.h"
 
 struct MainWindowPrivate {
     MapWidget* map;
     LoginWidget* login;
+    SplashWidget* splash;
+    StateDialog* stateDialog;
+    int readyCount = 0;
 };
 
 MainWindow::MainWindow(QWidget* parent)
@@ -53,6 +59,18 @@ MainWindow::MainWindow(QWidget* parent)
         }
     });
     d->login->installEventFilter(this);
+
+    d->stateDialog = new StateDialog(this);
+
+    d->splash = new SplashWidget(this);
+    d->splash->move(0, 0);
+    d->splash->resize(this->width(), this->height());
+    d->splash->raise();
+
+    connect(DataManager::instance(), &DataManager::ready, this, [ = ] {
+        d->splash->hide();
+        d->stateDialog->show();
+    });
 }
 
 MainWindow::~MainWindow() {
@@ -62,6 +80,7 @@ MainWindow::~MainWindow() {
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
     d->map->resize(this->size());
+    d->splash->resize(this->size());
     d->login->move(this->width() - d->login->width(), ui->topWidget->height());
 }
 

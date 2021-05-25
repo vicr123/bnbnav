@@ -24,6 +24,7 @@
 struct StateManagerPrivate {
     StateManager::GlobalState state = StateManager::Browse;
     QString login;
+    QList<Edge*> currentRoute;
 };
 
 StateManager* StateManager::instance() {
@@ -49,6 +50,14 @@ void StateManager::setLogin(QString login) {
 
 QString StateManager::login() {
     return instance()->d->login;
+}
+
+void StateManager::setCurrentRoute(QList<Edge*> edges) {
+    instance()->d->currentRoute = edges;
+}
+
+QList<Edge*> StateManager::currentRoute() {
+    return instance()->d->currentRoute;
 }
 
 StateManager::StateManager(QObject* parent) : QObject(parent) {

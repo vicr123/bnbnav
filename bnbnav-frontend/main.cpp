@@ -27,6 +27,11 @@ int main(int argc, char* argv[]) {
     a.setOrganizationName("theSuite");
     a.setOrganizationDomain("vicr123.com");
 
+    QPalette pal = a.palette();
+    pal.setColor(QPalette::Window, Qt::white);
+    pal.setColor(QPalette::WindowText, Qt::black);
+    a.setPalette(pal);
+
     MainWindow w;
     w.show();
     return a.exec();

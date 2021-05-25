@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+class Edge;
 struct StateManagerPrivate;
 class StateManager : public QObject {
         Q_OBJECT
@@ -39,6 +40,9 @@ class StateManager : public QObject {
 
         static void setLogin(QString login);
         static QString login();
+
+        static void setCurrentRoute(QList<Edge*> edges);
+        static QList<Edge*> currentRoute();
 
     signals:
         void stateChanged(GlobalState state);

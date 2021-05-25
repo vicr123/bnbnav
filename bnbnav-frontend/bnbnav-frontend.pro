@@ -13,6 +13,7 @@ SOURCES += \
     datamanager.cpp \
     edge.cpp \
     landmark.cpp \
+    locationentrybox.cpp \
     loginwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -23,6 +24,8 @@ SOURCES += \
     nodeconnectdialog.cpp \
     player.cpp \
     road.cpp \
+    splashwidget.cpp \
+    statedialog.cpp \
     statemanager.cpp \
     topwidget.cpp
 
@@ -31,6 +34,7 @@ HEADERS += \
     datamanager.h \
     edge.h \
     landmark.h \
+    locationentrybox.h \
     loginwidget.h \
     mainwindow.h \
     mapwidget.h \
@@ -40,6 +44,8 @@ HEADERS += \
     nodeconnectdialog.h \
     player.h \
     road.h \
+    splashwidget.h \
+    statedialog.h \
     statemanager.h \
     topwidget.h
 
@@ -49,6 +55,8 @@ FORMS += \
     newlandmarkdialog.ui \
     newroaddialog.ui \
     nodeconnectdialog.ui \
+    splashwidget.ui \
+    statedialog.ui \
     topwidget.ui
 
 DEFINES += BASE_URL=\\\"bnbnav.aircs.racing\\\"

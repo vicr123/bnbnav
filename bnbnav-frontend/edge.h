@@ -37,6 +37,13 @@ class Edge : public QObject {
         QLineF line();
         QPolygonF hitbox(double width);
 
+        double length();
+
+        QPointF closestPointTo(QPointF point);
+        double distanceTo(QPointF point, bool* ok = nullptr);
+
+        double averageY();
+
     signals:
 
     private:

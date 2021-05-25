@@ -40,7 +40,7 @@ public:
     {
         if (NodeConnectDialog->objectName().isEmpty())
             NodeConnectDialog->setObjectName(QString::fromUtf8("NodeConnectDialog"));
-        NodeConnectDialog->resize(400, 144);
+        NodeConnectDialog->resize(400, 175);
         gridLayout = new QGridLayout(NodeConnectDialog);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         roadSelectionBox = new QComboBox(NodeConnectDialog);

@@ -23,6 +23,9 @@
 #include <QJsonDocument>
 #include <QWebSocket>
 #include <QPoint>
+#include <QLineF>
+#include <QPen>
+#include "statemanager.h"
 #include "node.h"
 #include "road.h"
 #include "edge.h"
@@ -71,6 +74,14 @@ Edge* DataManager::edgeForNodes(Node* from, Node* to) {
     return nullptr;
 }
 
+QList<Edge*> DataManager::edgesFromNode(Node* from) {
+    QList<Edge*> edges;
+    for (Edge* edge : instance()->d->edges.values()) {
+        if (edge->from() == from) edges.append(edge);
+    }
+    return edges;
+}
+
 QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
     QSet<QString> roads;
     for (Edge* edge : instance()->d->edges.values()) {
@@ -81,9 +92,111 @@ QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
     return roads;
 }
 
-//Test?
 QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
+    //Find the closest edge for each point
+    QMultiMap<double, Edge*> point1Candidates, point2Candidates;
+    for (Edge* edge : edges().values()) {
+        QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF());
+        bool ok;
+        double distance = edge->distanceTo(from, &ok);
+        if (!ok) {
+            if (hitbox.containsPoint(from, Qt::OddEvenFill)) {
+                distance = 0;
+                ok = true;
+            }
+        }
+        if (ok) point1Candidates.insert(distance, edge);
 
+        distance = edge->distanceTo(to, &ok);
+        if (!ok) {
+            if (hitbox.containsPoint(to, Qt::OddEvenFill)) {
+                distance = 0;
+                ok = true;
+            }
+        }
+        if (ok) point2Candidates.insert(distance, edge);
+    }
+
+    if (point1Candidates.isEmpty() || point2Candidates.isEmpty()) return QList<Edge*>();
+
+    //TODO: Consider the other edges
+    Node* fromNode = point1Candidates.first()->from();
+    Node* toNode = point2Candidates.first()->to();
+
+    struct SearchNode {
+        Node* node;
+        double distance = 0;
+        bool visited = false;
+        Node* via = nullptr;
+    };
+
+    QList<SearchNode*> nodes;
+    QMap<Node*, SearchNode*> searchNodes;
+
+    for (Node* node : DataManager::nodes().values()) {
+        SearchNode* n = new SearchNode();
+        n->node = node;
+        if (node == fromNode) {
+            n->distance = 0;
+            n->visited = true;
+        }
+        nodes.append(n);
+        searchNodes.insert(n->node, n);
+    }
+
+    while (!nodes.isEmpty()) {
+        //Sort the nodes by distance
+        std::sort(nodes.begin(), nodes.end(), [ = ](SearchNode * first, SearchNode * second) {
+            if (first->visited && second->visited) {
+                return first->distance < second->distance;
+            } else if (first->visited) {
+                return true;
+            } else if (second->visited) {
+                return false;
+            } else {
+                return false;
+            }
+        });
+
+        //Inspect the stations!
+        SearchNode* top = nodes.takeFirst();
+        if (!top->visited) {
+            //No route found; bail here.
+
+            qDeleteAll(searchNodes.values());
+            return QList<Edge*>({
+                point1Candidates.first(), point2Candidates.values(point2Candidates.firstKey()).at(1)
+            });
+        }
+
+        if (top->node == toNode) {
+            QList<Edge*> edges;
+
+            //We found it!
+            do {
+                edges.prepend(edgeForNodes(top->via, top->node));
+                top = searchNodes.value(top->via);
+            } while (top->via != nullptr);
+
+
+            qDeleteAll(searchNodes.values());
+            return edges;
+        }
+
+        for (Edge* edge : edgesFromNode(top->node)) {
+            SearchNode* otherNode = searchNodes.value(edge->to());
+            double distance = edge->length();
+
+            if (otherNode->distance > top->distance + distance || !otherNode->visited) {
+                otherNode->distance = top->distance + distance;
+                otherNode->via = top->node;
+                otherNode->visited = true;
+            }
+        }
+    }
+
+    qDeleteAll(searchNodes.values());
+    return QList<Edge*>();
 }
 
 DataManager::DataManager(QObject* parent) : QObject(parent) {
