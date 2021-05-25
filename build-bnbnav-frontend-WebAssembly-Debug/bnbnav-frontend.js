@@ -691,8 +691,8 @@ var wasmMemory;
 // In the wasm backend, we polyfill the WebAssembly object,
 // so this creates a (non-native-wasm) table for us.
 var wasmTable = new WebAssembly.Table({
-  'initial': 10707,
-  'maximum': 10707 + 0,
+  'initial': 10705,
+  'maximum': 10705 + 0,
   'element': 'anyfunc'
 });
 
@@ -1293,11 +1293,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 9487536,
+    STACK_BASE = 9487088,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 4244656,
-    DYNAMIC_BASE = 9487536,
-    DYNAMICTOP_PTR = 4244480;
+    STACK_MAX = 4244208,
+    DYNAMIC_BASE = 9487088,
+    DYNAMICTOP_PTR = 4244032;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1831,7 +1831,7 @@ var ASM_CONSTS = {
 
 
 
-// STATICTOP = STATIC_BASE + 4243632;
+// STATICTOP = STATIC_BASE + 4243184;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -8305,7 +8305,7 @@ var ASM_CONSTS = {
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 4244480;
+      return 4244032;
     }
 
   
@@ -12674,7 +12674,7 @@ var ASM_CONSTS = {
   }
   
   
-  var _fetch_work_queue=4244640;function __emscripten_get_fetch_work_queue() {
+  var _fetch_work_queue=4244192;function __emscripten_get_fetch_work_queue() {
       return _fetch_work_queue;
     }function _emscripten_start_fetch(fetch, successcb, errorcb, progresscb, readystatechangecb) {
     if (typeof noExitRuntime !== 'undefined') noExitRuntime = true; // If we are the main Emscripten runtime, we should not be closing down.
@@ -13294,10 +13294,10 @@ var ASM_CONSTS = {
     }
 
   
-  var ___tm_current=4244496;
+  var ___tm_current=4244048;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 4244544, 4), 4244544);
+  var ___tm_timezone=(stringToUTF8("GMT", 4244096, 4), 4244096);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.
@@ -14001,12 +14001,6 @@ var _main = Module["_main"] = function() {
   return Module["asm"]["main"].apply(null, arguments)
 };
 
-var _malloc = Module["_malloc"] = function() {
-  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
-  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
-  return Module["asm"]["malloc"].apply(null, arguments)
-};
-
 var _free = Module["_free"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
@@ -14017,6 +14011,12 @@ var _strstr = Module["_strstr"] = function() {
   assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
   assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
   return Module["asm"]["strstr"].apply(null, arguments)
+};
+
+var _malloc = Module["_malloc"] = function() {
+  assert(runtimeInitialized, 'you need to wait for the runtime to be ready (e.g. wait for main() to be called)');
+  assert(!runtimeExited, 'the runtime was exited (use NO_EXIT_RUNTIME to keep it alive after main() exits)');
+  return Module["asm"]["malloc"].apply(null, arguments)
 };
 
 var ___errno_location = Module["___errno_location"] = function() {

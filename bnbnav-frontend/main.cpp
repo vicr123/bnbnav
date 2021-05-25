@@ -21,19 +21,11 @@
 
 #include <QApplication>
 
-#ifdef Q_OS_WASM
-    #include <QWasmSettings/qwasmsettings.h>
-#endif
-
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     a.setApplicationName("bnbnav");
     a.setOrganizationName("theSuite");
     a.setOrganizationDomain("vicr123.com");
-
-#ifdef Q_OS_WASM
-    QWasmSettings::registerFormat(true); // register the format and make it the default format
-#endif
 
     MainWindow w;
     w.show();
