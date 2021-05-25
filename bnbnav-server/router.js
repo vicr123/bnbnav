@@ -49,17 +49,6 @@ router.post("/nodes/:id", async (req, res) => {
         return;
     }
 
-    for (let edgeId of Object.keys(db.data.edges)) {
-        let edge = db.data.edges[edgeId];
-        if (edge.node1 == id || edge.node2 == id) {
-            delete db.data.edges[edgeId];
-            ws.broadcast({
-                type: "edgeRemoved",
-                id: edgeId
-            })
-        }
-    }
-
     let node = JSON.parse(JSON.stringify(db.data.nodes[id]));
     if (req.body.x != null) node.x = req.body.x;
     if (req.body.y != null) node.y = req.body.y;
@@ -69,7 +58,7 @@ router.post("/nodes/:id", async (req, res) => {
         res.sendStatus(400);
         return;
     }
-    
+
     db.data.nodes[id] = node;
     db.save();
 
