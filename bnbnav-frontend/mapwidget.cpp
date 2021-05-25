@@ -159,22 +159,23 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     //Draw players
     QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
     for (Player* player : DataManager::players()) {
-
         QRectF circle;
         circle.setSize(QSizeF(50, 50));
         circle.moveCenter(QPointF(0, 0));
 
+        QPointF markerCoordinates = player->markerCoordinates();
+
         painter.save();
         painter.resetTransform();
-        painter.translate(currentTransform().map(QPointF(player->x(), player->z())));
-        painter.rotate(-player->angle());
+        painter.translate(currentTransform().map(markerCoordinates));
+        painter.rotate(-player->markerAngle());
         playerMarkRenderer.render(&painter, circle);
         painter.restore();
 
         painter.setPen(Qt::black);
 
         circle.setSize(QSizeF(50, 50) / d->scale);
-        circle.moveCenter(QPointF(player->x(), player->z()));
+        circle.moveCenter(markerCoordinates);
 
         QRectF text;
         text.setHeight(painter.fontMetrics().height());
@@ -254,22 +255,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
             for (Edge* edge : DataManager::edges().values()) {
                 double width = edge->road()->pen(edge).widthF();
-                QLineF perpendicular = edge->line();
-                perpendicular.setLength(width);
-                perpendicular = perpendicular.normalVector();
-
-                QPolygonF poly;
-                poly.append(perpendicular.pointAt(-1));
-                poly.append(perpendicular.pointAt(1));
-
-                perpendicular = edge->line();
-                perpendicular.setPoints(perpendicular.p2(), perpendicular.p1());
-                perpendicular.setLength(width);
-                perpendicular = perpendicular.normalVector();
-                poly.append(perpendicular.pointAt(1));
-                poly.append(perpendicular.pointAt(-1));
-
-                if (poly.containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
+                if (edge->hitbox(width).containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
             }
         }
     }

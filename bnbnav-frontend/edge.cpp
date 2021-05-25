@@ -24,6 +24,7 @@
 #include "datamanager.h"
 #include <QJsonObject>
 #include <QLineF>
+#include <QPolygonF>
 
 struct EdgePrivate {
     Road* road;
@@ -57,4 +58,23 @@ Road* Edge::road() {
 
 QLineF Edge::line() {
     return QLineF(d->from->x(), d->from->z(), d->to->x(), d->to->z());
+}
+
+QPolygonF Edge::hitbox(double width) {
+    QLineF perpendicular = this->line();
+    perpendicular.setLength(width);
+    perpendicular = perpendicular.normalVector();
+
+    QPolygonF poly;
+    poly.append(perpendicular.pointAt(-1));
+    poly.append(perpendicular.pointAt(1));
+
+    perpendicular = this->line();
+    perpendicular.setPoints(perpendicular.p2(), perpendicular.p1());
+    perpendicular.setLength(width);
+    perpendicular = perpendicular.normalVector();
+    poly.append(perpendicular.pointAt(1));
+    poly.append(perpendicular.pointAt(-1));
+
+    return poly;
 }

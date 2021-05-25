@@ -21,12 +21,17 @@
 
 #include <QPointF>
 #include <QLineF>
+#include <QPen>
 #include <QJsonObject>
+#include "edge.h"
+#include "road.h"
+#include "datamanager.h"
 
 struct PlayerPrivate {
     QString name;
     double x, y, z;
 
+    Edge* snappedEdge = nullptr;
     QList<QPair<qint64, QPointF>> posHistory;
 };
 
@@ -52,11 +57,27 @@ void Player::update(QJsonObject object) {
 
     d->posHistory.append(QPair<qint64, QPointF>(QDateTime::currentMSecsSinceEpoch(), QPointF(d->x, d->z)));
     for (int i = 0; i < d->posHistory.count(); i++) {
-        if (d->posHistory.count() <= 10) break;;
+        if (d->posHistory.count() <= 10) break;
         if (d->posHistory.at(i).first < QDateTime::currentMSecsSinceEpoch() - 100) {
             d->posHistory.removeAt(i);
             i--;
         }
+    }
+
+    QList<Edge*> candidateEdges;
+    for (Edge* edge : DataManager::edges().values()) {
+        QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF() * 10);
+        if (hitbox.containsPoint(QPointF(d->x, d->z), Qt::OddEvenFill)) {
+            double angle = edge->line().angleTo(this->velocity());
+            if (angle > 180) angle = -360 + angle;
+            if (qAbs(angle) < 45) {
+                candidateEdges.append(edge);
+            }
+        }
+    }
+
+    if (!candidateEdges.contains(d->snappedEdge)) {
+        d->snappedEdge = candidateEdges.isEmpty() ? nullptr : candidateEdges.first();
     }
 }
 
@@ -76,7 +97,32 @@ double Player::z() {
     return d->z;
 }
 
+QPointF Player::markerCoordinates() {
+    if (d->snappedEdge) {
+        //Find the intersection point
+        QLineF playerLine(d->x, d->z, d->x + 1, d->z);
+        playerLine.setAngle(d->snappedEdge->line().normalVector().angle());
+
+        QPointF intersectionPoint;
+        playerLine.intersects(d->snappedEdge->line(), &intersectionPoint);
+        return intersectionPoint;
+    } else {
+        return QPointF(d->x, d->z);
+    }
+}
+
+double Player::markerAngle() {
+    if (d->snappedEdge) {
+        return d->snappedEdge->line().angle();
+    } else {
+        return velocity().angle();
+    }
+}
+
+QLineF Player::velocity() {
+    return QLineF(d->posHistory.first().second, d->posHistory.last().second);
+}
+
 double Player::angle() {
-    QLineF line(d->posHistory.first().second, d->posHistory.last().second);
-    return line.angle();
+    return velocity().angle();
 }

@@ -35,6 +35,7 @@ class Edge : public QObject {
         Node* to();
         Road* road();
         QLineF line();
+        QPolygonF hitbox(double width);
 
     signals:
 

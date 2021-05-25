@@ -36,6 +36,10 @@ class Player : public QObject {
         double y();
         double z();
 
+        QPointF markerCoordinates();
+        double markerAngle();
+
+        QLineF velocity();
         double angle();
 
     signals:
