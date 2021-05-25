@@ -110,13 +110,31 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         //Draw the edge
         Node* from = edge->from();
         Node* to = edge->to();
-        painter.setPen(d->roadTypes.value(edge->road()->type()));
-
-        if (StateManager::currentState() == StateManager::Edit && d->hoverTargets.contains(edge)) {
-            painter.setPen(Qt::blue);
-        }
 
         QLineF roadLine(from->x(), from->z(), to->x(), to->z());
+
+        QBrush col = d->roadTypes.value(edge->road()->type());
+        double thickness = 1;
+        if (edge->road()->type() == "motorway") {
+            QLineF perpendicular = roadLine;
+            perpendicular.setLength(0.5);
+            perpendicular = perpendicular.normalVector();
+
+            QLinearGradient grad(perpendicular.pointAt(-1), perpendicular.pointAt(1));
+            grad.setColorAt(0, QColor(100, 0, 0));
+            grad.setColorAt(0.2, QColor(100, 0, 0));
+            grad.setColorAt(0.2001, QColor(200, 200, 0));
+            grad.setColorAt(0.7999, QColor(200, 200, 0));
+            grad.setColorAt(0.8, QColor(100, 0, 0));
+            grad.setColorAt(1, QColor(100, 0, 0));
+            col = grad;
+            thickness = 2;
+        }
+        if (StateManager::currentState() == StateManager::Edit && d->hoverTargets.contains(edge)) {
+            col = Qt::blue;
+        }
+        painter.setPen(QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+
         painter.drawLine(roadLine);
 
     }
@@ -227,7 +245,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 void MapWidget::wheelEvent(QWheelEvent* event) {
     double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
     d->scale *= factor;
-    d->origin *= factor;
+    d->origin = (d->origin - event->position()) * factor + event->position();
     this->update();
 }
 
