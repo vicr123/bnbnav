@@ -116,7 +116,9 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             painter.setPen(Qt::blue);
         }
 
-        painter.drawLine(from->x(), from->z(), to->x(), to->z());
+        QLineF roadLine(from->x(), from->z(), to->x(), to->z());
+        painter.drawLine(roadLine);
+
     }
 
     //Draw players

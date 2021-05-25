@@ -43,15 +43,15 @@ router.post("/nodes/add", async (req, res) => {
     });
 });
 router.delete("/nodes/:id", async (req, res) => {
-    let id = req.params
-    if (!db.data.nodes[req.params.id]) {
+    let id = req.params.id
+    if (!db.data.nodes[id]) {
         res.sendStatus(404);
         return;
     }
 
     for (let edgeId of Object.keys(db.data.edges)) {
         let edge = db.data.edges[edgeId];
-        if (edge.node1 == req.params.id || edge.node2 == req.params.id) {
+        if (edge.node1 == id || edge.node2 == id) {
             delete db.data.edges[edgeId];
             ws.broadcast({
                 type: "edgeRemoved",
@@ -60,12 +60,12 @@ router.delete("/nodes/:id", async (req, res) => {
         }
     }
 
-    delete db.data.nodes[req.params.id];
+    delete db.data.nodes[id];
     db.save();
 
     ws.broadcast({
         type: "nodeRemoved",
-        id: req.params.id
+        id: id
     });
 
     res.sendStatus(200);
@@ -93,6 +93,34 @@ router.post("/roads/add", async (req, res) => {
     res.send({
         id: id
     });
+});
+router.delete("/roads/:id", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.roads[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    for (let edgeId of Object.keys(db.data.edges)) {
+        let edge = db.data.edges[edgeId];
+        if (edge.road == id) {
+            delete db.data.edges[edgeId];
+            ws.broadcast({
+                type: "edgeRemoved",
+                id: edgeId
+            })
+        }
+    }
+
+    delete db.data.nodes[id];
+    db.save();
+
+    ws.broadcast({
+        type: "roadRemoved",
+        id: id
+    });
+
+    res.sendStatus(200);
 });
 router.post("/edges/add", async (req, res) => {
     if (req.body.road == null || req.body.node1 == null || req.body.node2 == null) {
@@ -124,6 +152,23 @@ router.post("/edges/add", async (req, res) => {
     res.send({
         id: id.toString()
     });
+});
+router.delete("/edges/:id", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.edges[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    delete db.data.edges[id];
+    db.save();
+
+    ws.broadcast({
+        type: "edgeRemoved",
+        id: id
+    });
+
+    res.sendStatus(200);
 });
 router.post("/player/:player", async (req, res) => {
     ws.broadcast({
