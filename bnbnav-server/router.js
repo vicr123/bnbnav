@@ -90,6 +90,17 @@ router.delete("/nodes/:id", async (req, res) => {
         }
     }
 
+    for (let landmarkId of Object.keys(db.data.landmarks)) {
+        let landmark = db.data.landmarks[landmarkId];
+        if (landmark.node == id) {
+            delete db.data.landmarks[landmarkId];
+            ws.broadcast({
+                type: "landmarkRemoved",
+                id: landmarkId
+            });
+        }
+    }
+
     delete db.data.nodes[id];
     db.save();
 
@@ -195,6 +206,54 @@ router.delete("/edges/:id", async (req, res) => {
 
     ws.broadcast({
         type: "edgeRemoved",
+        id: id
+    });
+
+    res.sendStatus(200);
+});
+router.post("/landmarks/add", async (req, res) => {
+    if (req.body.node == null || req.body.name == null || req.body.type == null) {
+        res.sendStatus(400);
+        return;
+    }
+
+    if (!Object.keys(db.data.nodes).includes(req.body.node.toString())) {
+        res.sendStatus(400);
+        return;
+    }
+    
+    let id = db.uniqueId("landmarks");
+    db.data.landmarks[id] = {
+        name: req.body.name,
+        type: req.body.type,
+        node: req.body.node.toString()
+    };
+    db.save();
+
+    ws.broadcast({
+        type: "newLandmark",
+        id: id,
+        name: req.body.name,
+        landmarkType: req.body.type,
+        node: req.body.node.toString()
+    });
+
+    res.send({
+        id: id
+    });
+});
+router.delete("/landmarks/:id", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.landmarks[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    delete db.data.landmarks[id];
+    db.save();
+
+    ws.broadcast({
+        type: "landmarkRemoved",
         id: id
     });
 

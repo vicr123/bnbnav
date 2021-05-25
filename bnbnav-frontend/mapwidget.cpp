@@ -127,7 +127,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     painter.setRenderHint(QPainter::Antialiasing);
 
     QFont font = painter.font();
-    font.setPixelSize(5);
+    font.setPointSizeF(20 / d->scale);
     painter.setFont(font);
 
     for (Edge* edge : DataManager::edges().values()) {
