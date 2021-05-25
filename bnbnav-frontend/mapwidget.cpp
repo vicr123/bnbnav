@@ -94,6 +94,33 @@ QTransform MapWidget::currentTransform() {
     return transform;
 }
 
+void MapWidget::doClick() {
+    if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
+        //TODO: more than one hover target
+        Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
+        Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
+
+        if (hoverNode) {
+            if (d->firstNode) {
+                Node* first = d->firstNode;
+                Node* second = hoverNode;
+                d->firstNode = nullptr;
+
+                if (first == second) return;
+                if (DataManager::edgeForNodes(first, second)) return;
+
+                //Connect these nodes!
+                NodeConnectDialog dialog(first, second);
+                dialog.exec();
+            } else {
+                d->firstNode = hoverNode;
+            }
+        } else if (hoverEdge) {
+            //TODO: Edit edge
+        }
+    }
+}
+
 void MapWidget::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     painter.setTransform(currentTransform());
@@ -166,7 +193,9 @@ void MapWidget::mousePressEvent(QMouseEvent* event) {
 void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
         if (d->dragNode) {
-            if (d->dragNodeCoordinates != d->initialNodeCoordinates) {
+            if (d->dragNodeCoordinates == d->initialNodeCoordinates) {
+                doClick();
+            } else {
                 d->dragNode->submitUpdate(d->dragNodeCoordinates.x(), d->dragNode->y(), d->dragNodeCoordinates.y(), [ = ](bool error) {
                     if (error) {
                         QMessageBox::warning(this, tr("Could not update node"), tr("Could not update the node."));
@@ -178,30 +207,7 @@ void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
             d->dragging = false;
             if ((d->dragInitial - d->dragStart).manhattanLength() < 5) {
                 //Treat this as a click!
-                if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
-                    //TODO: more than one hover target
-                    Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
-                    Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
-
-                    if (hoverNode) {
-                        if (d->firstNode) {
-                            Node* first = d->firstNode;
-                            Node* second = hoverNode;
-                            d->firstNode = nullptr;
-
-                            if (first == second) return;
-                            if (DataManager::edgeForNodes(first, second)) return;
-
-                            //Connect these nodes!
-                            NodeConnectDialog dialog(first, second);
-                            dialog.exec();
-                        } else {
-                            d->firstNode = hoverNode;
-                        }
-                    } else if (hoverEdge) {
-                        //TODO: Edit edge
-                    }
-                }
+                doClick();
             }
         }
     }

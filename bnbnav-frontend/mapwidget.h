@@ -38,6 +38,8 @@ class MapWidget : public QWidget {
     private:
         MapWidgetPrivate* d;
 
+        void doClick();
+
         // QWidget interface
     protected:
         void paintEvent(QPaintEvent* event);
