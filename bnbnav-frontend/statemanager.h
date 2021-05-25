@@ -37,8 +37,12 @@ class StateManager : public QObject {
         static GlobalState currentState();
         static void setCurrentState(GlobalState state);
 
+        static void setLogin(QString login);
+        static QString login();
+
     signals:
         void stateChanged(GlobalState state);
+        void loginChanged(QString login);
 
     private:
         explicit StateManager(QObject* parent = nullptr);

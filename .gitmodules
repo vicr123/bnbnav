@@ -1,0 +1,3 @@
+[submodule "bnbnav-frontend/QWasmSettings"]
+	path = bnbnav-frontend/QWasmSettings
+	url = https://github.com/Skycoder42/QWasmSettings.git

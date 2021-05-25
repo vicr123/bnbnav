@@ -160,7 +160,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
     for (Player* player : DataManager::players()) {
         QRectF circle;
-        circle.setSize(QSizeF(50, 50));
+        circle.setSize(QSizeF(15, 15) * d->scale);
         circle.moveCenter(QPointF(0, 0));
 
         QPointF markerCoordinates = player->markerCoordinates();
@@ -174,7 +174,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
         painter.setPen(Qt::black);
 
-        circle.setSize(QSizeF(50, 50) / d->scale);
+        circle.setSize(QSizeF(15, 15));
         circle.moveCenter(markerCoordinates);
 
         QRectF text;
@@ -184,6 +184,23 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         text.moveTop(circle.bottom() + 10 / d->scale);
         painter.drawText(text, player->name());
 
+        if (player->snappedEdge()) {
+            QRectF roadText;
+            roadText.setHeight(painter.fontMetrics().height());
+            roadText.setWidth(painter.fontMetrics().horizontalAdvance(player->snappedEdge()->road()->name()) + 20 / d->scale);
+            roadText.moveCenter(text.center());
+
+            QRectF roadBacking = roadText.adjusted(-20 / d->scale, -5 / d->scale, 20 / d->scale, 5 / d->scale);
+            roadBacking.moveTop(text.bottom() + 10 / d->scale);
+
+            painter.setBrush(QColor(0, 130, 120));
+            painter.setPen(Qt::transparent);
+            painter.drawRoundedRect(roadBacking, roadBacking.height() / 2, roadBacking.height() / 2, Qt::AbsoluteSize);
+
+            roadText.moveCenter(roadBacking.center());
+            painter.setPen(Qt::white);
+            painter.drawText(roadText, Qt::AlignCenter, player->snappedEdge()->road()->name());
+        }
     }
 
     if (StateManager::currentState() == StateManager::Edit) {
@@ -281,6 +298,7 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
 
             if (hoverNode) {
                 menu->addSection(tr("Node"));
+                menu->addAction(tr("Node ID: %1").arg(DataManager::nodes().key(hoverNode)))->setEnabled(false);
                 menu->addAction(tr("Attach Landmark"), [ = ] {
                     //Connect these nodes!
                     NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);

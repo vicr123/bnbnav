@@ -66,11 +66,12 @@ void Player::update(QJsonObject object) {
 
     QList<Edge*> candidateEdges;
     for (Edge* edge : DataManager::edges().values()) {
-        QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF() * 10);
+        QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF() * 2);
         if (hitbox.containsPoint(QPointF(d->x, d->z), Qt::OddEvenFill)) {
             double angle = edge->line().angleTo(this->velocity());
             if (angle > 180) angle = -360 + angle;
             if (qAbs(angle) < 45) {
+                //TODO: Prepend this edge if it's part of the current route
                 candidateEdges.append(edge);
             }
         }
@@ -95,6 +96,10 @@ double Player::y() {
 
 double Player::z() {
     return d->z;
+}
+
+Edge* Player::snappedEdge() {
+    return d->snappedEdge;
 }
 
 QPointF Player::markerCoordinates() {

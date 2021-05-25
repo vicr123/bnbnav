@@ -22,6 +22,7 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 #include <QWebSocket>
+#include <QPoint>
 #include "node.h"
 #include "road.h"
 #include "edge.h"
@@ -35,6 +36,7 @@ struct DataManagerPrivate {
     QMap<QString, Road*> roads;
     QMap<QString, Landmark*> landmarks;
     QMap<QString, Player*> players;
+    QMap<QString, Player*> allPlayers;
 };
 
 DataManager* DataManager::instance() {
@@ -77,6 +79,11 @@ QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
         }
     }
     return roads;
+}
+
+//Test?
+QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
+
 }
 
 DataManager::DataManager(QObject* parent) : QObject(parent) {
@@ -147,10 +154,19 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
             emit updatedNode();
         } else if (type == "playerMove") {
             if (!d->players.contains(id)) {
-                d->players.insert(id, new Player(id));
+                if (d->allPlayers.contains(id)) {
+                    d->players.insert(id, d->allPlayers.value(id));
+                } else {
+                    Player* p = new Player(id);
+                    d->allPlayers.insert(id, p);
+                    d->players.insert(id, p);
+                }
             }
             d->players.value(id)->update(object);
             emit playerUpdate();
+        } else if (type == "playerGone") {
+            d->players.remove(id);
+            emit removedPlayer();
         }
     });
 }

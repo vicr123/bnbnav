@@ -65,12 +65,11 @@
      inkscape:groupmode="layer"
      id="layer1">
     <circle
-       style="fill:#ffffff;fill-opacity:0.5;stroke:none;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round"
-       id="path940"
+       style="fill:#ffffff;fill-opacity:0.804108;stroke:#000000;stroke-width:0.264583;stroke-linecap:round;stroke-linejoin:round;stroke-opacity:1"
+       id="path944"
        cx="4.2333331"
-       cy="-4.2333331"
-       r="4.2333331"
-       transform="rotate(90)" />
+       cy="4.2333331"
+       r="4.1010418" />
     <path
        style="fill:#0096ff;fill-opacity:1;stroke:none;stroke-width:0.264583px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 7.9374996,4.2333333 1.5874995,1.5875 c 0.5291667,0.79375 1.0583334,1.5875 1.0583334,2.6458333 0,1.0583334 -0.5291667,1.8520834 -1.0583334,2.6458334 z"

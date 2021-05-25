@@ -43,6 +43,8 @@ class DataManager : public QObject {
         static Edge* edgeForNodes(Node* from, Node* to);
         static QSet<QString> roadsConnectedToNode(Node* node);
 
+        static QList<Edge*> shortestPath(QPoint from, QPoint to);
+
     signals:
         void ready();
         void newNode();
@@ -56,6 +58,7 @@ class DataManager : public QObject {
         void updatedEdge();
         void loadError();
         void playerUpdate();
+        void removedPlayer();
 
     private:
         explicit DataManager(QObject* parent = nullptr);

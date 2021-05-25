@@ -13,6 +13,7 @@ SOURCES += \
     datamanager.cpp \
     edge.cpp \
     landmark.cpp \
+    loginwidget.cpp \
     main.cpp \
     mainwindow.cpp \
     mapwidget.cpp \
@@ -30,6 +31,7 @@ HEADERS += \
     datamanager.h \
     edge.h \
     landmark.h \
+    loginwidget.h \
     mainwindow.h \
     mapwidget.h \
     newlandmarkdialog.h \
@@ -42,6 +44,7 @@ HEADERS += \
     topwidget.h
 
 FORMS += \
+    loginwidget.ui \
     mainwindow.ui \
     newlandmarkdialog.ui \
     newroaddialog.ui \
@@ -55,6 +58,8 @@ DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+include(QWasmSettings/qwasmsettings.pri)
 
 RESOURCES += \
     resources.qrc

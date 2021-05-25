@@ -60,21 +60,21 @@ QString Road::type() {
 
 QPen Road::pen(Edge* edge) {
     QBrush col = d->roadTypes.value(d->type);
-    double thickness = 1;
+    double thickness = 5;
     if (d->type == "motorway") {
         QLineF perpendicular = edge->line();
-        perpendicular.setLength(0.5);
+        perpendicular.setLength(5);
         perpendicular = perpendicular.normalVector();
 
         QLinearGradient grad(perpendicular.pointAt(-1), perpendicular.pointAt(1));
         grad.setColorAt(0, QColor(100, 0, 0));
-        grad.setColorAt(0.2, QColor(100, 0, 0));
-        grad.setColorAt(0.2001, QColor(200, 200, 0));
-        grad.setColorAt(0.7999, QColor(200, 200, 0));
-        grad.setColorAt(0.8, QColor(100, 0, 0));
+        grad.setColorAt(0.3, QColor(100, 0, 0));
+        grad.setColorAt(0.3001, QColor(200, 200, 0));
+        grad.setColorAt(0.6999, QColor(200, 200, 0));
+        grad.setColorAt(0.7, QColor(100, 0, 0));
         grad.setColorAt(1, QColor(100, 0, 0));
         col = grad;
-        thickness = 2;
+        thickness = 10;
     }
     return QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 }

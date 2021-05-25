@@ -22,6 +22,7 @@
 
 #include <QObject>
 
+class Edge;
 struct PlayerPrivate;
 class Player : public QObject {
         Q_OBJECT
@@ -36,6 +37,7 @@ class Player : public QObject {
         double y();
         double z();
 
+        Edge* snappedEdge();
         QPointF markerCoordinates();
         double markerAngle();
 

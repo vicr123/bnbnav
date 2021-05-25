@@ -26,6 +26,7 @@ public:
     QLabel *panLabel;
     QSpacerItem *horizontalSpacer;
     QPushButton *editModeButton;
+    QPushButton *loginButton;
 
     void setupUi(QWidget *TopWidget)
     {
@@ -49,6 +50,12 @@ public:
         editModeButton->setCheckable(true);
 
         horizontalLayout->addWidget(editModeButton);
+
+        loginButton = new QPushButton(TopWidget);
+        loginButton->setObjectName(QString::fromUtf8("loginButton"));
+        loginButton->setText(QString::fromUtf8("Log In"));
+
+        horizontalLayout->addWidget(loginButton);
 
 
         retranslateUi(TopWidget);

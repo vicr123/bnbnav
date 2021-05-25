@@ -20,12 +20,26 @@
 #include "topwidget.h"
 #include "ui_topwidget.h"
 
+#include <QSettings>
 #include "statemanager.h"
 
 TopWidget::TopWidget(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TopWidget) {
     ui->setupUi(this);
+
+    connect(StateManager::instance(), &StateManager::loginChanged, this, [ = ](QString login) {
+        if (login.isEmpty()) {
+            ui->loginButton->setText(tr("Log In"));
+        } else {
+            ui->loginButton->setText(login);
+        }
+    });
+    if (StateManager::login().isEmpty()) {
+        ui->loginButton->setText(tr("Log In"));
+    } else {
+        ui->loginButton->setText(StateManager::login());
+    }
 }
 
 TopWidget::~TopWidget() {
@@ -38,5 +52,9 @@ void TopWidget::setPan(int x, int y) {
 
 void TopWidget::on_editModeButton_toggled(bool checked) {
     StateManager::setCurrentState(checked ? StateManager::Edit : StateManager::Browse);
+}
+
+void TopWidget::on_loginButton_clicked() {
+    emit showLoginWidget();
 }
 

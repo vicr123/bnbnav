@@ -36,11 +36,13 @@ class TopWidget : public QWidget {
         void setPan(int x, int y);
 
     signals:
-
+        void showLoginWidget();
 
     private slots:
 
         void on_editModeButton_toggled(bool checked);
+
+        void on_loginButton_clicked();
 
     private:
         Ui::TopWidget* ui;

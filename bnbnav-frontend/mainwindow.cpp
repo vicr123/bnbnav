@@ -21,9 +21,11 @@
 #include "ui_mainwindow.h"
 
 #include "mapwidget.h"
+#include "loginwidget.h"
 
 struct MainWindowPrivate {
     MapWidget* map;
+    LoginWidget* login;
 };
 
 MainWindow::MainWindow(QWidget* parent)
@@ -39,6 +41,18 @@ MainWindow::MainWindow(QWidget* parent)
     d->map->lower();
 
     connect(d->map, &MapWidget::pan, ui->topWidget, &TopWidget::setPan);
+
+    d->login = new LoginWidget(ui->centralwidget);
+    d->login->move(0, 0);
+    d->login->hide();
+    connect(ui->topWidget, &TopWidget::showLoginWidget, this, [ = ] {
+        if (d->login->isVisible()) {
+            d->login->hide();
+        } else {
+            d->login->show();
+        }
+    });
+    d->login->installEventFilter(this);
 }
 
 MainWindow::~MainWindow() {
@@ -48,4 +62,13 @@ MainWindow::~MainWindow() {
 
 void MainWindow::resizeEvent(QResizeEvent* event) {
     d->map->resize(this->size());
+    d->login->move(this->width() - d->login->width(), ui->topWidget->height());
+}
+
+
+bool MainWindow::eventFilter(QObject* watched, QEvent* event) {
+    if (watched == d->login && event->type() == QEvent::Resize) {
+        d->login->move(this->width() - d->login->width(), ui->topWidget->height());
+    }
+    return false;
 }

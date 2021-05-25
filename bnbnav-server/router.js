@@ -270,7 +270,7 @@ router.post("/player/:player", async (req, res) => {
 router.delete("/player/:player", async (req, res) => {
     ws.broadcast({
         type: "playerGone",
-        ...req.body
+        id: req.params.player
     });
 
     res.sendStatus(200);

@@ -19,8 +19,11 @@
  * *************************************/
 #include "statemanager.h"
 
+#include <QSettings>
+
 struct StateManagerPrivate {
     StateManager::GlobalState state = StateManager::Browse;
+    QString login;
 };
 
 StateManager* StateManager::instance() {
@@ -37,6 +40,20 @@ void StateManager::setCurrentState(GlobalState state) {
     emit instance()->stateChanged(state);
 }
 
+void StateManager::setLogin(QString login) {
+    QSettings settings;
+    settings.setValue("login/username", login);
+    instance()->d->login = login;
+    emit instance()->loginChanged(login);
+}
+
+QString StateManager::login() {
+    return instance()->d->login;
+}
+
 StateManager::StateManager(QObject* parent) : QObject(parent) {
     d = new StateManagerPrivate();
+
+    QSettings settings;
+    d->login = settings.value("login/username").toString();
 }

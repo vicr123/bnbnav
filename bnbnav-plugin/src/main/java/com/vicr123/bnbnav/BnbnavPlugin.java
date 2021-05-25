@@ -29,6 +29,7 @@ public class BnbnavPlugin extends JavaPlugin {
                 .defaultBaseUrl(API_BASE)
                 .setDefaultHeader("Authorization", "Bearer " + AUTH_TOKEN);
 
+        getServer().getPluginManager().registerEvents(new EventListener(unirest), plugin);
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
 
         getServer().getScheduler().scheduleSyncRepeatingTask(getPlugin(), this::detectPlayers, 20, 1);
@@ -40,7 +41,8 @@ public class BnbnavPlugin extends JavaPlugin {
         for (Player player : getServer().getOnlinePlayers()) {
             Location loc = player.getLocation();
             String body = "{\"id\": \"" + player.getName() + "\", \"x\": " + loc.getX() + ", \"y\": " + loc.getY() + ", \"z\": " + loc.getZ() + "}";
-            unirest.post("/player/" + player.getName())
+            unirest.post("/player/{player}")
+                    .routeParam("player", player.getName())
                     .contentType("application/json")
                     .body(body)
                     .asEmptyAsync();
