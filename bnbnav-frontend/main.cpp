@@ -20,12 +20,15 @@
 #include "mainwindow.h"
 
 #include <QApplication>
+#include <QStyleFactory>
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     a.setApplicationName("bnbnav");
     a.setOrganizationName("theSuite");
     a.setOrganizationDomain("vicr123.com");
+
+    a.setStyle(QStyleFactory::create("fusion"));
 
     QPalette pal = a.palette();
     pal.setColor(QPalette::Window, Qt::white);

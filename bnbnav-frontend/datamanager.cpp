@@ -164,9 +164,7 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
             //No route found; bail here.
 
             qDeleteAll(searchNodes.values());
-            return QList<Edge*>({
-                point1Candidates.first(), point2Candidates.values(point2Candidates.firstKey()).at(1)
-            });
+            return QList<Edge*>();
         }
 
         if (top->node == toNode) {
