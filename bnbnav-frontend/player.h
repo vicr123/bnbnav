@@ -36,6 +36,8 @@ class Player : public QObject {
         double y();
         double z();
 
+        double angle();
+
     signals:
 
     private:

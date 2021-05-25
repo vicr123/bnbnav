@@ -26,11 +26,14 @@
 #include <QPainterPath>
 #include <datagatherer.h>
 #include <QMessageBox>
+#include <QSvgRenderer>
 #include "nodeconnectdialog.h"
+#include "newlandmarkdialog.h"
 #include "datamanager.h"
 #include "edge.h"
 #include "node.h"
 #include "road.h"
+#include "landmark.h"
 #include "player.h"
 #include "statemanager.h"
 
@@ -110,8 +113,10 @@ void MapWidget::doClick() {
                 if (DataManager::edgeForNodes(first, second)) return;
 
                 //Connect these nodes!
-                NodeConnectDialog dialog(first, second);
-                dialog.exec();
+                NodeConnectDialog* dialog = new NodeConnectDialog(first, second);
+                dialog->setWindowModality(Qt::ApplicationModal);
+                connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
+                dialog->open();
             } else {
                 d->firstNode = hoverNode;
             }
@@ -142,23 +147,42 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         painter.drawLine(edge->line());
     }
 
+    for (Landmark* landmark : DataManager::landmarks().values()) {
+        QRectF landmarkPin;
+        landmarkPin.setSize(QSizeF(4, 4));
+        landmarkPin.moveCenter(QPointF(landmark->node()->x(), landmark->node()->z()));
+
+        QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
+        renderer.render(&painter, landmarkPin);
+    }
+
     //Draw players
+    QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
     for (Player* player : DataManager::players()) {
-        painter.setPen(Qt::white);
-        painter.setBrush(Qt::red);
+
         QRectF circle;
-        circle.setSize(QSizeF(5, 5));
-        circle.moveCenter(QPointF(player->x(), player->z()));
-        painter.drawEllipse(circle);
+        circle.setSize(QSizeF(50, 50));
+        circle.moveCenter(QPointF(0, 0));
+
+        painter.save();
+        painter.resetTransform();
+        painter.translate(currentTransform().map(QPointF(player->x(), player->z())));
+        painter.rotate(-player->angle());
+        playerMarkRenderer.render(&painter, circle);
+        painter.restore();
 
         painter.setPen(Qt::black);
+
+        circle.setSize(QSizeF(50, 50) / d->scale);
+        circle.moveCenter(QPointF(player->x(), player->z()));
 
         QRectF text;
         text.setHeight(painter.fontMetrics().height());
         text.setWidth(painter.fontMetrics().horizontalAdvance(player->name()));
         text.moveCenter(circle.center());
-        text.moveTop(circle.bottom() + 1);
+        text.moveTop(circle.bottom() + 10 / d->scale);
         painter.drawText(text, player->name());
+
     }
 
     if (StateManager::currentState() == StateManager::Edit) {
@@ -271,6 +295,13 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
 
             if (hoverNode) {
                 menu->addSection(tr("Node"));
+                menu->addAction(tr("Attach Landmark"), [ = ] {
+                    //Connect these nodes!
+                    NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);
+                    dialog->setWindowModality(Qt::ApplicationModal);
+                    connect(dialog, &NewLandmarkDialog::finished, dialog, &NewLandmarkDialog::deleteLater);
+                    dialog->open();
+                });
                 menu->addAction(tr("Delete Node"), [ = ] {
                     DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
                         if (error) {

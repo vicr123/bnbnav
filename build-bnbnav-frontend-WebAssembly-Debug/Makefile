@@ -55,9 +55,11 @@ OBJECTS_DIR   = ./
 SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 		../bnbnav-frontend/datamanager.cpp \
 		../bnbnav-frontend/edge.cpp \
+		../bnbnav-frontend/landmark.cpp \
 		../bnbnav-frontend/main.cpp \
 		../bnbnav-frontend/mainwindow.cpp \
 		../bnbnav-frontend/mapwidget.cpp \
+		../bnbnav-frontend/newlandmarkdialog.cpp \
 		../bnbnav-frontend/newroaddialog.cpp \
 		../bnbnav-frontend/node.cpp \
 		../bnbnav-frontend/nodeconnectdialog.cpp \
@@ -65,11 +67,14 @@ SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 		../bnbnav-frontend/road.cpp \
 		../bnbnav-frontend/statemanager.cpp \
 		../bnbnav-frontend/topwidget.cpp /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/bnbnav-frontend.js_plugin_import.cpp \
+		qrc_resources.cpp \
 		moc_datagatherer.cpp \
 		moc_datamanager.cpp \
 		moc_edge.cpp \
+		moc_landmark.cpp \
 		moc_mainwindow.cpp \
 		moc_mapwidget.cpp \
+		moc_newlandmarkdialog.cpp \
 		moc_newroaddialog.cpp \
 		moc_node.cpp \
 		moc_nodeconnectdialog.cpp \
@@ -80,9 +85,11 @@ SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 OBJECTS       = datagatherer.o \
 		datamanager.o \
 		edge.o \
+		landmark.o \
 		main.o \
 		mainwindow.o \
 		mapwidget.o \
+		newlandmarkdialog.o \
 		newroaddialog.o \
 		node.o \
 		nodeconnectdialog.o \
@@ -91,11 +98,14 @@ OBJECTS       = datagatherer.o \
 		statemanager.o \
 		topwidget.o \
 		bnbnav-frontend.js_plugin_import.o \
+		qrc_resources.o \
 		moc_datagatherer.o \
 		moc_datamanager.o \
 		moc_edge.o \
+		moc_landmark.o \
 		moc_mainwindow.o \
 		moc_mapwidget.o \
+		moc_newlandmarkdialog.o \
 		moc_newroaddialog.o \
 		moc_node.o \
 		moc_nodeconnectdialog.o \
@@ -198,8 +208,10 @@ DIST          = /opt/qt5-wasm/mkspecs/features/spec_pre.prf \
 		../bnbnav-frontend/bnbnav-frontend.pro ../bnbnav-frontend/datagatherer.h \
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/edge.h \
+		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/mainwindow.h \
 		../bnbnav-frontend/mapwidget.h \
+		../bnbnav-frontend/newlandmarkdialog.h \
 		../bnbnav-frontend/newroaddialog.h \
 		../bnbnav-frontend/node.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
@@ -209,9 +221,11 @@ DIST          = /opt/qt5-wasm/mkspecs/features/spec_pre.prf \
 		../bnbnav-frontend/topwidget.h ../bnbnav-frontend/datagatherer.cpp \
 		../bnbnav-frontend/datamanager.cpp \
 		../bnbnav-frontend/edge.cpp \
+		../bnbnav-frontend/landmark.cpp \
 		../bnbnav-frontend/main.cpp \
 		../bnbnav-frontend/mainwindow.cpp \
 		../bnbnav-frontend/mapwidget.cpp \
+		../bnbnav-frontend/newlandmarkdialog.cpp \
 		../bnbnav-frontend/newroaddialog.cpp \
 		../bnbnav-frontend/node.cpp \
 		../bnbnav-frontend/nodeconnectdialog.cpp \
@@ -227,7 +241,7 @@ TARGET        = ./bnbnav-frontend.js
 first: all
 ####### Build rules
 
-./bnbnav-frontend.js: /opt/qt5-wasm/lib/libQt5Svg.a /opt/qt5-wasm/lib/libQt5Widgets.a /opt/qt5-wasm/lib/libQt5Gui.a /opt/qt5-wasm/lib/libQt5WebSockets.a /opt/qt5-wasm/lib/libQt5Network.a /opt/qt5-wasm/lib/libQt5Core.a ui_mainwindow.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h $(OBJECTS)  apphtml appjs appsvg
+./bnbnav-frontend.js: /opt/qt5-wasm/lib/libQt5Svg.a /opt/qt5-wasm/lib/libQt5Widgets.a /opt/qt5-wasm/lib/libQt5Gui.a /opt/qt5-wasm/lib/libQt5WebSockets.a /opt/qt5-wasm/lib/libQt5Network.a /opt/qt5-wasm/lib/libQt5Core.a ui_mainwindow.h ui_newlandmarkdialog.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h $(OBJECTS)  apphtml appjs appsvg
 	@test -d ./ || mkdir -p ./
 	$(LINK) $(LFLAGS) -o $(TARGET) $(OBJECTS) $(OBJCOMP) $(LIBS)
 
@@ -324,6 +338,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 		/opt/qt5-wasm/mkspecs/features/yacc.prf \
 		/opt/qt5-wasm/mkspecs/features/lex.prf \
 		../bnbnav-frontend/bnbnav-frontend.pro \
+		../bnbnav-frontend/resources.qrc \
 		/opt/qt5-wasm/plugins/platforms/libqwasm.prl \
 		/opt/qt5-wasm/plugins/iconengines/libqsvgicon.prl \
 		/opt/qt5-wasm/plugins/imageformats/libqgif.prl \
@@ -430,6 +445,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 /opt/qt5-wasm/mkspecs/features/yacc.prf:
 /opt/qt5-wasm/mkspecs/features/lex.prf:
 ../bnbnav-frontend/bnbnav-frontend.pro:
+../bnbnav-frontend/resources.qrc:
 /opt/qt5-wasm/plugins/platforms/libqwasm.prl:
 /opt/qt5-wasm/plugins/iconengines/libqsvgicon.prl:
 /opt/qt5-wasm/plugins/imageformats/libqgif.prl:
@@ -456,10 +472,11 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5-wasm/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.h ../bnbnav-frontend/datamanager.h ../bnbnav-frontend/edge.h ../bnbnav-frontend/mainwindow.h ../bnbnav-frontend/mapwidget.h ../bnbnav-frontend/newroaddialog.h ../bnbnav-frontend/node.h ../bnbnav-frontend/nodeconnectdialog.h ../bnbnav-frontend/player.h ../bnbnav-frontend/road.h ../bnbnav-frontend/statemanager.h ../bnbnav-frontend/topwidget.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/node.cpp ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/player.cpp ../bnbnav-frontend/road.cpp ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/topwidget.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/mainwindow.ui ../bnbnav-frontend/newroaddialog.ui ../bnbnav-frontend/nodeconnectdialog.ui ../bnbnav-frontend/topwidget.ui $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.h ../bnbnav-frontend/datamanager.h ../bnbnav-frontend/edge.h ../bnbnav-frontend/landmark.h ../bnbnav-frontend/mainwindow.h ../bnbnav-frontend/mapwidget.h ../bnbnav-frontend/newlandmarkdialog.h ../bnbnav-frontend/newroaddialog.h ../bnbnav-frontend/node.h ../bnbnav-frontend/nodeconnectdialog.h ../bnbnav-frontend/player.h ../bnbnav-frontend/road.h ../bnbnav-frontend/statemanager.h ../bnbnav-frontend/topwidget.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/node.cpp ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/player.cpp ../bnbnav-frontend/road.cpp ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/topwidget.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/mainwindow.ui ../bnbnav-frontend/newlandmarkdialog.ui ../bnbnav-frontend/newroaddialog.ui ../bnbnav-frontend/nodeconnectdialog.ui ../bnbnav-frontend/topwidget.ui $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -503,17 +520,24 @@ compiler_appjs_clean:
 compiler_appsvg_make_all:
 compiler_appsvg_clean:
 	-$(DEL_FILE) qtlogo.svg
-compiler_rcc_make_all:
+compiler_rcc_make_all: qrc_resources.cpp
 compiler_rcc_clean:
+	-$(DEL_FILE) qrc_resources.cpp
+qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
+		/opt/qt5-wasm/bin/rcc \
+		../bnbnav-frontend/playermark.svg \
+		../bnbnav-frontend/landmarks/aircs.svg
+	/opt/qt5-wasm/bin/rcc -name resources ../bnbnav-frontend/resources.qrc -o qrc_resources.cpp
+
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
 	-$(DEL_FILE) moc_predefs.h
 moc_predefs.h: /opt/qt5-wasm/mkspecs/features/data/dummy.cpp
 	em++ -pipe -g -std=gnu++11 -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra -dM -E -o moc_predefs.h /opt/qt5-wasm/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_statemanager.cpp moc_topwidget.cpp
+compiler_moc_header_make_all: moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_landmark.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_statemanager.cpp moc_topwidget.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_statemanager.cpp moc_topwidget.cpp
+	-$(DEL_FILE) moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_landmark.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_statemanager.cpp moc_topwidget.cpp
 moc_datagatherer.cpp: ../bnbnav-frontend/datagatherer.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
 		/opt/qt5-wasm/include/QtCore/qobject.h \
@@ -687,6 +711,64 @@ moc_edge.cpp: ../bnbnav-frontend/edge.h \
 		moc_predefs.h \
 		/opt/qt5-wasm/bin/moc
 	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/edge.h -o moc_edge.cpp
+
+moc_landmark.cpp: ../bnbnav-frontend/landmark.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		moc_predefs.h \
+		/opt/qt5-wasm/bin/moc
+	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/landmark.h -o moc_landmark.cpp
 
 moc_mainwindow.cpp: ../bnbnav-frontend/mainwindow.h \
 		/opt/qt5-wasm/include/QtWidgets/QMainWindow \
@@ -906,6 +988,115 @@ moc_mapwidget.cpp: ../bnbnav-frontend/mapwidget.h \
 		moc_predefs.h \
 		/opt/qt5-wasm/bin/moc
 	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/mapwidget.h -o moc_mapwidget.cpp
+
+moc_newlandmarkdialog.cpp: ../bnbnav-frontend/newlandmarkdialog.h \
+		/opt/qt5-wasm/include/QtWidgets/QDialog \
+		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
+		/opt/qt5-wasm/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtGui/qtgui-config.h \
+		/opt/qt5-wasm/include/QtWidgets/qtwidgets-config.h \
+		/opt/qt5-wasm/include/QtWidgets/qwidget.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtCore/qmargins.h \
+		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
+		/opt/qt5-wasm/include/QtCore/qrect.h \
+		/opt/qt5-wasm/include/QtCore/qsize.h \
+		/opt/qt5-wasm/include/QtGui/qpalette.h \
+		/opt/qt5-wasm/include/QtGui/qcolor.h \
+		/opt/qt5-wasm/include/QtGui/qrgb.h \
+		/opt/qt5-wasm/include/QtGui/qrgba64.h \
+		/opt/qt5-wasm/include/QtGui/qbrush.h \
+		/opt/qt5-wasm/include/QtGui/qmatrix.h \
+		/opt/qt5-wasm/include/QtGui/qpolygon.h \
+		/opt/qt5-wasm/include/QtGui/qregion.h \
+		/opt/qt5-wasm/include/QtCore/qdatastream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qline.h \
+		/opt/qt5-wasm/include/QtGui/qtransform.h \
+		/opt/qt5-wasm/include/QtGui/qimage.h \
+		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
+		/opt/qt5-wasm/include/QtGui/qpixmap.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		/opt/qt5-wasm/include/QtGui/qfont.h \
+		/opt/qt5-wasm/include/QtGui/qfontmetrics.h \
+		/opt/qt5-wasm/include/QtGui/qfontinfo.h \
+		/opt/qt5-wasm/include/QtWidgets/qsizepolicy.h \
+		/opt/qt5-wasm/include/QtGui/qcursor.h \
+		/opt/qt5-wasm/include/QtGui/qkeysequence.h \
+		/opt/qt5-wasm/include/QtGui/qevent.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qurl.h \
+		/opt/qt5-wasm/include/QtCore/qurlquery.h \
+		/opt/qt5-wasm/include/QtCore/qfile.h \
+		/opt/qt5-wasm/include/QtCore/qfiledevice.h \
+		/opt/qt5-wasm/include/QtGui/qvector2d.h \
+		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
+		moc_predefs.h \
+		/opt/qt5-wasm/bin/moc
+	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/newlandmarkdialog.h -o moc_newlandmarkdialog.cpp
 
 moc_newroaddialog.cpp: ../bnbnav-frontend/newroaddialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
@@ -1469,9 +1660,9 @@ compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
-compiler_uic_make_all: ui_mainwindow.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h
+compiler_uic_make_all: ui_mainwindow.h ui_newlandmarkdialog.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h
 compiler_uic_clean:
-	-$(DEL_FILE) ui_mainwindow.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h
+	-$(DEL_FILE) ui_mainwindow.h ui_newlandmarkdialog.h ui_newroaddialog.h ui_nodeconnectdialog.h ui_topwidget.h
 ui_mainwindow.h: ../bnbnav-frontend/mainwindow.ui \
 		/opt/qt5-wasm/bin/uic \
 		../bnbnav-frontend/topwidget.h \
@@ -1580,6 +1771,10 @@ ui_mainwindow.h: ../bnbnav-frontend/mainwindow.ui \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h
 	/opt/qt5-wasm/bin/uic ../bnbnav-frontend/mainwindow.ui -o ui_mainwindow.h
 
+ui_newlandmarkdialog.h: ../bnbnav-frontend/newlandmarkdialog.ui \
+		/opt/qt5-wasm/bin/uic
+	/opt/qt5-wasm/bin/uic ../bnbnav-frontend/newlandmarkdialog.ui -o ui_newlandmarkdialog.h
+
 ui_newroaddialog.h: ../bnbnav-frontend/newroaddialog.ui \
 		/opt/qt5-wasm/bin/uic
 	/opt/qt5-wasm/bin/uic ../bnbnav-frontend/newroaddialog.ui -o ui_newroaddialog.h
@@ -1598,7 +1793,7 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean compiler_uic_clean 
 
 ####### Compile
 
@@ -1822,6 +2017,7 @@ datamanager.o: ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/datamanager
 		../bnbnav-frontend/road.h \
 		../bnbnav-frontend/edge.h \
 		../bnbnav-frontend/player.h \
+		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/datagatherer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datamanager.o ../bnbnav-frontend/datamanager.cpp
 
@@ -1903,8 +2099,89 @@ edge.o: ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/edge.h \
 		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QLineF \
+		/opt/qt5-wasm/include/QtCore/qline.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o edge.o ../bnbnav-frontend/edge.cpp
+
+landmark.o: ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/landmark.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		../bnbnav-frontend/datamanager.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtCore/qurl.h \
+		/opt/qt5-wasm/include/QtCore/qurlquery.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o landmark.o ../bnbnav-frontend/landmark.cpp
 
 main.o: ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.h \
 		/opt/qt5-wasm/include/QtWidgets/QMainWindow \
@@ -2271,15 +2548,142 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
 		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
+		/opt/qt5-wasm/include/QtSvg/QSvgRenderer \
+		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
+		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
+		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
+		../bnbnav-frontend/newlandmarkdialog.h \
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/edge.h \
 		../bnbnav-frontend/node.h \
 		../bnbnav-frontend/road.h \
+		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/player.h \
 		../bnbnav-frontend/statemanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapwidget.o ../bnbnav-frontend/mapwidget.cpp
+
+newlandmarkdialog.o: ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newlandmarkdialog.h \
+		/opt/qt5-wasm/include/QtWidgets/QDialog \
+		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
+		/opt/qt5-wasm/include/QtWidgets/qtwidgetsglobal.h \
+		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtGui/qtgui-config.h \
+		/opt/qt5-wasm/include/QtWidgets/qtwidgets-config.h \
+		/opt/qt5-wasm/include/QtWidgets/qwidget.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtCore/qmargins.h \
+		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
+		/opt/qt5-wasm/include/QtCore/qrect.h \
+		/opt/qt5-wasm/include/QtCore/qsize.h \
+		/opt/qt5-wasm/include/QtGui/qpalette.h \
+		/opt/qt5-wasm/include/QtGui/qcolor.h \
+		/opt/qt5-wasm/include/QtGui/qrgb.h \
+		/opt/qt5-wasm/include/QtGui/qrgba64.h \
+		/opt/qt5-wasm/include/QtGui/qbrush.h \
+		/opt/qt5-wasm/include/QtGui/qmatrix.h \
+		/opt/qt5-wasm/include/QtGui/qpolygon.h \
+		/opt/qt5-wasm/include/QtGui/qregion.h \
+		/opt/qt5-wasm/include/QtCore/qdatastream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qline.h \
+		/opt/qt5-wasm/include/QtGui/qtransform.h \
+		/opt/qt5-wasm/include/QtGui/qimage.h \
+		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
+		/opt/qt5-wasm/include/QtGui/qpixmap.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		/opt/qt5-wasm/include/QtGui/qfont.h \
+		/opt/qt5-wasm/include/QtGui/qfontmetrics.h \
+		/opt/qt5-wasm/include/QtGui/qfontinfo.h \
+		/opt/qt5-wasm/include/QtWidgets/qsizepolicy.h \
+		/opt/qt5-wasm/include/QtGui/qcursor.h \
+		/opt/qt5-wasm/include/QtGui/qkeysequence.h \
+		/opt/qt5-wasm/include/QtGui/qevent.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qurl.h \
+		/opt/qt5-wasm/include/QtCore/qurlquery.h \
+		/opt/qt5-wasm/include/QtCore/qfile.h \
+		/opt/qt5-wasm/include/QtCore/qfiledevice.h \
+		/opt/qt5-wasm/include/QtGui/qvector2d.h \
+		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
+		ui_newlandmarkdialog.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
+		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		../bnbnav-frontend/datagatherer.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		../bnbnav-frontend/datamanager.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newlandmarkdialog.o ../bnbnav-frontend/newlandmarkdialog.cpp
 
 newroaddialog.o: ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/newroaddialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
@@ -2523,7 +2927,9 @@ node.o: ../bnbnav-frontend/node.cpp ../bnbnav-frontend/node.h \
 		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		../bnbnav-frontend/datagatherer.h \
+		../bnbnav-frontend/datamanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o node.o ../bnbnav-frontend/node.cpp
 
 nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/nodeconnectdialog.h \
@@ -2741,6 +3147,9 @@ player.o: ../bnbnav-frontend/player.cpp ../bnbnav-frontend/player.h \
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtCore/QPointF \
+		/opt/qt5-wasm/include/QtCore/QLineF \
+		/opt/qt5-wasm/include/QtCore/qline.h \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
@@ -2819,28 +3228,52 @@ road.o: ../bnbnav-frontend/road.cpp ../bnbnav-frontend/road.h \
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtGui/QPen \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
+		/opt/qt5-wasm/include/QtGui/qtgui-config.h \
+		/opt/qt5-wasm/include/QtGui/qcolor.h \
+		/opt/qt5-wasm/include/QtGui/qrgb.h \
+		/opt/qt5-wasm/include/QtGui/qrgba64.h \
+		/opt/qt5-wasm/include/QtGui/qbrush.h \
+		/opt/qt5-wasm/include/QtGui/qmatrix.h \
+		/opt/qt5-wasm/include/QtGui/qpolygon.h \
+		/opt/qt5-wasm/include/QtCore/qrect.h \
+		/opt/qt5-wasm/include/QtCore/qmargins.h \
+		/opt/qt5-wasm/include/QtCore/qsize.h \
+		/opt/qt5-wasm/include/QtGui/qregion.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
+		/opt/qt5-wasm/include/QtCore/qdatastream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qline.h \
+		/opt/qt5-wasm/include/QtGui/qtransform.h \
+		/opt/qt5-wasm/include/QtGui/qimage.h \
+		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
+		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
+		/opt/qt5-wasm/include/QtGui/qpixmap.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
-		/opt/qt5-wasm/include/QtCore/qshareddata.h \
-		/opt/qt5-wasm/include/QtCore/qhash.h \
 		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
 		/opt/qt5-wasm/include/QtCore/qdatetime.h \
 		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
 		/opt/qt5-wasm/include/QtCore/qdebug.h \
 		/opt/qt5-wasm/include/QtCore/qmap.h \
 		/opt/qt5-wasm/include/QtCore/qtextstream.h \
-		/opt/qt5-wasm/include/QtCore/qiodevice.h \
 		/opt/qt5-wasm/include/QtCore/qlocale.h \
 		/opt/qt5-wasm/include/QtCore/qvariant.h \
 		/opt/qt5-wasm/include/QtCore/qset.h \
 		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
 		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		../bnbnav-frontend/edge.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o road.o ../bnbnav-frontend/road.cpp
 
 statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemanager.h \
@@ -3032,6 +3465,9 @@ topwidget.o: ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/topwidget.h \
 bnbnav-frontend.js_plugin_import.o: /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/bnbnav-frontend.js_plugin_import.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o bnbnav-frontend.js_plugin_import.o /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/bnbnav-frontend.js_plugin_import.cpp
 
+qrc_resources.o: qrc_resources.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
+
 moc_datagatherer.o: moc_datagatherer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_datagatherer.o moc_datagatherer.cpp
 
@@ -3041,11 +3477,17 @@ moc_datamanager.o: moc_datamanager.cpp
 moc_edge.o: moc_edge.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_edge.o moc_edge.cpp
 
+moc_landmark.o: moc_landmark.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_landmark.o moc_landmark.cpp
+
 moc_mainwindow.o: moc_mainwindow.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mainwindow.o moc_mainwindow.cpp
 
 moc_mapwidget.o: moc_mapwidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_mapwidget.o moc_mapwidget.cpp
+
+moc_newlandmarkdialog.o: moc_newlandmarkdialog.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_newlandmarkdialog.o moc_newlandmarkdialog.cpp
 
 moc_newroaddialog.o: moc_newroaddialog.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_newroaddialog.o moc_newroaddialog.cpp

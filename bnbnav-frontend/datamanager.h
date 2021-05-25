@@ -26,6 +26,7 @@ class Node;
 class Edge;
 class Road;
 class Player;
+class Landmark;
 
 struct DataManagerPrivate;
 class DataManager : public QObject {
@@ -36,6 +37,7 @@ class DataManager : public QObject {
         static QMap<QString, Node*> nodes();
         static QMap<QString, Edge*> edges();
         static QMap<QString, Road*> roads();
+        static QMap<QString, Landmark*> landmarks();
         static QList<Player*> players();
 
         static Edge* edgeForNodes(Node* from, Node* to);

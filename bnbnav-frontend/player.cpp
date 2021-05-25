@@ -19,11 +19,15 @@
  * *************************************/
 #include "player.h"
 
+#include <QPointF>
+#include <QLineF>
 #include <QJsonObject>
 
 struct PlayerPrivate {
     QString name;
     double x, y, z;
+
+    QList<QPair<qint64, QPointF>> posHistory;
 };
 
 Player::Player(QString name, QObject* parent) : QObject(parent) {
@@ -36,9 +40,24 @@ Player::~Player() {
 }
 
 void Player::update(QJsonObject object) {
-    d->x = object.value("x").toDouble();
-    d->y = object.value("y").toDouble();
-    d->z = object.value("z").toDouble();
+    double newX = object.value("x").toDouble();
+    double newY = object.value("y").toDouble();
+    double newZ = object.value("z").toDouble();
+
+    if (d->x == newX && d->y == newY && d->z == newZ) return;
+
+    d->x = newX;
+    d->y = newY;
+    d->z = newZ;
+
+    d->posHistory.append(QPair<qint64, QPointF>(QDateTime::currentMSecsSinceEpoch(), QPointF(d->x, d->z)));
+    for (int i = 0; i < d->posHistory.count(); i++) {
+        if (d->posHistory.count() <= 10) break;;
+        if (d->posHistory.at(i).first < QDateTime::currentMSecsSinceEpoch() - 100) {
+            d->posHistory.removeAt(i);
+            i--;
+        }
+    }
 }
 
 QString Player::name() {
@@ -55,4 +74,9 @@ double Player::y() {
 
 double Player::z() {
     return d->z;
+}
+
+double Player::angle() {
+    QLineF line(d->posHistory.first().second, d->posHistory.last().second);
+    return line.angle();
 }

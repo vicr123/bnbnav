@@ -26,7 +26,7 @@
 #include <QLineF>
 
 struct EdgePrivate {
-    QString road;
+    Road* road;
     Node* from;
     Node* to;
 };
@@ -34,7 +34,7 @@ struct EdgePrivate {
 Edge::Edge(QJsonObject definition, QObject* parent) : QObject(parent) {
     d = new EdgePrivate();
 
-    d->road = definition.value("road").toString();
+    d->road = DataManager::roads().value(definition.value("road").toString());
     d->from = DataManager::nodes().value(definition.value("node1").toString());
     d->to = DataManager::nodes().value(definition.value("node2").toString());
 }
@@ -52,7 +52,7 @@ Node* Edge::to() {
 }
 
 Road* Edge::road() {
-    return DataManager::roads().value(d->road);
+    return d->road;
 }
 
 QLineF Edge::line() {

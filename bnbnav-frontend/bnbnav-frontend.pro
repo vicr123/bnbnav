@@ -12,9 +12,11 @@ SOURCES += \
     datagatherer.cpp \
     datamanager.cpp \
     edge.cpp \
+    landmark.cpp \
     main.cpp \
     mainwindow.cpp \
     mapwidget.cpp \
+    newlandmarkdialog.cpp \
     newroaddialog.cpp \
     node.cpp \
     nodeconnectdialog.cpp \
@@ -27,8 +29,10 @@ HEADERS += \
     datagatherer.h \
     datamanager.h \
     edge.h \
+    landmark.h \
     mainwindow.h \
     mapwidget.h \
+    newlandmarkdialog.h \
     newroaddialog.h \
     node.h \
     nodeconnectdialog.h \
@@ -39,6 +43,7 @@ HEADERS += \
 
 FORMS += \
     mainwindow.ui \
+    newlandmarkdialog.ui \
     newroaddialog.ui \
     nodeconnectdialog.ui \
     topwidget.ui
@@ -50,3 +55,6 @@ DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+RESOURCES += \
+    resources.qrc

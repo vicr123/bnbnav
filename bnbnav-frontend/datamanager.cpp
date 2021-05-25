@@ -26,12 +26,14 @@
 #include "road.h"
 #include "edge.h"
 #include "player.h"
+#include "landmark.h"
 #include "datagatherer.h"
 
 struct DataManagerPrivate {
     QMap<QString, Node*> nodes;
     QMap<QString, Edge*> edges;
     QMap<QString, Road*> roads;
+    QMap<QString, Landmark*> landmarks;
     QMap<QString, Player*> players;
 };
 
@@ -50,6 +52,10 @@ QMap<QString, Edge*> DataManager::edges() {
 
 QMap<QString, Road*> DataManager::roads() {
     return instance()->d->roads;
+}
+
+QMap<QString, Landmark*> DataManager::landmarks() {
+    return instance()->d->landmarks;
 }
 
 QList<Player*> DataManager::players() {
@@ -97,6 +103,11 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         QJsonObject edges = root.value("edges").toObject();
         for (QString edgeId : edges.keys()) {
             d->edges.insert(edgeId, new Edge(edges.value(edgeId).toObject()));
+        }
+
+        QJsonObject landmarks = root.value("landmarks").toObject();
+        for (QString landmarkId : landmarks.keys()) {
+            d->landmarks.insert(landmarkId, new Landmark(landmarks.value(landmarkId).toObject()));
         }
 
         emit ready();

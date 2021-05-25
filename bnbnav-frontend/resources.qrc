@@ -1,0 +1,6 @@
+<RCC>
+    <qresource prefix="/">
+        <file>landmarks/aircs.svg</file>
+        <file>playermark.svg</file>
+    </qresource>
+</RCC>
