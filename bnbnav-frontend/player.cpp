@@ -74,7 +74,7 @@ void Player::update(QJsonObject object) {
             if (qAbs(angle) < 45) {
                 //TODO: Prepend this edge if it's part of the current route
                 if (StateManager::currentRoute().contains(edge)) {
-                    candidateEdges.append(edge);
+                    candidateEdges.prepend(edge);
                 } else {
                     candidateEdges.append(edge);
                 }
@@ -86,7 +86,7 @@ void Player::update(QJsonObject object) {
     bool changeEdge = false;
     if (!d->snappedEdge) changeEdge = true;
     if (!candidateEdges.contains(d->snappedEdge)) changeEdge = true;
-    if (!candidateEdges.isEmpty() && d->snappedEdge && StateManager::currentRoute().contains(candidateEdges.first()) && !StateManager::currentRoute().contains(d->snappedEdge)) changeEdge = true;
+    if (!candidateEdges.isEmpty() && StateManager::currentRoute().contains(candidateEdges.first()) && !StateManager::currentRoute().contains(d->snappedEdge)) changeEdge = true;
     if (changeEdge) {
         d->snappedEdge = candidateEdges.isEmpty() ? nullptr : candidateEdges.first();
     }

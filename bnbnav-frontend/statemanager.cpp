@@ -56,6 +56,10 @@ StateManager::GlobalState StateManager::currentState() {
 }
 
 void StateManager::setCurrentState(GlobalState state) {
+    if (state == Go) {
+        setFollowMe(true);
+    }
+
     instance()->d->state = state;
     emit instance()->stateChanged(state);
 }
@@ -100,6 +104,7 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
 
         Instruction inst;
         inst.node = edge->from();
+        inst.fromEdge = previousEdge;
         inst.toEdge = edge;
         inst.distance = currentLength;
         inst.turnAngle = 0;
@@ -229,8 +234,8 @@ void StateManager::calculateCurrentInstruction() {
             d->lastSnappedToRoute.start();
         } else if (d->lastSnappedToRoute.isValid() && d->lastSnappedToRoute.elapsed() > 3000) {
             d->currentInstruction = -1;
-            emit currentInstructionChanged();
             d->lastSnappedToRoute.invalidate();
+            emit currentInstructionChanged();
         }
         return;
     }
@@ -262,6 +267,9 @@ void StateManager::calculateCurrentInstruction() {
     }
     //We should never get here?
 
+    if (instructionFound) {
+        emit currentInstructionChanged();
+    }
 }
 
 QString StateManager::Instruction::humanReadableString(int distance) {
@@ -304,7 +312,7 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     QFontMetrics metrics(font);
 
     painter->setFont(font);
-    painter->setPen(pal.color(QPalette::Window));
+    painter->setPen(pal.color(QPalette::WindowText));
 
     QRect distanceText;
     distanceText.setHeight(metrics.height());
@@ -329,7 +337,7 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     if (toEdge) {
         text = toEdge->road()->name();
     } else {
-        text = "Instruction";
+        text = tr("Arrive at the destination");
     }
     painter->drawText(roadText, Qt::AlignLeft | Qt::AlignVCenter, text);
 }

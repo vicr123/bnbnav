@@ -32,7 +32,7 @@ class StateManager : public QObject {
         enum GlobalState {
             Browse,
             Edit,
-            Route
+            Go
         };
 
         struct Instruction {
@@ -53,6 +53,7 @@ class StateManager : public QObject {
             };
 
             Node* node;
+            Edge* fromEdge;
             Edge* toEdge;
             InstructionType type;
             double distance;

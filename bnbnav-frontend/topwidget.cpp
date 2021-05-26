@@ -40,6 +40,12 @@ TopWidget::TopWidget(QWidget* parent) :
     } else {
         ui->loginButton->setText(StateManager::login());
     }
+
+    connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
+        ui->editModeButton->setVisible(StateManager::currentState() != StateManager::Go);
+        ui->loginButton->setEnabled(StateManager::currentState() != StateManager::Go);
+        ui->editModeButton->setChecked(StateManager::currentState() == StateManager::Edit);
+    });
 }
 
 TopWidget::~TopWidget() {

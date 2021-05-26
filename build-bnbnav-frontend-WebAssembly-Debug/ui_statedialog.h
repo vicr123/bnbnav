@@ -17,6 +17,7 @@
 #include <QtWidgets/QListView>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
+#include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
@@ -28,6 +29,9 @@ class Ui_StateDialog
 {
 public:
     QVBoxLayout *verticalLayout;
+    QStackedWidget *stackedWidget;
+    QWidget *normalModePage;
+    QVBoxLayout *verticalLayout_3;
     QTabWidget *tabWidget;
     QWidget *tab;
     QWidget *tab_2;
@@ -39,7 +43,12 @@ public:
     QSpacerItem *horizontalSpacer;
     QPushButton *getDirectionsButton;
     QListView *instructionList;
-    QLabel *currentInstructionText;
+    QHBoxLayout *horizontalLayout_2;
+    QSpacerItem *horizontalSpacer_2;
+    QPushButton *goModeButton;
+    QWidget *goModePage;
+    QVBoxLayout *verticalLayout_4;
+    QWidget *currentInstructionWidget;
 
     void setupUi(QDialog *StateDialog)
     {
@@ -49,7 +58,15 @@ public:
         verticalLayout = new QVBoxLayout(StateDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
-        tabWidget = new QTabWidget(StateDialog);
+        stackedWidget = new QStackedWidget(StateDialog);
+        stackedWidget->setObjectName(QString::fromUtf8("stackedWidget"));
+        normalModePage = new QWidget();
+        normalModePage->setObjectName(QString::fromUtf8("normalModePage"));
+        verticalLayout_3 = new QVBoxLayout(normalModePage);
+        verticalLayout_3->setSpacing(0);
+        verticalLayout_3->setObjectName(QString::fromUtf8("verticalLayout_3"));
+        verticalLayout_3->setContentsMargins(0, 0, 0, 0);
+        tabWidget = new QTabWidget(normalModePage);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         tab = new QWidget();
         tab->setObjectName(QString::fromUtf8("tab"));
@@ -96,18 +113,46 @@ public:
 
         verticalLayout_2->addWidget(instructionList);
 
-        currentInstructionText = new QLabel(tab_2);
-        currentInstructionText->setObjectName(QString::fromUtf8("currentInstructionText"));
+        horizontalLayout_2 = new QHBoxLayout();
+        horizontalLayout_2->setObjectName(QString::fromUtf8("horizontalLayout_2"));
+        horizontalSpacer_2 = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
-        verticalLayout_2->addWidget(currentInstructionText);
+        horizontalLayout_2->addItem(horizontalSpacer_2);
+
+        goModeButton = new QPushButton(tab_2);
+        goModeButton->setObjectName(QString::fromUtf8("goModeButton"));
+        goModeButton->setEnabled(false);
+
+        horizontalLayout_2->addWidget(goModeButton);
+
+
+        verticalLayout_2->addLayout(horizontalLayout_2);
 
         tabWidget->addTab(tab_2, QString());
 
-        verticalLayout->addWidget(tabWidget);
+        verticalLayout_3->addWidget(tabWidget);
+
+        stackedWidget->addWidget(normalModePage);
+        goModePage = new QWidget();
+        goModePage->setObjectName(QString::fromUtf8("goModePage"));
+        verticalLayout_4 = new QVBoxLayout(goModePage);
+        verticalLayout_4->setSpacing(0);
+        verticalLayout_4->setObjectName(QString::fromUtf8("verticalLayout_4"));
+        verticalLayout_4->setContentsMargins(0, 0, 0, 0);
+        currentInstructionWidget = new QWidget(goModePage);
+        currentInstructionWidget->setObjectName(QString::fromUtf8("currentInstructionWidget"));
+        currentInstructionWidget->setAutoFillBackground(true);
+
+        verticalLayout_4->addWidget(currentInstructionWidget);
+
+        stackedWidget->addWidget(goModePage);
+
+        verticalLayout->addWidget(stackedWidget);
 
 
         retranslateUi(StateDialog);
 
+        stackedWidget->setCurrentIndex(1);
         tabWidget->setCurrentIndex(1);
 
 
@@ -122,7 +167,7 @@ public:
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));
         endLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "End Location", nullptr));
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
-        currentInstructionText->setText(QCoreApplication::translate("StateDialog", "TextLabel", nullptr));
+        goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("StateDialog", "Directions", nullptr));
     } // retranslateUi
 

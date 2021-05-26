@@ -136,16 +136,24 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
     double shortest1 = point1Candidates.firstKey();
     for (Edge* edge : point1Candidates.values(shortest1)) {
         QPointF closest = edge->closestPointTo(from);
-        Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
-        nextTemporaryEdge(fromNode, node, edge->road());
-        nextTemporaryEdge(node, edge->to(), edge->road());
+        if (closest.isNull()) {
+            nextTemporaryEdge(fromNode, edge->to(), edge->road());
+        } else {
+            Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
+            nextTemporaryEdge(fromNode, node, edge->road());
+            nextTemporaryEdge(node, edge->to(), edge->road());
+        }
     }
     double shortest2 = point2Candidates.firstKey();
     for (Edge* edge : point2Candidates.values(shortest2)) {
         QPointF closest = edge->closestPointTo(to);
-        Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
-        nextTemporaryEdge(edge->from(), node, edge->road());
-        nextTemporaryEdge(node, toNode, edge->road());
+        if (closest.isNull()) {
+            nextTemporaryEdge(edge->from(), toNode, edge->road());
+        } else {
+            Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
+            nextTemporaryEdge(edge->from(), node, edge->road());
+            nextTemporaryEdge(node, toNode, edge->road());
+        }
     }
 
     struct SearchNode {

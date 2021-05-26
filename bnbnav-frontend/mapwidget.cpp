@@ -188,6 +188,39 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         renderer.render(&painter, landmarkPin);
     }
 
+    if (StateManager::currentInstruction() != -1) {
+        StateManager::Instruction inst = StateManager::currentInstructions().at(StateManager::currentInstruction());
+        if (inst.fromEdge && inst.toEdge) {
+            QPolygonF arrow;
+            QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(20, 0));
+            fromLine.setAngle(inst.fromEdge->line().angle());
+
+            arrow.append(fromLine.pointAt(-1));
+            arrow.append(fromLine.pointAt(0));
+            fromLine.setAngle(inst.toEdge->line().angle());
+            arrow.append(fromLine.pointAt(1));
+
+
+            painter.setPen(QPen(QColor(100, 50, 150), 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter.setBrush(QColor(100, 50, 150));
+
+            QPolygonF arrowHead;
+            arrowHead.append(fromLine.pointAt(1));
+
+            QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(5, 0));
+            arrowHeadBase.setAngle(fromLine.normalVector().angle());
+
+            fromLine.setLength(fromLine.length() + 5);
+
+            arrowHead.append(arrowHeadBase.pointAt(1));
+            arrowHead.append(fromLine.pointAt(1));
+            arrowHead.append(arrowHeadBase.pointAt(-1));
+
+            painter.drawPolyline(arrow);
+            painter.drawPolygon(arrowHead);
+        }
+    }
+
     //Draw players
     QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
     for (Player* player : DataManager::players()) {

@@ -40,8 +40,14 @@ class StateDialog : public QDialog {
 
         void on_endLocationBox_textChanged(const QString& arg1);
 
+        void on_goModeButton_clicked();
+
     private:
         Ui::StateDialog* ui;
+
+        // QObject interface
+    public:
+        bool eventFilter(QObject* watched, QEvent* event);
 };
 
 #endif // STATEDIALOG_H
