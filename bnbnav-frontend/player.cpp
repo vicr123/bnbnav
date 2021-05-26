@@ -26,6 +26,7 @@
 #include "edge.h"
 #include "road.h"
 #include "datamanager.h"
+#include "statemanager.h"
 
 struct PlayerPrivate {
     QString name;
@@ -72,12 +73,21 @@ void Player::update(QJsonObject object) {
             if (angle > 180) angle = -360 + angle;
             if (qAbs(angle) < 45) {
                 //TODO: Prepend this edge if it's part of the current route
-                candidateEdges.append(edge);
+                if (StateManager::currentRoute().contains(edge)) {
+                    candidateEdges.append(edge);
+                } else {
+                    candidateEdges.append(edge);
+                }
             }
         }
     }
 
-    if (!candidateEdges.contains(d->snappedEdge)) {
+    //Decide whether to change over to a new snapped edge
+    bool changeEdge = false;
+    if (!d->snappedEdge) changeEdge = true;
+    if (!candidateEdges.contains(d->snappedEdge)) changeEdge = true;
+    if (!candidateEdges.isEmpty() && d->snappedEdge && StateManager::currentRoute().contains(candidateEdges.first()) && !StateManager::currentRoute().contains(d->snappedEdge)) changeEdge = true;
+    if (changeEdge) {
         d->snappedEdge = candidateEdges.isEmpty() ? nullptr : candidateEdges.first();
     }
 }

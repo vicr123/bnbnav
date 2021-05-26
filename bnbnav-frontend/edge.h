@@ -31,6 +31,9 @@ class Edge : public QObject {
         explicit Edge(QJsonObject definition, QObject* parent = nullptr);
         ~Edge();
 
+        QString id();
+        bool isTemporary();
+
         Node* from();
         Node* to();
         Road* road();
@@ -43,6 +46,8 @@ class Edge : public QObject {
         double distanceTo(QPointF point, bool* ok = nullptr);
 
         double averageY();
+
+        void redefine(QJsonObject definition);
 
     signals:
 

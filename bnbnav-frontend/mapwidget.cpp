@@ -148,6 +148,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     });
     for (Edge* edge : edges) {
         //Draw the edge
+        bool bailIfTemporary = true;
         QPen pen = edge->road()->pen(edge);
 
         if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty() && d->hoverTargets.contains(edge)) {
@@ -155,7 +156,10 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         }
         if (StateManager::currentRoute().contains(edge)) {
             pen.setColor(QColor(0, 150, 255));
+            bailIfTemporary = false;
         }
+
+        if (bailIfTemporary && edge->isTemporary()) continue;
 
         painter.setPen(pen);
         painter.drawLine(edge->line());
@@ -220,6 +224,9 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     if (StateManager::currentState() == StateManager::Edit) {
         for (Node* node : DataManager::nodes().values()) {
             //Draw the node
+            //Don't draw temporary nodes
+            if (node->isTemporary()) continue;
+
             painter.setPen(QPen(Qt::black, 2 / d->scale));
             painter.setBrush(Qt::white);
             if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
@@ -281,10 +288,12 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
             d->hoverTargets.clear();
             QPointF mapPos = toMapCoordinates(event->pos());
             for (Node* node : DataManager::nodes().values()) {
+                if (node->isTemporary()) continue;
                 if (node->nodeRect(d->scale).contains(mapPos)) d->hoverTargets.append(node);
             }
 
             for (Edge* edge : DataManager::edges().values()) {
+                if (edge->isTemporary()) continue;
                 double width = edge->road()->pen(edge).widthF();
                 if (edge->hitbox(width).containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
             }

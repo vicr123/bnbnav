@@ -37,6 +37,14 @@ Node::~Node() {
     delete d;
 }
 
+QString Node::id() {
+    return DataManager::nodes().key(this);
+}
+
+bool Node::isTemporary() {
+    return this->id().startsWith("temp");
+}
+
 int Node::x() {
     return d->x;
 }

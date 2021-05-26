@@ -43,6 +43,7 @@ void StateDialog::on_getDirectionsButton_clicked() {
         return;
     }
 
+    DataManager::resetTemporaries();
     StateManager::setCurrentRoute(DataManager::shortestPath(start, end));
 }
 

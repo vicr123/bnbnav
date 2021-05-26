@@ -29,6 +29,9 @@ class Node : public QObject {
         Node(QJsonObject definition, QObject* parent = nullptr);
         ~Node();
 
+        QString id();
+        bool isTemporary();
+
         int x();
         int y();
         int z();

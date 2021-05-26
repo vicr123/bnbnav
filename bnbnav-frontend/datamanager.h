@@ -46,6 +46,10 @@ class DataManager : public QObject {
 
         static QList<Edge*> shortestPath(QPoint from, QPoint to);
 
+        static Node* nextTemporaryNode(int x, int y, int z);
+        static Edge* nextTemporaryEdge(Node* from, Node* to, Road* road);
+        static void resetTemporaries();
+
     signals:
         void ready();
         void newNode();

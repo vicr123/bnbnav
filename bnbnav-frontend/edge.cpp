@@ -34,14 +34,19 @@ struct EdgePrivate {
 
 Edge::Edge(QJsonObject definition, QObject* parent) : QObject(parent) {
     d = new EdgePrivate();
-
-    d->road = DataManager::roads().value(definition.value("road").toString());
-    d->from = DataManager::nodes().value(definition.value("node1").toString());
-    d->to = DataManager::nodes().value(definition.value("node2").toString());
+    redefine(definition);
 }
 
 Edge::~Edge() {
     delete d;
+}
+
+QString Edge::id() {
+    return DataManager::edges().key(this);
+}
+
+bool Edge::isTemporary() {
+    return this->id().startsWith("temp");
 }
 
 Node* Edge::from() {
@@ -111,4 +116,10 @@ double Edge::distanceTo(QPointF point, bool* ok) {
 
 double Edge::averageY() {
     return (d->from->y() + d->to->y()) / 2.0;
+}
+
+void Edge::redefine(QJsonObject definition) {
+    d->road = DataManager::roads().value(definition.value("road").toString());
+    d->from = DataManager::nodes().value(definition.value("node1").toString());
+    d->to = DataManager::nodes().value(definition.value("node2").toString());
 }

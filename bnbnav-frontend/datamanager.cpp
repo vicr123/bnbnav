@@ -40,6 +40,12 @@ struct DataManagerPrivate {
     QMap<QString, Landmark*> landmarks;
     QMap<QString, Player*> players;
     QMap<QString, Player*> allPlayers;
+
+    QMap<QString, Node*> temporaryNodes;
+    QMap<QString, Edge*> temporaryEdges;
+
+    uint currentTemporaryEdge = 0;
+    uint currentTemporaryNode = 0;
 };
 
 DataManager* DataManager::instance() {
@@ -120,8 +126,27 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
     if (point1Candidates.isEmpty() || point2Candidates.isEmpty()) return QList<Edge*>();
 
     //TODO: Consider the other edges
-    Node* fromNode = point1Candidates.first()->from();
-    Node* toNode = point2Candidates.first()->to();
+//    Node* fromNode = point1Candidates.first()->from();
+//    Node* toNode = point2Candidates.first()->to();
+
+    Node* fromNode = nextTemporaryNode(from.x(), point1Candidates.first()->averageY(), from.y());
+    Node* toNode = nextTemporaryNode(to.x(), point2Candidates.first()->averageY(), to.y());
+
+    //Construct edges and nodes to each candiate road
+    double shortest1 = point1Candidates.firstKey();
+    for (Edge* edge : point1Candidates.values(shortest1)) {
+        QPointF closest = edge->closestPointTo(from);
+        Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
+        nextTemporaryEdge(fromNode, node, edge->road());
+        nextTemporaryEdge(node, edge->to(), edge->road());
+    }
+    double shortest2 = point2Candidates.firstKey();
+    for (Edge* edge : point2Candidates.values(shortest2)) {
+        QPointF closest = edge->closestPointTo(to);
+        Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
+        nextTemporaryEdge(edge->from(), node, edge->road());
+        nextTemporaryEdge(node, toNode, edge->road());
+    }
 
     struct SearchNode {
         Node* node;
@@ -195,6 +220,57 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
 
     qDeleteAll(searchNodes.values());
     return QList<Edge*>();
+}
+
+Node* DataManager::nextTemporaryNode(int x, int y, int z) {
+    QJsonObject def = {
+        {"x", x},
+        {"y", y},
+        {"z", z}
+    };
+    QString nodeName = QStringLiteral("temp%1").arg(++instance()->d->currentTemporaryNode);
+    if (instance()->d->temporaryNodes.contains(nodeName)) {
+        Node* node = instance()->d->temporaryNodes.value(nodeName);
+        node->redefine(def);
+        instance()->d->nodes.insert(nodeName, node);
+        return node;
+    } else {
+        Node* node = new Node(def);
+        instance()->d->temporaryNodes.insert(nodeName, node);
+        instance()->d->nodes.insert(nodeName, node);
+        return node;
+    }
+}
+
+Edge* DataManager::nextTemporaryEdge(Node* from, Node* to, Road* road) {
+    QJsonObject def = {
+        {"road", instance()->d->roads.key(road)},
+        {"node1", instance()->d->nodes.key(from)},
+        {"node2", instance()->d->nodes.key(to)}
+    };
+    QString edgeName = QStringLiteral("temp%1").arg(++instance()->d->currentTemporaryNode);
+    if (instance()->d->temporaryEdges.contains(edgeName)) {
+        Edge* edge = instance()->d->temporaryEdges.value(edgeName);
+        edge->redefine(def);
+        instance()->d->edges.insert(edgeName, edge);
+        return edge;
+    } else {
+        Edge* edge = new Edge(def);
+        instance()->d->temporaryEdges.insert(edgeName, edge);
+        instance()->d->edges.insert(edgeName, edge);
+        return edge;
+    }
+}
+
+void DataManager::resetTemporaries() {
+    for (QString nodeId : instance()->d->temporaryNodes.keys()) {
+        instance()->d->nodes.remove(nodeId);
+    }
+    for (QString edgeId : instance()->d->temporaryEdges.keys()) {
+        instance()->d->edges.remove(edgeId);
+    }
+    instance()->d->currentTemporaryEdge = 0;
+    instance()->d->currentTemporaryNode = 0;
 }
 
 DataManager::DataManager(QObject* parent) : QObject(parent) {
