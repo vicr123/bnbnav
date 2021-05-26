@@ -33,8 +33,8 @@ public:
     QWidget *normalModePage;
     QVBoxLayout *verticalLayout_3;
     QTabWidget *tabWidget;
-    QWidget *tab;
-    QWidget *tab_2;
+    QWidget *discoverTab;
+    QWidget *directionsTab;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
     LocationEntryBox *startLocationBox;
@@ -68,14 +68,14 @@ public:
         verticalLayout_3->setContentsMargins(0, 0, 0, 0);
         tabWidget = new QTabWidget(normalModePage);
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
-        tab = new QWidget();
-        tab->setObjectName(QString::fromUtf8("tab"));
-        tabWidget->addTab(tab, QString());
-        tab_2 = new QWidget();
-        tab_2->setObjectName(QString::fromUtf8("tab_2"));
-        verticalLayout_2 = new QVBoxLayout(tab_2);
+        discoverTab = new QWidget();
+        discoverTab->setObjectName(QString::fromUtf8("discoverTab"));
+        tabWidget->addTab(discoverTab, QString());
+        directionsTab = new QWidget();
+        directionsTab->setObjectName(QString::fromUtf8("directionsTab"));
+        verticalLayout_2 = new QVBoxLayout(directionsTab);
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
-        label = new QLabel(tab_2);
+        label = new QLabel(directionsTab);
         label->setObjectName(QString::fromUtf8("label"));
         QFont font;
         font.setPointSize(15);
@@ -83,12 +83,12 @@ public:
 
         verticalLayout_2->addWidget(label);
 
-        startLocationBox = new LocationEntryBox(tab_2);
+        startLocationBox = new LocationEntryBox(directionsTab);
         startLocationBox->setObjectName(QString::fromUtf8("startLocationBox"));
 
         verticalLayout_2->addWidget(startLocationBox);
 
-        endLocationBox = new LocationEntryBox(tab_2);
+        endLocationBox = new LocationEntryBox(directionsTab);
         endLocationBox->setObjectName(QString::fromUtf8("endLocationBox"));
 
         verticalLayout_2->addWidget(endLocationBox);
@@ -100,7 +100,7 @@ public:
 
         horizontalLayout->addItem(horizontalSpacer);
 
-        getDirectionsButton = new QPushButton(tab_2);
+        getDirectionsButton = new QPushButton(directionsTab);
         getDirectionsButton->setObjectName(QString::fromUtf8("getDirectionsButton"));
 
         horizontalLayout->addWidget(getDirectionsButton);
@@ -108,7 +108,7 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
-        instructionList = new QListView(tab_2);
+        instructionList = new QListView(directionsTab);
         instructionList->setObjectName(QString::fromUtf8("instructionList"));
 
         verticalLayout_2->addWidget(instructionList);
@@ -119,7 +119,7 @@ public:
 
         horizontalLayout_2->addItem(horizontalSpacer_2);
 
-        goModeButton = new QPushButton(tab_2);
+        goModeButton = new QPushButton(directionsTab);
         goModeButton->setObjectName(QString::fromUtf8("goModeButton"));
         goModeButton->setEnabled(false);
 
@@ -128,7 +128,7 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout_2);
 
-        tabWidget->addTab(tab_2, QString());
+        tabWidget->addTab(directionsTab, QString());
 
         verticalLayout_3->addWidget(tabWidget);
 
@@ -152,7 +152,7 @@ public:
 
         retranslateUi(StateDialog);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
         tabWidget->setCurrentIndex(1);
 
 
@@ -162,13 +162,13 @@ public:
     void retranslateUi(QDialog *StateDialog)
     {
         StateDialog->setWindowTitle(QCoreApplication::translate("StateDialog", "Dialog", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("StateDialog", "Discover", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(discoverTab), QCoreApplication::translate("StateDialog", "Discover", nullptr));
         label->setText(QCoreApplication::translate("StateDialog", "Get Directions", nullptr));
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));
         endLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "End Location", nullptr));
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
         goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
-        tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("StateDialog", "Directions", nullptr));
+        tabWidget->setTabText(tabWidget->indexOf(directionsTab), QCoreApplication::translate("StateDialog", "Directions", nullptr));
     } // retranslateUi
 
 };

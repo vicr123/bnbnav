@@ -26,12 +26,16 @@ namespace Ui {
     class StateDialog;
 }
 
+struct StateDialogPrivate;
 class StateDialog : public QDialog {
         Q_OBJECT
 
     public:
         explicit StateDialog(QWidget* parent = nullptr);
         ~StateDialog();
+
+        void routeTo(QPoint location);
+        void routeFrom(QPoint location);
 
     private slots:
         void on_getDirectionsButton_clicked();
@@ -44,6 +48,9 @@ class StateDialog : public QDialog {
 
     private:
         Ui::StateDialog* ui;
+        StateDialogPrivate* d;
+
+        void recalculateRoute();
 
         // QObject interface
     public:

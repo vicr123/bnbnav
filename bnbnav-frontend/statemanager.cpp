@@ -77,10 +77,15 @@ QString StateManager::login() {
     return instance()->d->login;
 }
 
+Player* StateManager::loggedInPlayer() {
+    return DataManager::players().value(login());
+}
+
 void StateManager::setCurrentRoute(QList<Edge*> edges) {
     instance()->d->currentRoute = edges;
 
     if (currentRoute().isEmpty()) {
+        instance()->d->currentInstruction = -1;
         instance()->d->instructions.clear();
         emit instance()->routeChanged();
         return;
@@ -97,7 +102,7 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
     instructions.append(departure);
 
     double currentLength = 0;
-    for (int i = 1; i < currentRoute().length() - 1; i++) {
+    for (int i = 1; i < currentRoute().length(); i++) {
         Edge* previousEdge = currentRoute().at(i - 1);
         Edge* edge = currentRoute().at(i);
         currentLength += previousEdge->length();
@@ -137,11 +142,11 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
             inst.type = Instruction::TurnLeft;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 170) { //Sharp Left!
+        } else if (turnAngle < 160) { //Sharp Left!
             inst.type = Instruction::SharpLeft;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 190) { //U-turn!
+        } else if (turnAngle < 200) { //U-turn!
             inst.type = Instruction::TurnAround;
             instructions.append(inst);
             currentLength = 0;
@@ -345,9 +350,9 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
 QString StateManager::Instruction::imageName() {
     switch (type) {
         case StateManager::Instruction::Departure:
-            break;
+            return "depart";
         case StateManager::Instruction::Arrival:
-            break;
+            return "arrive";
         case StateManager::Instruction::ContinueStraight:
             return "continue-straight";
         case StateManager::Instruction::BearLeft:
@@ -369,8 +374,7 @@ QString StateManager::Instruction::imageName() {
         case StateManager::Instruction::ExitRight:
             return "exit-right";
         case StateManager::Instruction::Merge:
-            break;
-
+            return "merge";
     }
     return "";
 }

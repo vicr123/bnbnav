@@ -34,6 +34,8 @@ class MapWidget : public QWidget {
 
     signals:
         void pan(int x, int y);
+        void routeTo(QPoint location);
+        void routeFrom(QPoint location);
 
     private:
         MapWidgetPrivate* d;

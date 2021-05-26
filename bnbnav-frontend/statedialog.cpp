@@ -24,15 +24,28 @@
 #include <QMessageBox>
 #include <QMenu>
 #include <QMouseEvent>
+#include <QTimer>
 #include "player.h"
 #include "statemanager.h"
 #include "datamanager.h"
 #include "instructionmodel.h"
 
+struct StateDialogPrivate {
+    QTimer* recalculateTimer;
+};
+
 StateDialog::StateDialog(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::StateDialog) {
     ui->setupUi(this);
+
+    d = new StateDialogPrivate();
+    d->recalculateTimer = new QTimer();
+    d->recalculateTimer->setInterval(3000);
+    d->recalculateTimer->setSingleShot(true);
+    connect(d->recalculateTimer, &QTimer::timeout, this, [ = ] {
+        if (StateManager::currentInstruction() == -1 && StateManager::currentState() == StateManager::Go) recalculateRoute();
+    });
 
     ui->instructionList->setModel(new InstructionModel(this));
     ui->instructionList->setItemDelegate(new InstructionDelegate(this));
@@ -60,15 +73,7 @@ StateDialog::StateDialog(QWidget* parent) :
 
         ui->currentInstructionWidget->update();
 
-        if (instruction == -1 && StateManager::currentState() == StateManager::Go) {
-            //Reroute!
-            Player* player = DataManager::players().value(StateManager::login());
-
-            QPoint start(player->x(), player->z());
-
-            DataManager::resetTemporaries();
-            StateManager::setCurrentRoute(DataManager::shortestPath(start, ui->endLocationBox->location()));
-        }
+        if (instruction == -1 && StateManager::currentState() == StateManager::Go) recalculateRoute();
     });
 
     QPalette pal = ui->currentInstructionWidget->palette();
@@ -81,12 +86,32 @@ StateDialog::StateDialog(QWidget* parent) :
 }
 
 StateDialog::~StateDialog() {
+    delete d;
     delete ui;
+}
+
+void StateDialog::routeTo(QPoint location) {
+    ui->tabWidget->setCurrentWidget(ui->directionsTab);
+    ui->endLocationBox->setText(QStringLiteral("%1,%2").arg(location.x()).arg(location.y()));
+    ui->getDirectionsButton->click();
+    this->show();
+}
+
+void StateDialog::routeFrom(QPoint location) {
+    ui->tabWidget->setCurrentWidget(ui->directionsTab);
+    ui->startLocationBox->setText(QStringLiteral("%1,%2").arg(location.x()).arg(location.y()));
+    ui->getDirectionsButton->click();
+    this->show();
 }
 
 void StateDialog::on_getDirectionsButton_clicked() {
     QPoint start = ui->startLocationBox->location();
     QPoint end = ui->endLocationBox->location();
+
+    if (start.isNull() && StateManager::loggedInPlayer()) {
+        start = QPoint(StateManager::loggedInPlayer()->x(), StateManager::loggedInPlayer()->z());
+    }
+
     if (start.isNull() || end.isNull()) {
         QMessageBox::warning(this, tr("Please enter a valid location"), tr("We can't find that location. Please enter a valid location."));
         return;
@@ -105,7 +130,24 @@ void StateDialog::on_endLocationBox_textChanged(const QString& arg1) {
 }
 
 void StateDialog::on_goModeButton_clicked() {
+    if (StateManager::login().isEmpty()) {
+        QMessageBox::warning(this, tr("Please Log In"), tr("Log in to use Go mode."));
+        return;
+    }
     StateManager::setCurrentState(StateManager::Go);
+}
+
+void StateDialog::recalculateRoute() {
+    //Reroute!
+    Player* player = DataManager::players().value(StateManager::login());
+
+    QPoint start(player->x(), player->z());
+
+    DataManager::resetTemporaries();
+    StateManager::setCurrentRoute(DataManager::shortestPath(start, ui->endLocationBox->location()));
+
+    //Recalculate every 3 seconds until on track
+    d->recalculateTimer->start();
 }
 
 bool StateDialog::eventFilter(QObject* watched, QEvent* event) {

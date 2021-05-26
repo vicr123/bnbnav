@@ -559,14 +559,17 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/logo.svg \
 		../bnbnav-frontend/landmarks/aircs.svg \
 		../bnbnav-frontend/directions/turn-aroud.svg \
+		../bnbnav-frontend/directions/merge.svg \
 		../bnbnav-frontend/directions/turn-around.svg \
 		../bnbnav-frontend/directions/turn-left.svg \
 		../bnbnav-frontend/directions/sharp-left.svg \
 		../bnbnav-frontend/directions/sharp-right.svg \
+		../bnbnav-frontend/directions/depart.svg \
 		../bnbnav-frontend/directions/bear-right.svg \
 		../bnbnav-frontend/directions/bear-left.svg \
 		../bnbnav-frontend/directions/exit-right.svg \
 		../bnbnav-frontend/directions/turn-right.svg \
+		../bnbnav-frontend/directions/arrive.svg \
 		../bnbnav-frontend/directions/exit-left.svg \
 		../bnbnav-frontend/directions/continue-straight.svg
 	/opt/qt5-wasm/bin/rcc -name resources ../bnbnav-frontend/resources.qrc -o qrc_resources.cpp
@@ -4749,13 +4752,31 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtWidgets/QLabel \
 		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
 		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QListView \
+		/opt/qt5-wasm/include/QtWidgets/qlistview.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemview.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractscrollarea.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtCore/qitemselectionmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
 		/opt/qt5-wasm/include/QtWidgets/QPushButton \
 		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
-		/opt/qt5-wasm/include/QtGui/qicon.h \
 		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
+		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QTabWidget \
-		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
 		/opt/qt5-wasm/include/QtWidgets/QWidget \
 		../bnbnav-frontend/locationentrybox.h \
@@ -4765,26 +4786,26 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtGui/qtextformat.h \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \
+		/opt/qt5-wasm/include/QtGui/QPainter \
+		/opt/qt5-wasm/include/QtGui/qpainter.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
-		../bnbnav-frontend/statemanager.h \
+		/opt/qt5-wasm/include/QtWidgets/QMenu \
+		/opt/qt5-wasm/include/QtWidgets/qmenu.h \
+		/opt/qt5-wasm/include/QtWidgets/qaction.h \
+		/opt/qt5-wasm/include/QtWidgets/qactiongroup.h \
+		/opt/qt5-wasm/include/QtGui/QMouseEvent \
+		/opt/qt5-wasm/include/QtCore/QTimer \
+		/opt/qt5-wasm/include/QtCore/qtimer.h \
+		/opt/qt5-wasm/include/QtCore/qbasictimer.h \
+		../bnbnav-frontend/player.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
+		../bnbnav-frontend/statemanager.h \
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/instructionmodel.h \
 		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
-		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
 		/opt/qt5-wasm/include/QtWidgets/QStyledItemDelegate \
-		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
-		/opt/qt5-wasm/include/QtGui/qvalidator.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
-		/opt/qt5-wasm/include/QtWidgets/qslider.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
-		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
-		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
-		/opt/qt5-wasm/include/QtWidgets/qrubberband.h
+		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o statedialog.o ../bnbnav-frontend/statedialog.cpp
 
 statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemanager.h \

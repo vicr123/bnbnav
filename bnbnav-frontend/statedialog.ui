@@ -29,7 +29,7 @@
    <item>
     <widget class="QStackedWidget" name="stackedWidget">
      <property name="currentIndex">
-      <number>1</number>
+      <number>0</number>
      </property>
      <widget class="QWidget" name="normalModePage">
       <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -53,12 +53,12 @@
          <property name="currentIndex">
           <number>1</number>
          </property>
-         <widget class="QWidget" name="tab">
+         <widget class="QWidget" name="discoverTab">
           <attribute name="title">
            <string>Discover</string>
           </attribute>
          </widget>
-         <widget class="QWidget" name="tab_2">
+         <widget class="QWidget" name="directionsTab">
           <attribute name="title">
            <string>Directions</string>
           </attribute>

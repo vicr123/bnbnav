@@ -25,6 +25,7 @@
 class QPainter;
 class Edge;
 class Node;
+class Player;
 struct StateManagerPrivate;
 class StateManager : public QObject {
         Q_OBJECT
@@ -73,6 +74,7 @@ class StateManager : public QObject {
 
         static void setLogin(QString login);
         static QString login();
+        static Player* loggedInPlayer();
 
         static void setCurrentRoute(QList<Edge*> edges);
         static QList<Edge*> currentRoute();

@@ -71,6 +71,9 @@ MainWindow::MainWindow(QWidget* parent)
         d->splash->hide();
         d->stateDialog->show();
     });
+
+    connect(d->map, &MapWidget::routeFrom, d->stateDialog, &StateDialog::routeFrom);
+    connect(d->map, &MapWidget::routeTo, d->stateDialog, &StateDialog::routeTo);
 }
 
 MainWindow::~MainWindow() {

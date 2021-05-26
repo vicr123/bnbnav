@@ -192,7 +192,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         StateManager::Instruction inst = StateManager::currentInstructions().at(StateManager::currentInstruction());
         if (inst.fromEdge && inst.toEdge) {
             QPolygonF arrow;
-            QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(20, 0));
+            QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(100, 0) / d->scale);
             fromLine.setAngle(inst.fromEdge->line().angle());
 
             arrow.append(fromLine.pointAt(-1));
@@ -201,16 +201,16 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             arrow.append(fromLine.pointAt(1));
 
 
-            painter.setPen(QPen(QColor(100, 50, 150), 10, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+            painter.setPen(QPen(QColor(100, 50, 150), 50 / d->scale, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.setBrush(QColor(100, 50, 150));
 
             QPolygonF arrowHead;
             arrowHead.append(fromLine.pointAt(1));
 
-            QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(5, 0));
+            QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(50, 0) / d->scale);
             arrowHeadBase.setAngle(fromLine.normalVector().angle());
 
-            fromLine.setLength(fromLine.length() + 5);
+            fromLine.setLength(fromLine.length() + 50 / d->scale);
 
             arrowHead.append(arrowHeadBase.pointAt(1));
             arrowHead.append(fromLine.pointAt(1));
@@ -327,7 +327,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
     if (d->dragNode) {
         d->dragNodeCoordinates = toMapCoordinates(event->pos()).toPoint();
     } else if (d->dragging) {
-        d->origin += event->globalPos() - d->dragStart;
+        if (!StateManager::followMe()) d->origin += event->globalPos() - d->dragStart;
         d->dragStart = event->globalPos();
     } else {
         //Figure out what we're on
@@ -361,6 +361,14 @@ void MapWidget::wheelEvent(QWheelEvent* event) {
 void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
     QMenu* menu = new QMenu();
 
+    QPoint mapPos = toMapCoordinates(event->pos()).toPoint();
+    menu->addAction(tr("Route from here"), [ = ] {
+        emit routeFrom(mapPos);
+    });
+    menu->addAction(tr("Route to here"), [ = ] {
+        emit routeTo(mapPos);
+    });
+
     if (StateManager::currentState() == StateManager::Edit) {
         for (QObject* target : d->hoverTargets) {
             Node* hoverNode = qobject_cast<Node*>(target);
@@ -369,14 +377,14 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
             if (hoverNode) {
                 menu->addSection(tr("Node"));
                 menu->addAction(tr("Node ID: %1").arg(DataManager::nodes().key(hoverNode)))->setEnabled(false);
-                menu->addAction(tr("Attach Landmark"), [ = ] {
+                menu->addAction(tr("Attach Landmark"), this, [ = ] {
                     //Connect these nodes!
                     NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);
                     dialog->setWindowModality(Qt::ApplicationModal);
                     connect(dialog, &NewLandmarkDialog::finished, dialog, &NewLandmarkDialog::deleteLater);
                     dialog->open();
                 });
-                menu->addAction(tr("Delete Node"), [ = ] {
+                menu->addAction(tr("Delete Node"), this, [ = ] {
                     DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
                         if (error) {
                             QMessageBox::warning(this, tr("Could not delete node"), tr("Could not delete the node."));
@@ -386,7 +394,7 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
             } else if (hoverEdge) {
                 menu->addSection(tr("Edge"));
                 menu->addAction(hoverEdge->road()->name())->setEnabled(false);
-                menu->addAction(tr("Delete Edge"), [ = ] {
+                menu->addAction(tr("Delete Edge"), this, [ = ] {
                     DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [ = ](bool error) {
                         if (error) {
                             QMessageBox::warning(this, tr("Could not delete edge"), tr("Could not delete the edge."));

@@ -14,5 +14,8 @@
         <file>directions/turn-around.svg</file>
         <file>directions/turn-left.svg</file>
         <file>directions/turn-right.svg</file>
+        <file>directions/arrive.svg</file>
+        <file>directions/depart.svg</file>
+        <file>directions/merge.svg</file>
     </qresource>
 </RCC>
