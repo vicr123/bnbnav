@@ -69,8 +69,8 @@ QMap<QString, Landmark*> DataManager::landmarks() {
     return instance()->d->landmarks;
 }
 
-QList<Player*> DataManager::players() {
-    return instance()->d->players.values();
+QMap<QString, Player*> DataManager::players() {
+    return instance()->d->players;
 }
 
 Edge* DataManager::edgeForNodes(Node* from, Node* to) {
@@ -350,7 +350,7 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
                 }
             }
             d->players.value(id)->update(object);
-            emit playerUpdate();
+            emit playerUpdate(id);
         } else if (type == "playerGone") {
             d->players.remove(id);
             emit removedPlayer();

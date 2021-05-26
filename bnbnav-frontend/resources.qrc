@@ -3,5 +3,16 @@
         <file>landmarks/aircs.svg</file>
         <file>playermark.svg</file>
         <file>logo.svg</file>
+        <file>directions/bear-left.svg</file>
+        <file>directions/bear-right.svg</file>
+        <file>directions/continue-straight.svg</file>
+        <file>directions/exit-left.svg</file>
+        <file>directions/exit-right.svg</file>
+        <file>directions/sharp-left.svg</file>
+        <file>directions/sharp-right.svg</file>
+        <file>directions/turn-aroud.svg</file>
+        <file>directions/turn-around.svg</file>
+        <file>directions/turn-left.svg</file>
+        <file>directions/turn-right.svg</file>
     </qresource>
 </RCC>

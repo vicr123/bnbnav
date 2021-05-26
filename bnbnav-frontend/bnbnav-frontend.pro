@@ -12,6 +12,7 @@ SOURCES += \
     datagatherer.cpp \
     datamanager.cpp \
     edge.cpp \
+    instructionmodel.cpp \
     landmark.cpp \
     locationentrybox.cpp \
     loginwidget.cpp \
@@ -33,6 +34,7 @@ HEADERS += \
     datagatherer.h \
     datamanager.h \
     edge.h \
+    instructionmodel.h \
     landmark.h \
     locationentrybox.h \
     loginwidget.h \

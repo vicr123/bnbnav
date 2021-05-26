@@ -39,6 +39,7 @@ class MapWidget : public QWidget {
         MapWidgetPrivate* d;
 
         void doClick();
+        void followPlayer();
 
         // QWidget interface
     protected:

@@ -23,17 +23,30 @@
 #include <QMessageBox>
 #include "statemanager.h"
 #include "datamanager.h"
+#include "instructionmodel.h"
 
 StateDialog::StateDialog(QWidget* parent) :
     QDialog(parent),
     ui(new Ui::StateDialog) {
     ui->setupUi(this);
+
+    ui->instructionList->setModel(new InstructionModel(this));
+    ui->instructionList->setItemDelegate(new InstructionDelegate(this));
+
+    connect(StateManager::instance(), &StateManager::currentInstructionChanged, this, [ = ] {
+        int inst = StateManager::currentInstruction();
+        if (inst == -1) {
+            ui->currentInstructionText->setText("No instruction...");
+        } else {
+            StateManager::Instruction instruction = StateManager::currentInstructions().at(inst);
+            ui->currentInstructionText->setText(instruction.humanReadableString(StateManager::blocksToNextInstruction()));
+        }
+    });
 }
 
 StateDialog::~StateDialog() {
     delete ui;
 }
-
 
 void StateDialog::on_getDirectionsButton_clicked() {
     QPoint start = ui->startLocationBox->location();
@@ -46,7 +59,6 @@ void StateDialog::on_getDirectionsButton_clicked() {
     DataManager::resetTemporaries();
     StateManager::setCurrentRoute(DataManager::shortestPath(start, end));
 }
-
 
 void StateDialog::on_startLocationBox_textChanged(const QString& arg1) {
     StateManager::setCurrentRoute({});

@@ -22,7 +22,9 @@
 
 #include <QObject>
 
+class QPainter;
 class Edge;
+class Node;
 struct StateManagerPrivate;
 class StateManager : public QObject {
         Q_OBJECT
@@ -31,6 +33,36 @@ class StateManager : public QObject {
             Browse,
             Edit,
             Route
+        };
+
+        struct Instruction {
+            enum InstructionType {
+                Departure,
+                Arrival,
+                ContinueStraight,
+                BearLeft,
+                TurnLeft,
+                SharpLeft,
+                TurnAround,
+                SharpRight,
+                TurnRight,
+                BearRight,
+                ExitLeft,
+                ExitRight,
+                Merge
+            };
+
+            Node* node;
+            Edge* toEdge;
+            InstructionType type;
+            double distance;
+            double turnAngle;
+
+            QString humanReadableString(int distance);
+
+            int height();
+            void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);
+            QString imageName();
         };
 
         static StateManager* instance();
@@ -43,14 +75,25 @@ class StateManager : public QObject {
 
         static void setCurrentRoute(QList<Edge*> edges);
         static QList<Edge*> currentRoute();
+        static QList<Instruction> currentInstructions();
+        static int currentInstruction();
+        static double blocksToNextInstruction();
+
+        static void setFollowMe(bool follow);
+        static bool followMe();
 
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);
+        void followMeChanged(bool followMe);
+        void routeChanged();
+        void currentInstructionChanged();
 
     private:
         explicit StateManager(QObject* parent = nullptr);
         StateManagerPrivate* d;
+
+        void calculateCurrentInstruction();
 };
 
 #endif // STATEMANAGER_H

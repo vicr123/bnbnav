@@ -102,6 +102,16 @@
         </widget>
        </item>
        <item>
+        <widget class="QPushButton" name="followMeButton">
+         <property name="text">
+          <string>Follow Me</string>
+         </property>
+         <property name="checkable">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QPushButton" name="logOutButton">
          <property name="text">
           <string>Log Out</string>

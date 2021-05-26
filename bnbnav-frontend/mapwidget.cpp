@@ -78,11 +78,16 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     connect(DataManager::instance(), &DataManager::removedRoad, this, [ = ] {
         update();
     });
-    connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ] {
+    connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
         update();
+
+        if (player == StateManager::login()) followPlayer();
     });
     connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
         update();
+    });
+    connect(StateManager::instance(), &StateManager::followMeChanged, this, [ = ] {
+        followPlayer();
     });
 }
 
@@ -124,6 +129,15 @@ void MapWidget::doClick() {
             //TODO: Edit edge
         }
     }
+}
+
+void MapWidget::followPlayer() {
+    if (!StateManager::followMe()) return;
+
+    Player* player = DataManager::players().value(StateManager::login());
+    QPointF playerCoords(player->x(), player->z());
+
+    d->origin = -playerCoords * d->scale + QPointF(this->width() / 2, this->height() / 2);
 }
 
 void MapWidget::paintEvent(QPaintEvent* event) {

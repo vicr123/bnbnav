@@ -39,6 +39,7 @@ public:
     QWidget *userPage;
     QVBoxLayout *verticalLayout_2;
     QLabel *userPageTitle;
+    QPushButton *followMeButton;
     QPushButton *logOutButton;
 
     void setupUi(QWidget *LoginWidget)
@@ -100,6 +101,12 @@ public:
 
         verticalLayout_2->addWidget(userPageTitle);
 
+        followMeButton = new QPushButton(userPage);
+        followMeButton->setObjectName(QString::fromUtf8("followMeButton"));
+        followMeButton->setCheckable(true);
+
+        verticalLayout_2->addWidget(followMeButton);
+
         logOutButton = new QPushButton(userPage);
         logOutButton->setObjectName(QString::fromUtf8("logOutButton"));
 
@@ -125,6 +132,7 @@ public:
         label_2->setText(QCoreApplication::translate("LoginWidget", "Minecraft Username", nullptr));
         loginButton->setText(QCoreApplication::translate("LoginWidget", "Log In", nullptr));
         userPageTitle->setText(QCoreApplication::translate("LoginWidget", "Log In", nullptr));
+        followMeButton->setText(QCoreApplication::translate("LoginWidget", "Follow Me", nullptr));
         logOutButton->setText(QCoreApplication::translate("LoginWidget", "Log Out", nullptr));
     } // retranslateUi
 

@@ -14,6 +14,7 @@
 #include <QtWidgets/QDialog>
 #include <QtWidgets/QHBoxLayout>
 #include <QtWidgets/QLabel>
+#include <QtWidgets/QListView>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QTabWidget>
@@ -37,13 +38,14 @@ public:
     QHBoxLayout *horizontalLayout;
     QSpacerItem *horizontalSpacer;
     QPushButton *getDirectionsButton;
-    QSpacerItem *verticalSpacer;
+    QListView *instructionList;
+    QLabel *currentInstructionText;
 
     void setupUi(QDialog *StateDialog)
     {
         if (StateDialog->objectName().isEmpty())
             StateDialog->setObjectName(QString::fromUtf8("StateDialog"));
-        StateDialog->resize(400, 300);
+        StateDialog->resize(400, 416);
         verticalLayout = new QVBoxLayout(StateDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -89,9 +91,15 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
-        verticalSpacer = new QSpacerItem(20, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+        instructionList = new QListView(tab_2);
+        instructionList->setObjectName(QString::fromUtf8("instructionList"));
 
-        verticalLayout_2->addItem(verticalSpacer);
+        verticalLayout_2->addWidget(instructionList);
+
+        currentInstructionText = new QLabel(tab_2);
+        currentInstructionText->setObjectName(QString::fromUtf8("currentInstructionText"));
+
+        verticalLayout_2->addWidget(currentInstructionText);
 
         tabWidget->addTab(tab_2, QString());
 
@@ -114,6 +122,7 @@ public:
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));
         endLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "End Location", nullptr));
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
+        currentInstructionText->setText(QCoreApplication::translate("StateDialog", "TextLabel", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("StateDialog", "Directions", nullptr));
     } // retranslateUi
 

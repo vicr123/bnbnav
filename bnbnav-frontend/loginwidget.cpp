@@ -42,6 +42,8 @@ LoginWidget::LoginWidget(QWidget* parent) :
         ui->stackedWidget->setCurrentWidget(ui->userPage);
     }
     ui->userPageTitle->setText(tr("Hello %1!").arg(StateManager::login()));
+
+    connect(StateManager::instance(), &StateManager::followMeChanged, ui->followMeButton, &QPushButton::setChecked);
 }
 
 LoginWidget::~LoginWidget() {
@@ -58,5 +60,9 @@ void LoginWidget::on_loginButton_clicked() {
 
 void LoginWidget::on_logOutButton_clicked() {
     StateManager::setLogin("");
+}
+
+void LoginWidget::on_followMeButton_toggled(bool checked) {
+    StateManager::setFollowMe(checked);
 }
 

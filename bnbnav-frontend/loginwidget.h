@@ -40,6 +40,8 @@ class LoginWidget : public QWidget {
 
         void on_logOutButton_clicked();
 
+        void on_followMeButton_toggled(bool checked);
+
     private:
         Ui::LoginWidget* ui;
 };

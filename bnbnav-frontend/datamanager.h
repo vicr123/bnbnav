@@ -38,7 +38,7 @@ class DataManager : public QObject {
         static QMap<QString, Edge*> edges();
         static QMap<QString, Road*> roads();
         static QMap<QString, Landmark*> landmarks();
-        static QList<Player*> players();
+        static QMap<QString, Player*> players();
 
         static Edge* edgeForNodes(Node* from, Node* to);
         static QList<Edge*> edgesFromNode(Node* from);
@@ -62,7 +62,7 @@ class DataManager : public QObject {
         void updatedRoad();
         void updatedEdge();
         void loadError();
-        void playerUpdate();
+        void playerUpdate(QString player);
         void removedPlayer();
 
     private:
