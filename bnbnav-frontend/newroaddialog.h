@@ -31,7 +31,7 @@ class NewRoadDialog : public QDialog {
         Q_OBJECT
 
     public:
-        explicit NewRoadDialog(QWidget* parent = nullptr);
+        explicit NewRoadDialog(QString oldId, QWidget* parent = nullptr);
         ~NewRoadDialog();
 
         QString addedRoadId();

@@ -55,9 +55,11 @@ class DataManager : public QObject {
         void newNode();
         void newRoad();
         void newEdge();
+        void newLandmark();
         void removedNode();
         void removedRoad();
         void removedEdge();
+        void removedLandmark();
         void updatedNode();
         void updatedRoad();
         void updatedEdge();

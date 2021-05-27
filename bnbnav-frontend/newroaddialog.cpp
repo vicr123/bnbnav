@@ -23,23 +23,31 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QMessageBox>
+#include "road.h"
 #include "datagatherer.h"
+#include "datamanager.h"
 
 struct NewRoadDialogPrivate {
     QString roadId;
 };
 
-NewRoadDialog::NewRoadDialog(QWidget* parent) :
+NewRoadDialog::NewRoadDialog(QString oldId, QWidget* parent) :
     QDialog(parent),
     ui(new Ui::NewRoadDialog) {
     ui->setupUi(this);
 
     d = new NewRoadDialogPrivate();
+    d->roadId = oldId;
 
-    ui->typeBox->addItem(tr("Local Road"), "local");
-    ui->typeBox->addItem(tr("Main Road"), "main");
-    ui->typeBox->addItem(tr("Highway"), "highway");
-    ui->typeBox->addItem(tr("Motorway"), "motorway");
+    for (QPair<QString, QString> roadType : Road::roadTypes()) {
+        ui->typeBox->addItem(roadType.second, roadType.first);
+    }
+
+    if (!d->roadId.isEmpty()) {
+        Road* road = DataManager::roads().value(d->roadId);
+        ui->nameBox->setText(road->name());
+        ui->typeBox->setCurrentIndex(ui->typeBox->findData(road->type()));
+    }
 }
 
 NewRoadDialog::~NewRoadDialog() {
@@ -61,7 +69,13 @@ void NewRoadDialog::on_cancelButton_clicked() {
 void NewRoadDialog::on_okButton_clicked() {
     //Send data to the server
     this->setEnabled(false);
-    DataGatherer::submit("/roads/add", {
+
+    QString url = QStringLiteral("/roads/add");
+    if (!d->roadId.isEmpty()) {
+        url = QStringLiteral("/roads/%1").arg(d->roadId);
+    }
+
+    DataGatherer::submit(url, {
         {"name", ui->nameBox->text()},
         {"type", ui->typeBox->currentData().toString()}
     }, [ = ](QByteArray data, bool error) {

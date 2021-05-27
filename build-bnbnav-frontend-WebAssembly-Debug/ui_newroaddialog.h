@@ -40,7 +40,7 @@ public:
     {
         if (NewRoadDialog->objectName().isEmpty())
             NewRoadDialog->setObjectName(QString::fromUtf8("NewRoadDialog"));
-        NewRoadDialog->resize(400, 136);
+        NewRoadDialog->resize(400, 137);
         gridLayout = new QGridLayout(NewRoadDialog);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         label = new QLabel(NewRoadDialog);
@@ -99,7 +99,7 @@ public:
     void retranslateUi(QDialog *NewRoadDialog)
     {
         NewRoadDialog->setWindowTitle(QCoreApplication::translate("NewRoadDialog", "Dialog", nullptr));
-        label->setText(QCoreApplication::translate("NewRoadDialog", "New Road", nullptr));
+        label->setText(QCoreApplication::translate("NewRoadDialog", "Define Road", nullptr));
         label_2->setText(QCoreApplication::translate("NewRoadDialog", "Name", nullptr));
         cancelButton->setText(QCoreApplication::translate("NewRoadDialog", "Cancel", nullptr));
         okButton->setText(QCoreApplication::translate("NewRoadDialog", "OK", nullptr));

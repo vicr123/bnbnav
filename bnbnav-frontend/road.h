@@ -30,9 +30,13 @@ class Road : public QObject {
         explicit Road(QJsonObject definition, QObject* parent = nullptr);
         ~Road();
 
+        static QList<QPair<QString, QString>> roadTypes();
+
         QString name();
         QString type();
         QPen pen(Edge* edge);
+
+        void redefine(QJsonObject definition);
 
     signals:
 

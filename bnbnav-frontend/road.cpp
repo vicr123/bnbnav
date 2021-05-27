@@ -37,17 +37,20 @@ struct RoadPrivate {
 
 Road::Road(QJsonObject definition, QObject* parent) : QObject(parent) {
     d = new RoadPrivate();
-    d->name = definition.value("name").toString();
-
-    if (definition.contains("roadType")) {
-        d->type = definition.value("roadType").toString();
-    } else {
-        d->type = definition.value("type").toString();
-    }
+    redefine(definition);
 }
 
 Road::~Road() {
     delete d;
+}
+
+QList<QPair<QString, QString>> Road::roadTypes() {
+    return {
+        {"local", tr("Local Road")},
+        {"main", tr("Main Road")},
+        {"highway", tr("Highway")},
+        {"motorway", tr("Motorway")}
+    };
 }
 
 QString Road::name() {
@@ -77,4 +80,14 @@ QPen Road::pen(Edge* edge) {
         thickness = 10;
     }
     return QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+}
+
+void Road::redefine(QJsonObject definition) {
+    d->name = definition.value("name").toString();
+
+    if (definition.contains("roadType")) {
+        d->type = definition.value("roadType").toString();
+    } else {
+        d->type = definition.value("type").toString();
+    }
 }

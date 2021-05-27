@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>400</width>
-    <height>136</height>
+    <height>137</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -22,7 +22,7 @@
       </font>
      </property>
      <property name="text">
-      <string>New Road</string>
+      <string>Define Road</string>
      </property>
     </widget>
    </item>

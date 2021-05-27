@@ -36,6 +36,7 @@
 #include "landmark.h"
 #include "player.h"
 #include "statemanager.h"
+#include "newroaddialog.h"
 
 struct MapWidgetPrivate {
     QPointF origin;
@@ -69,6 +70,9 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     connect(DataManager::instance(), &DataManager::newEdge, this, [ = ] {
         update();
     });
+    connect(DataManager::instance(), &DataManager::newLandmark, this, [ = ] {
+        update();
+    });
     connect(DataManager::instance(), &DataManager::removedEdge, this, [ = ] {
         update();
     });
@@ -76,6 +80,9 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
         update();
     });
     connect(DataManager::instance(), &DataManager::removedRoad, this, [ = ] {
+        update();
+    });
+    connect(DataManager::instance(), &DataManager::removedLandmark, this, [ = ] {
         update();
     });
     connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
@@ -377,13 +384,30 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
             if (hoverNode) {
                 menu->addSection(tr("Node"));
                 menu->addAction(tr("Node ID: %1").arg(DataManager::nodes().key(hoverNode)))->setEnabled(false);
-                menu->addAction(tr("Attach Landmark"), this, [ = ] {
-                    //Connect these nodes!
-                    NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);
-                    dialog->setWindowModality(Qt::ApplicationModal);
-                    connect(dialog, &NewLandmarkDialog::finished, dialog, &NewLandmarkDialog::deleteLater);
-                    dialog->open();
-                });
+
+                Landmark* attached = nullptr;
+                for (Landmark* landmark : DataManager::landmarks().values()) {
+                    if (landmark->node() == hoverNode) attached = landmark;
+                }
+
+                if (attached) {
+                    menu->addAction(tr("Detach Landmark"), this, [ = ] {
+                        //Detach this landmark!
+                        DataGatherer::del(QStringLiteral("/landmarks/%1").arg(DataManager::landmarks().key(attached)), [ = ](bool error) {
+                            if (error) {
+                                QMessageBox::warning(this, tr("Could not detach landmark"), tr("Could not detach the landmark."));
+                            }
+                        });
+                    });
+                } else {
+                    menu->addAction(tr("Attach Landmark"), this, [ = ] {
+                        //Connect these nodes!
+                        NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);
+                        dialog->setWindowModality(Qt::ApplicationModal);
+                        connect(dialog, &NewLandmarkDialog::finished, dialog, &NewLandmarkDialog::deleteLater);
+                        dialog->open();
+                    });
+                }
                 menu->addAction(tr("Delete Node"), this, [ = ] {
                     DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [ = ](bool error) {
                         if (error) {
@@ -394,6 +418,12 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
             } else if (hoverEdge) {
                 menu->addSection(tr("Edge"));
                 menu->addAction(hoverEdge->road()->name())->setEnabled(false);
+                menu->addAction(tr("Edit Road"), this, [ = ] {
+                    NewRoadDialog* d = new NewRoadDialog(DataManager::roads().key(hoverEdge->road()), this);
+                    d->setWindowModality(Qt::ApplicationModal);
+                    connect(d, &NewRoadDialog::finished, d, &QDialog::deleteLater);
+                    d->open();
+                });
                 menu->addAction(tr("Delete Edge"), this, [ = ] {
                     DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [ = ](bool error) {
                         if (error) {

@@ -335,6 +335,9 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         } else if (type == "newEdge") {
             d->edges.insert(id, new Edge(object));
             emit newEdge();
+        } else if (type == "newLandmark") {
+            d->landmarks.insert(id, new Landmark(object));
+            emit newLandmark();
         } else if (type == "edgeRemoved") {
             d->edges.remove(id);
             emit removedEdge();
@@ -344,9 +347,15 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
         } else if (type == "nodeRemoved") {
             d->nodes.remove(id);
             emit removedNode();
+        } else if (type == "landmarkRemoved") {
+            d->landmarks.remove(id);
+            emit removedLandmark();
         } else if (type == "nodeUpdated") {
             d->nodes.value(id)->redefine(object);
             emit updatedNode();
+        } else if (type == "roadUpdated") {
+            d->roads.value(id)->redefine(object);
+            emit updatedRoad();
         } else if (type == "playerMove") {
             if (!d->players.contains(id)) {
                 if (d->allPlayers.contains(id)) {

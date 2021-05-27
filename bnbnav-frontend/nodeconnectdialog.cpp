@@ -102,7 +102,7 @@ void NodeConnectDialog::on_okButton_clicked() {
 }
 
 void NodeConnectDialog::on_newRoadButton_clicked() {
-    NewRoadDialog* d = new NewRoadDialog(this);
+    NewRoadDialog* d = new NewRoadDialog("", this);
     d->setWindowModality(Qt::ApplicationModal);
     connect(d, &NewRoadDialog::accepted, this, [ = ] {
         ui->roadSelectionBox->addItem(d->addedRoadName(), d->addedRoadId());
