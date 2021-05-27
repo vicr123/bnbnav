@@ -24,5 +24,10 @@
         <file>landmarks/walnut.svg</file>
         <file>landmarks/immigration-check.svg</file>
         <file>landmarks/tourist-attraction.svg</file>
+        <file>landmarks/generic-blue.svg</file>
+        <file>landmarks/generic-gray.svg</file>
+        <file>landmarks/generic-green.svg</file>
+        <file>landmarks/generic-red.svg</file>
+        <file>landmarks/invisible.svg</file>
     </qresource>
 </RCC>
