@@ -31,7 +31,10 @@ struct RoadPrivate {
         {"local", QColor(Qt::black)},
         {"main", QColor(245, 179, 66)},
         {"highway", QColor(173, 25, 9)},
-        {"motorway", QColor(105, 9, 173)}
+        {"motorway", QColor(105, 9, 173)},
+        {"footpath", QColor(150, 150, 150)},
+        {"waterway", QColor(0, 110, 150)},
+        {"private", QColor(100, 100, 100)}
     };
 };
 
@@ -49,7 +52,10 @@ QList<QPair<QString, QString>> Road::roadTypes() {
         {"local", tr("Local Road")},
         {"main", tr("Main Road")},
         {"highway", tr("Highway")},
-        {"motorway", tr("Motorway")}
+        {"motorway", tr("Motorway")},
+        {"footpath", tr("Footpath")},
+        {"waterway", tr("Waterway")},
+        {"private", tr("Private Use Road")}
     };
 }
 
