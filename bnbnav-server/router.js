@@ -153,7 +153,7 @@ router.post("/roads/:id", async (req, res) => {
         type: "roadUpdated",
         id: id,
         name: road.name,
-        type: road.type
+        roadType: road.type
     });
 
     res.sendStatus(200);
