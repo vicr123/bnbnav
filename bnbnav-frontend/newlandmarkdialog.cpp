@@ -38,9 +38,9 @@ NewLandmarkDialog::NewLandmarkDialog(Node* node, QWidget* parent) :
     d->node = node;
 
     QList<QPair<QString, QString>> landmarks = Landmark::landmarks();
-    std::sort(landmarks.begin(), landmarks.end(), [ = ](const QPair<QString, QString>& first, const QPair<QString, QString>& second) {
-        return first.second.localeAwareCompare(second.first) < 0;
-    });
+//    std::sort(landmarks.begin(), landmarks.end(), [ = ](const QPair<QString, QString>& first, const QPair<QString, QString>& second) {
+//        return first.second.localeAwareCompare(second.first) < 0;
+//    });
 
     for (QPair<QString, QString> landmarkType : qAsConst(landmarks)) {
         ui->typeBox->addItem(landmarkType.second, landmarkType.first);
