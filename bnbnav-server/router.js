@@ -135,6 +135,29 @@ router.post("/roads/add", async (req, res) => {
         id: id
     });
 });
+router.post("/roads/:id", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.roads[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    let road = JSON.parse(JSON.stringify(db.data.roads[id]));
+    if (req.body.name != null) road.name = req.body.name;
+    if (req.body.type != null) road.type = req.body.type;
+
+    db.data.roads[id] = road;
+    db.save();
+
+    ws.broadcast({
+        type: "roadUpdated",
+        id: id,
+        name: road.name,
+        type: road.type
+    });
+
+    res.sendStatus(200);
+});
 router.delete("/roads/:id", async (req, res) => {
     let id = req.params.id
     if (!db.data.roads[id]) {

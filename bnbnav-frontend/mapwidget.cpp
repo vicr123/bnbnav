@@ -134,7 +134,7 @@ void MapWidget::doClick() {
 void MapWidget::followPlayer() {
     if (!StateManager::followMe()) return;
 
-    Player* player = DataManager::players().value(StateManager::login());
+    Player* player = StateManager::loggedInPlayer();
     QPointF playerCoords(player->x(), player->z());
 
     d->origin = -playerCoords * d->scale + QPointF(this->width() / 2, this->height() / 2);
