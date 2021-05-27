@@ -40,8 +40,8 @@ Landmark::~Landmark() {
 void Landmark::redefine(QJsonObject definition) {
     d->node = DataManager::nodes().value(definition.value("node").toString());
     d->name = definition.value("name").toString();
-    if (definition.contains("roadType")) {
-        d->type = definition.value("roadType").toString();
+    if (definition.contains("landmarkType")) {
+        d->type = definition.value("landmarkType").toString();
     } else {
         d->type = definition.value("type").toString();
     }
