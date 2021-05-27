@@ -98,7 +98,7 @@ public:
 
     void retranslateUi(QDialog *NewRoadDialog)
     {
-        NewRoadDialog->setWindowTitle(QCoreApplication::translate("NewRoadDialog", "Dialog", nullptr));
+        NewRoadDialog->setWindowTitle(QCoreApplication::translate("NewRoadDialog", "Define Road", nullptr));
         label->setText(QCoreApplication::translate("NewRoadDialog", "Define Road", nullptr));
         label_2->setText(QCoreApplication::translate("NewRoadDialog", "Name", nullptr));
         cancelButton->setText(QCoreApplication::translate("NewRoadDialog", "Cancel", nullptr));

@@ -66,3 +66,8 @@ void LoginWidget::on_followMeButton_toggled(bool checked) {
     StateManager::setFollowMe(checked);
 }
 
+
+void LoginWidget::on_loginUsernameBox_returnPressed() {
+    ui->loginButton->click();
+}
+

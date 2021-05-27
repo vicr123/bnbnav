@@ -33,6 +33,7 @@ public:
         if (SplashWidget->objectName().isEmpty())
             SplashWidget->setObjectName(QString::fromUtf8("SplashWidget"));
         SplashWidget->resize(400, 300);
+        SplashWidget->setWindowTitle(QString::fromUtf8("Form"));
         verticalLayout = new QVBoxLayout(SplashWidget);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         stackedWidget = new QStackedWidget(SplashWidget);
@@ -63,7 +64,7 @@ public:
 
     void retranslateUi(QWidget *SplashWidget)
     {
-        SplashWidget->setWindowTitle(QCoreApplication::translate("SplashWidget", "Form", nullptr));
+        (void)SplashWidget;
     } // retranslateUi
 
 };

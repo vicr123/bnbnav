@@ -557,7 +557,14 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		/opt/qt5-wasm/bin/rcc \
 		../bnbnav-frontend/playermark.svg \
 		../bnbnav-frontend/logo.svg \
+		../bnbnav-frontend/landmarks/walnut.svg \
+		../bnbnav-frontend/landmarks/airport.svg \
+		../bnbnav-frontend/landmarks/hospital.svg \
+		../bnbnav-frontend/landmarks/parking.svg \
+		../bnbnav-frontend/landmarks/tourist-attraction.svg \
 		../bnbnav-frontend/landmarks/aircs.svg \
+		../bnbnav-frontend/landmarks/immigration-check.svg \
+		../bnbnav-frontend/landmarks/squid-transit.svg \
 		../bnbnav-frontend/directions/turn-aroud.svg \
 		../bnbnav-frontend/directions/merge.svg \
 		../bnbnav-frontend/directions/turn-around.svg \
@@ -3577,7 +3584,8 @@ mainwindow.o: ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mainwindow.h 
 		/opt/qt5-wasm/include/QtCore/QObject \
 		../bnbnav-frontend/statedialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
-		/opt/qt5-wasm/include/QtWidgets/qdialog.h
+		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
+		../bnbnav-frontend/statemanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../bnbnav-frontend/mainwindow.cpp
 
 mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
@@ -3715,7 +3723,8 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		../bnbnav-frontend/road.h \
 		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/player.h \
-		../bnbnav-frontend/statemanager.h
+		../bnbnav-frontend/statemanager.h \
+		../bnbnav-frontend/newroaddialog.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mapwidget.o ../bnbnav-frontend/mapwidget.cpp
 
 newlandmarkdialog.o: ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newlandmarkdialog.h \
@@ -3877,7 +3886,8 @@ newlandmarkdialog.o: ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
 		../bnbnav-frontend/datagatherer.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
-		../bnbnav-frontend/datamanager.h
+		../bnbnav-frontend/datamanager.h \
+		../bnbnav-frontend/landmark.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newlandmarkdialog.o ../bnbnav-frontend/newlandmarkdialog.cpp
 
 newroaddialog.o: ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/newroaddialog.h \
@@ -4039,8 +4049,10 @@ newroaddialog.o: ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/newroad
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		../bnbnav-frontend/road.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
 		../bnbnav-frontend/datagatherer.h \
-		/opt/qt5-wasm/include/QtCore/QObject
+		../bnbnav-frontend/datamanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o newroaddialog.o ../bnbnav-frontend/newroaddialog.cpp
 
 node.o: ../bnbnav-frontend/node.cpp ../bnbnav-frontend/node.h \

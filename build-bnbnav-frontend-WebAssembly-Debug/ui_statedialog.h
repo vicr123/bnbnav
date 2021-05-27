@@ -161,7 +161,7 @@ public:
 
     void retranslateUi(QDialog *StateDialog)
     {
-        StateDialog->setWindowTitle(QCoreApplication::translate("StateDialog", "Dialog", nullptr));
+        StateDialog->setWindowTitle(QCoreApplication::translate("StateDialog", "bnbnav", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(discoverTab), QCoreApplication::translate("StateDialog", "Discover", nullptr));
         label->setText(QCoreApplication::translate("StateDialog", "Get Directions", nullptr));
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));

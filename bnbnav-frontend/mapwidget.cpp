@@ -158,7 +158,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
     QList<Edge*> edges = DataManager::edges().values();
     //Sort edges by average Y height
-    std::sort(edges.begin(), edges.end(), [ = ](Edge * first, Edge * second) {
+    std::stable_sort(edges.begin(), edges.end(), [ = ](Edge * first, Edge * second) {
         if (StateManager::currentRoute().contains(first) == StateManager::currentRoute().contains(second)) {
             return first->averageY() < second->averageY();
         } else if (StateManager::currentRoute().contains(first)) {
@@ -188,7 +188,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
     for (Landmark* landmark : DataManager::landmarks().values()) {
         QRectF landmarkPin;
-        landmarkPin.setSize(QSizeF(4, 4));
+        landmarkPin.setSize(QSizeF(8, 8));
         landmarkPin.moveCenter(QPointF(landmark->node()->x(), landmark->node()->z()));
 
         QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
@@ -206,7 +206,6 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             arrow.append(fromLine.pointAt(0));
             fromLine.setAngle(inst.toEdge->line().angle());
             arrow.append(fromLine.pointAt(1));
-
 
             painter.setPen(QPen(QColor(100, 50, 150), 50 / d->scale, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
             painter.setBrush(QColor(100, 50, 150));

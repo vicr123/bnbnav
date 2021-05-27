@@ -25,6 +25,7 @@
 #include "splashwidget.h"
 #include "datamanager.h"
 #include "statedialog.h"
+#include "statemanager.h"
 
 struct MainWindowPrivate {
     MapWidget* map;
@@ -74,6 +75,10 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(d->map, &MapWidget::routeFrom, d->stateDialog, &StateDialog::routeFrom);
     connect(d->map, &MapWidget::routeTo, d->stateDialog, &StateDialog::routeTo);
+
+    connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
+        if (StateManager::currentState() == StateManager::Go && d->login->isVisible()) d->login->setVisible(false);
+    });
 }
 
 MainWindow::~MainWindow() {

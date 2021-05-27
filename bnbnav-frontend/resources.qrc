@@ -17,5 +17,12 @@
         <file>directions/arrive.svg</file>
         <file>directions/depart.svg</file>
         <file>directions/merge.svg</file>
+        <file>landmarks/airport.svg</file>
+        <file>landmarks/hospital.svg</file>
+        <file>landmarks/parking.svg</file>
+        <file>landmarks/squid-transit.svg</file>
+        <file>landmarks/walnut.svg</file>
+        <file>landmarks/immigration-check.svg</file>
+        <file>landmarks/tourist-attraction.svg</file>
     </qresource>
 </RCC>

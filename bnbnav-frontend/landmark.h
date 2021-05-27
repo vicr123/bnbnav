@@ -36,6 +36,8 @@ class Landmark : public QObject {
         QString name();
         QString type();
 
+        static QList<QPair<QString, QString>> landmarks();
+
     signals:
 
     private:

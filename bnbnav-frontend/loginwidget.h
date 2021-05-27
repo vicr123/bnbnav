@@ -42,6 +42,8 @@ class LoginWidget : public QWidget {
 
         void on_followMeButton_toggled(bool checked);
 
+        void on_loginUsernameBox_returnPressed();
+
     private:
         Ui::LoginWidget* ui;
 };

@@ -24,6 +24,7 @@
 #include <QMessageBox>
 #include "datagatherer.h"
 #include "datamanager.h"
+#include "landmark.h"
 
 struct NewLandmarkDialogPrivate {
     Node* node;
@@ -36,7 +37,14 @@ NewLandmarkDialog::NewLandmarkDialog(Node* node, QWidget* parent) :
     d = new NewLandmarkDialogPrivate();
     d->node = node;
 
-    ui->typeBox->addItem(tr("AirCS Station"), "aircs");
+    QList<QPair<QString, QString>> landmarks = Landmark::landmarks();
+    std::sort(landmarks.begin(), landmarks.end(), [ = ](QPair<QString, QString> first, QPair<QString, QString> second) {
+        return first.second.localeAwareCompare(second.first) < 0;
+    });
+
+    for (QPair<QString, QString> landmarkType : landmarks) {
+        ui->typeBox->addItem(landmarkType.second, landmarkType.first);
+    }
 }
 
 NewLandmarkDialog::~NewLandmarkDialog() {

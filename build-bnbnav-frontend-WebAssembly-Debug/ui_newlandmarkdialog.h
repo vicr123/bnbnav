@@ -98,7 +98,7 @@ public:
 
     void retranslateUi(QDialog *NewLandmarkDialog)
     {
-        NewLandmarkDialog->setWindowTitle(QCoreApplication::translate("NewLandmarkDialog", "Dialog", nullptr));
+        NewLandmarkDialog->setWindowTitle(QCoreApplication::translate("NewLandmarkDialog", "New Landmark", nullptr));
         label->setText(QCoreApplication::translate("NewLandmarkDialog", "New Landmark", nullptr));
         label_2->setText(QCoreApplication::translate("NewLandmarkDialog", "Name", nullptr));
         label_3->setText(QCoreApplication::translate("NewLandmarkDialog", "Type", nullptr));

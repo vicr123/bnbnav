@@ -47,6 +47,7 @@ public:
         if (LoginWidget->objectName().isEmpty())
             LoginWidget->setObjectName(QString::fromUtf8("LoginWidget"));
         LoginWidget->resize(400, 111);
+        LoginWidget->setWindowTitle(QString::fromUtf8("Form"));
         LoginWidget->setAutoFillBackground(true);
         verticalLayout = new QVBoxLayout(LoginWidget);
         verticalLayout->setSpacing(0);
@@ -119,7 +120,7 @@ public:
 
         retranslateUi(LoginWidget);
 
-        stackedWidget->setCurrentIndex(1);
+        stackedWidget->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(LoginWidget);
@@ -127,13 +128,13 @@ public:
 
     void retranslateUi(QWidget *LoginWidget)
     {
-        LoginWidget->setWindowTitle(QCoreApplication::translate("LoginWidget", "Form", nullptr));
         label->setText(QCoreApplication::translate("LoginWidget", "Log In", nullptr));
         label_2->setText(QCoreApplication::translate("LoginWidget", "Minecraft Username", nullptr));
         loginButton->setText(QCoreApplication::translate("LoginWidget", "Log In", nullptr));
         userPageTitle->setText(QCoreApplication::translate("LoginWidget", "Log In", nullptr));
         followMeButton->setText(QCoreApplication::translate("LoginWidget", "Follow Me", nullptr));
         logOutButton->setText(QCoreApplication::translate("LoginWidget", "Log Out", nullptr));
+        (void)LoginWidget;
     } // retranslateUi
 
 };

@@ -58,3 +58,21 @@ QString Landmark::name() {
 QString Landmark::type() {
     return d->type;
 }
+
+QList<QPair<QString, QString>> Landmark::landmarks() {
+    return {
+        {"aircs", tr("AirCS Station")},
+        {"airport", tr("Airport")},
+        {"hospital", tr("Hospital")},
+        {"squid-transit", tr("Squid Transit Station")},
+        {"parking", tr("Parking Lot")},
+        {"walnut", tr("Walnut")},
+        {"immigration-check", tr("Immigration Border")},
+        {"tourist-attraction", tr("Tourist Attraction")},
+        {"invisible", tr("Invisible")},
+        {"generic-blue", tr("Generic Blue")},
+        {"generic-green", tr("Generic Green")},
+        {"generic-red", tr("Generic Red")},
+        {"generic-gray", tr("Generic Gray")}
+    };
+}

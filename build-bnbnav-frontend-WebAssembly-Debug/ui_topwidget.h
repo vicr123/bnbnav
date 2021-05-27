@@ -33,6 +33,7 @@ public:
         if (TopWidget->objectName().isEmpty())
             TopWidget->setObjectName(QString::fromUtf8("TopWidget"));
         TopWidget->resize(400, 94);
+        TopWidget->setWindowTitle(QString::fromUtf8("Form"));
         horizontalLayout = new QHBoxLayout(TopWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         panLabel = new QLabel(TopWidget);
@@ -65,8 +66,8 @@ public:
 
     void retranslateUi(QWidget *TopWidget)
     {
-        TopWidget->setWindowTitle(QCoreApplication::translate("TopWidget", "Form", nullptr));
         editModeButton->setText(QCoreApplication::translate("TopWidget", "Edit Mode", nullptr));
+        (void)TopWidget;
     } // retranslateUi
 
 };
