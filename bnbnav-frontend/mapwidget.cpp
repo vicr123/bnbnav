@@ -27,6 +27,7 @@
 #include <datagatherer.h>
 #include <QMessageBox>
 #include <QSvgRenderer>
+#include <QPicture>
 #include "nodeconnectdialog.h"
 #include "newlandmarkdialog.h"
 #include "datamanager.h"
@@ -52,6 +53,8 @@ struct MapWidgetPrivate {
     Node* dragNode = nullptr;
     QPoint initialNodeCoordinates;
     QPoint dragNodeCoordinates;
+
+    QPicture baseMap;
 };
 
 MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
@@ -59,7 +62,7 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     this->setMouseTracking(true);
 
     connect(DataManager::instance(), &DataManager::ready, this, [ = ] {
-        update();
+        updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::newRoad, this, [ = ] {
         update();
@@ -68,13 +71,13 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
         update();
     });
     connect(DataManager::instance(), &DataManager::newEdge, this, [ = ] {
-        update();
+        updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::newLandmark, this, [ = ] {
-        update();
+        updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::removedEdge, this, [ = ] {
-        update();
+        updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::removedNode, this, [ = ] {
         update();
@@ -83,7 +86,7 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
         update();
     });
     connect(DataManager::instance(), &DataManager::removedLandmark, this, [ = ] {
-        update();
+        updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
         update();
@@ -96,6 +99,8 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     connect(StateManager::instance(), &StateManager::followMeChanged, this, [ = ] {
         followPlayer();
     });
+
+    updateBaseMap();
 }
 
 QPointF MapWidget::toMapCoordinates(QPointF widget) {
@@ -147,14 +152,8 @@ void MapWidget::followPlayer() {
     d->origin = -playerCoords * d->scale + QPointF(this->width() / 2, this->height() / 2);
 }
 
-void MapWidget::paintEvent(QPaintEvent* event) {
-    QPainter painter(this);
-    painter.setTransform(currentTransform());
-    painter.setRenderHint(QPainter::Antialiasing);
-
-    QFont font = painter.font();
-    font.setPointSizeF(20 / d->scale);
-    painter.setFont(font);
+void MapWidget::updateBaseMap() {
+    QPainter painter(&d->baseMap);
 
     QList<Edge*> edges = DataManager::edges().values();
     //Sort edges by average Y height
@@ -169,20 +168,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     });
     for (Edge* edge : edges) {
         //Draw the edge
-        bool bailIfTemporary = true;
-        QPen pen = edge->road()->pen(edge);
-
-        if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty() && d->hoverTargets.contains(edge)) {
-            pen.setColor(Qt::blue);
-        }
-        if (StateManager::currentRoute().contains(edge)) {
-            pen.setColor(QColor(0, 150, 255));
-            bailIfTemporary = false;
-        }
-
-        if (bailIfTemporary && edge->isTemporary()) continue;
-
-        painter.setPen(pen);
+        if (edge->isTemporary()) continue;
+        painter.setPen(edge->road()->pen(edge));
         painter.drawLine(edge->line());
     }
 
@@ -193,6 +180,40 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
         QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
         renderer.render(&painter, landmarkPin);
+    }
+
+    painter.end();
+
+    this->update();
+}
+
+void MapWidget::paintEvent(QPaintEvent* event) {
+    QPainter painter(this);
+    painter.setTransform(currentTransform());
+    painter.setRenderHint(QPainter::Antialiasing);
+
+    //Draw the base map
+    d->baseMap.play(&painter);
+
+    QFont font = painter.font();
+    font.setPointSizeF(20 / d->scale);
+    painter.setFont(font);
+
+    for (Edge* edge : StateManager::currentRoute()) {
+        QPen pen = edge->road()->pen(edge);
+        pen.setColor(QColor(0, 150, 255));
+        painter.setPen(pen);
+        painter.drawLine(edge->line());
+    }
+
+    for (QObject* target : d->hoverTargets) {
+        Edge* edge = qobject_cast<Edge*>(target);
+        if (edge) {
+            QPen pen = edge->road()->pen(edge);
+            pen.setColor(Qt::blue);
+            painter.setPen(pen);
+            painter.drawLine(edge->line());
+        }
     }
 
     if (StateManager::currentInstruction() != -1) {
