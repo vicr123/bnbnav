@@ -21,12 +21,16 @@
 
 #include <QApplication>
 #include <QStyleFactory>
+#include <QFontDatabase>
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
     a.setApplicationName("bnbnav");
     a.setOrganizationName("theSuite");
     a.setOrganizationDomain("vicr123.com");
+
+    QFontDatabase::addApplicationFont(":/Overpass-Regular.ttf");
+    a.setFont(QFont("Overpass", 15));
 
     a.setStyle(QStyleFactory::create("fusion"));
 
@@ -35,7 +39,8 @@ int main(int argc, char* argv[]) {
     pal.setColor(QPalette::WindowText, Qt::black);
     a.setPalette(pal);
 
-    MainWindow w;
-    w.show();
+    MainWindow* w = new MainWindow();
+    w->setFont(a.font());
+    w->show();
     return a.exec();
 }

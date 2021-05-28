@@ -88,6 +88,9 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     connect(DataManager::instance(), &DataManager::removedLandmark, this, [ = ] {
         updateBaseMap();
     });
+    connect(DataManager::instance(), &DataManager::updatedEdge, this, [ = ] {
+        updateBaseMap();
+    });
     connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
         update();
 

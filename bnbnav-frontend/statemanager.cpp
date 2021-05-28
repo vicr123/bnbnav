@@ -337,6 +337,11 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
 
     QRect roadText = rect;
     roadText.setLeft(distanceText.right() + 9);
+    roadText.setRight(rect.right() - 9);
+
+    QFont roadFont = font;
+    roadFont.setPointSizeF(font.pointSizeF() * 1.5);
+    painter->setFont(roadFont);
 
     QString text;
     if (toEdge) {
@@ -344,7 +349,16 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     } else {
         text = tr("Arrive at the destination");
     }
+
+    painter->save();
+    double width = QFontMetrics(roadFont).horizontalAdvance(text);
+    if (width > roadText.width()) {
+        //Scale the painter
+        painter->scale(roadText.width() / width, 1);
+        roadText.setWidth(width);
+    }
     painter->drawText(roadText, Qt::AlignLeft | Qt::AlignVCenter, text);
+    painter->restore();
 }
 
 QString StateManager::Instruction::imageName() {

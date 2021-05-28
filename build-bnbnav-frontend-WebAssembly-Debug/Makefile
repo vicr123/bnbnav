@@ -557,6 +557,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		/opt/qt5-wasm/bin/rcc \
 		../bnbnav-frontend/playermark.svg \
 		../bnbnav-frontend/logo.svg \
+		../bnbnav-frontend/Overpass-Regular.ttf \
 		../bnbnav-frontend/landmarks/walnut.svg \
 		../bnbnav-frontend/landmarks/airport.svg \
 		../bnbnav-frontend/landmarks/generic-blue.svg \
@@ -3455,7 +3456,9 @@ main.o: ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.h \
 		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
 		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
 		/opt/qt5-wasm/include/QtWidgets/QStyleFactory \
-		/opt/qt5-wasm/include/QtWidgets/qstylefactory.h
+		/opt/qt5-wasm/include/QtWidgets/qstylefactory.h \
+		/opt/qt5-wasm/include/QtGui/QFontDatabase \
+		/opt/qt5-wasm/include/QtGui/qfontdatabase.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../bnbnav-frontend/main.cpp
 
 mainwindow.o: ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mainwindow.h \
@@ -3719,6 +3722,8 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
 		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
 		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h \
+		/opt/qt5-wasm/include/QtGui/QPicture \
+		/opt/qt5-wasm/include/QtGui/qpicture.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
 		../bnbnav-frontend/newlandmarkdialog.h \

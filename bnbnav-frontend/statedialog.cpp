@@ -73,7 +73,18 @@ StateDialog::StateDialog(QWidget* parent) :
 
         ui->currentInstructionWidget->update();
 
-        if (instruction == -1 && StateManager::currentState() == StateManager::Go) recalculateRoute();
+        if (instruction == -1 && StateManager::currentState() == StateManager::Go) {
+            recalculateRoute();
+        } else if (instruction != -1) {
+            StateManager::Instruction inst = StateManager::currentInstructions().at(instruction);
+            if (inst.type == StateManager::Instruction::Arrival && StateManager::blocksToNextInstruction() < 20) {
+                //That's it!
+                QTimer::singleShot(3000, [ = ] {
+                    //Leave Go mode
+                    StateManager::setCurrentState(StateManager::Browse);
+                });
+            }
+        }
     });
 
     QPalette pal = ui->currentInstructionWidget->palette();

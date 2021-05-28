@@ -29,5 +29,6 @@
         <file>landmarks/generic-green.svg</file>
         <file>landmarks/generic-red.svg</file>
         <file>landmarks/invisible.svg</file>
+        <file>Overpass-Regular.ttf</file>
     </qresource>
 </RCC>
