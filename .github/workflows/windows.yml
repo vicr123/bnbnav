@@ -7,14 +7,18 @@ on:
     branches: [ master ]
 
 jobs:
+  install-openssl:
+    runs-on: windows-latest
+    steps:
+    - run: choco install openssl
+    - run: dir "C:/Program Files/OpenSSL"
+    
   build:
     runs-on: windows-latest
     defaults:
       run:
         working-directory: ./bnbnav-frontend
     steps:
-    - run: choco install openssl
-    - run: dir "C:/Program Files/OpenSSL"
     - uses: actions/checkout@v2
     - uses: ilammy/msvc-dev-cmd@v1
     - name: Install Qt
