@@ -7,11 +7,6 @@ on:
     branches: [ master ]
 
 jobs:
-  install-openssl:
-    runs-on: windows-latest
-    steps:
-    - run: dir "C:/Program Files/OpenSSL"
-    
   build:
     runs-on: windows-latest
     defaults:
