@@ -9,12 +9,15 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: ./bnbnav-frontend
     steps:
     - uses: actions/checkout@v2
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
     - name: Run qmake
-      run: qmake
+      run: qmake bnbnav
     - name: Build
       run: nmake
     - name: Prepare for deployment
