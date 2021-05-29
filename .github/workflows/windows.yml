@@ -27,11 +27,9 @@ jobs:
         cp release/bnbnav-frontend.exe bnbnav-win
     - name: Deploy
       run: windeployqt bnbnav-win
-    - name: List OpenSSL files
-      run: dir "C:/Program Files/OpenSSL/lib"
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.3
       with:
         # Artifact name
         name: bnbnav-win
-        path: bnbnav-win
+        path: bnbnav-frontend/bnbnav-win
