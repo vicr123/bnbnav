@@ -26,8 +26,7 @@ jobs:
         mkdir bnbnav-win
         cp release/bnbnav-frontend.exe bnbnav-win
     - name: Deploy
-      working-directory: ./bnbnav-win
-      run: windeployqt bnbnav-frontend.exe
+      run: windeployqt bnbnav-win
     - name: List OpenSSL files
       run: dir "C:/Program Files/OpenSSL/lib"
     - name: Upload a Build Artifact
