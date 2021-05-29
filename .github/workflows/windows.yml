@@ -24,7 +24,7 @@ jobs:
     - name: Prepare for deployment
       run: |
         mkdir bnbnav-win
-        cp bnbnav-frontend.exe bnbnav-win
+        cp release/bnbnav-frontend.exe bnbnav-win
     - name: Deploy
       working-directory: ./bnbnav-win
       run: windeployqt bnbnav-frontend.exe
