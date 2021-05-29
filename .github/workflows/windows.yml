@@ -1,0 +1,32 @@
+name: Windows build
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Install Qt
+      uses: jurplel/install-qt-action@v2
+    - name: Run qmake
+      run: qmake
+    - name: Build
+      run: nmake
+    - name: Prepare for deployment
+      run: |
+        mkdir bnbnav-win
+        cp bnbnav.exe bnbnav-win
+    - name: Deploy
+      working-directory: ./bnbnav-win
+      run: windeployqt bnbnav.exe
+    - name: Upload a Build Artifact
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        # Artifact name
+        name: bnbnav-win
+        path: bnbnav-win
