@@ -17,7 +17,7 @@ jobs:
     - name: Install Qt
       uses: jurplel/install-qt-action@v2
     - name: Run qmake
-      run: qmake bnbnav
+      run: qmake bnbnav-frontend.pro
     - name: Build
       run: nmake
     - name: Prepare for deployment
