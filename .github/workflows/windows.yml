@@ -10,7 +10,6 @@ jobs:
   install-openssl:
     runs-on: windows-latest
     steps:
-    - run: choco install openssl
     - run: dir "C:/Program Files/OpenSSL"
     
   build:
@@ -31,6 +30,8 @@ jobs:
       run: |
         mkdir bnbnav-win
         cp release/bnbnav-frontend.exe bnbnav-win
+        cp "C:/Program Files/OpenSSL/libcrypto-1_1-x64.dll" bnbnav-win
+        cp "C:/Program Files/OpenSSL/libssl-1_1-x64.dll" bnbnav-win
     - name: Deploy
       run: windeployqt bnbnav-win
     - name: Upload a Build Artifact
