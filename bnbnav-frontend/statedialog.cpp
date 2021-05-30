@@ -35,6 +35,8 @@
 
 struct StateDialogPrivate {
     QTimer* recalculateTimer;
+
+    int lastPrompt = -1;
 };
 
 StateDialog::StateDialog(QWidget* parent) :
@@ -59,7 +61,7 @@ StateDialog::StateDialog(QWidget* parent) :
     connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
         if (StateManager::currentState() == StateManager::Go) {
             ui->stackedWidget->setCurrentWidget(ui->goModePage);
-            this->setFixedSize(400, StateManager::currentInstructions().first().height());
+            this->setFixedSize(400, StateManager::currentInstructions().first().height() + ui->currentRouteWidget->sizeHint().height());
             this->move(this->parentWidget()->geometry().topLeft() + QPoint(20, 20));
         } else {
             ui->stackedWidget->setCurrentWidget(ui->normalModePage);
@@ -77,6 +79,7 @@ StateDialog::StateDialog(QWidget* parent) :
         ui->currentInstructionWidget->update();
 
         if (instruction == -1 && StateManager::currentState() == StateManager::Go) {
+            ui->routeInformationLabel->setText(tr("Calculating..."));
             recalculateRoute();
         } else if (instruction != -1) {
             StateManager::Instruction inst = StateManager::currentInstructions().at(instruction);
@@ -87,7 +90,32 @@ StateDialog::StateDialog(QWidget* parent) :
                     StateManager::setCurrentState(StateManager::Browse);
                 });
             }
+
+            int blocksToDestination = StateManager::blocksToNextInstruction();
+            for (int i = StateManager::currentInstruction() + 1; i < StateManager::currentInstructions().length(); i++) {
+                blocksToDestination += StateManager::currentInstructions().at(i).distance;
+            }
+
+            QStringList routeInformation;
+            routeInformation.append(tr("%n blocks", nullptr, blocksToDestination));
+            routeInformation.append(tr("%n instructions", nullptr, StateManager::currentInstructions().count() - StateManager::currentInstruction()));
+            ui->routeInformationLabel->setText(routeInformation.join(" · "));
+
+            if (StateManager::currentState() == StateManager::Go) {
+                //TTS
+                for (int i = 0; i < StateManager::voicePrompts().length(); i++) {
+                    StateManager::InstructionVoicePrompt prompt = StateManager::voicePrompts().at(i);
+                    if (prompt.atBlocks > blocksToDestination) {
+                        if (d->lastPrompt != prompt.atBlocks) {
+                            TextToSpeechEngine::instance()->say(prompt.speech());
+                            d->lastPrompt = prompt.atBlocks;
+                        }
+                        break;
+                    }
+                }
+            }
         }
+
     });
     connect(StateManager::instance(), &StateManager::selectedLandmarkChanged, this, &StateDialog::updateLandmark);
 
@@ -157,6 +185,8 @@ void StateDialog::on_goModeButton_clicked() {
         return;
     }
     StateManager::setCurrentState(StateManager::Go);
+
+    d->lastPrompt = -1;
 }
 
 void StateDialog::recalculateRoute() {
@@ -167,6 +197,8 @@ void StateDialog::recalculateRoute() {
 
     DataManager::resetTemporaries();
     StateManager::setCurrentRoute(DataManager::shortestPath(start, ui->endLocationBox->location()));
+
+    d->lastPrompt = -1;
 
     //Recalculate every 3 seconds until on track
     d->recalculateTimer->start();

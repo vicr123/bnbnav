@@ -62,12 +62,15 @@ public:
     QWidget *goModePage;
     QVBoxLayout *verticalLayout_4;
     QWidget *currentInstructionWidget;
+    QWidget *currentRouteWidget;
+    QHBoxLayout *horizontalLayout_4;
+    QLabel *routeInformationLabel;
 
     void setupUi(QDialog *StateDialog)
     {
         if (StateDialog->objectName().isEmpty())
             StateDialog->setObjectName(QString::fromUtf8("StateDialog"));
-        StateDialog->resize(400, 416);
+        StateDialog->resize(400, 279);
         verticalLayout = new QVBoxLayout(StateDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -213,6 +216,23 @@ public:
 
         verticalLayout_4->addWidget(currentInstructionWidget);
 
+        currentRouteWidget = new QWidget(goModePage);
+        currentRouteWidget->setObjectName(QString::fromUtf8("currentRouteWidget"));
+        QSizePolicy sizePolicy(QSizePolicy::Preferred, QSizePolicy::Fixed);
+        sizePolicy.setHorizontalStretch(0);
+        sizePolicy.setVerticalStretch(0);
+        sizePolicy.setHeightForWidth(currentRouteWidget->sizePolicy().hasHeightForWidth());
+        currentRouteWidget->setSizePolicy(sizePolicy);
+        horizontalLayout_4 = new QHBoxLayout(currentRouteWidget);
+        horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        routeInformationLabel = new QLabel(currentRouteWidget);
+        routeInformationLabel->setObjectName(QString::fromUtf8("routeInformationLabel"));
+
+        horizontalLayout_4->addWidget(routeInformationLabel);
+
+
+        verticalLayout_4->addWidget(currentRouteWidget);
+
         stackedWidget->addWidget(goModePage);
 
         verticalLayout->addWidget(stackedWidget);
@@ -223,7 +243,7 @@ public:
         QObject::connect(endLocationBox, SIGNAL(go()), getDirectionsButton, SLOT(click()));
         QObject::connect(searchBox, SIGNAL(go()), searchButton, SLOT(click()));
 
-        stackedWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(1);
         tabWidget->setCurrentIndex(0);
         discoverStack->setCurrentIndex(0);
 
@@ -246,6 +266,7 @@ public:
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
         goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(directionsTab), QCoreApplication::translate("StateDialog", "Directions", nullptr));
+        routeInformationLabel->setText(QCoreApplication::translate("StateDialog", "Calculating...", nullptr));
     } // retranslateUi
 
 };

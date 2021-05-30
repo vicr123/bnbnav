@@ -31,6 +31,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <QSvgRenderer>
+#include <math.h>
 
 struct StateManagerPrivate {
     StateManager::GlobalState state = StateManager::Browse;
@@ -191,6 +192,28 @@ QList<StateManager::Instruction> StateManager::currentInstructions() {
     return instance()->d->instructions;
 }
 
+QList<StateManager::InstructionVoicePrompt> StateManager::voicePrompts() {
+    QList<InstructionVoicePrompt> prompts;
+    int totalBlocks = 0;
+    int instIndex = StateManager::currentInstructions().length() - 1;
+
+    for (auto inst = StateManager::currentInstructions().crbegin(); inst != StateManager::currentInstructions().crend(); inst++) {
+        for (int targetDistance : QList<int>({10, 100, 500, static_cast<int>(inst->distance - 10)})) {
+            if (targetDistance > inst->distance - 10 || targetDistance < 0) continue;
+            int testBlocks = totalBlocks + targetDistance;
+
+            InstructionVoicePrompt prompt;
+            prompt.atBlocks = testBlocks;
+            prompt.forInstruction = instIndex;
+            prompts.append(prompt);
+        }
+        totalBlocks += inst->distance;
+        instIndex--;
+    }
+
+    return prompts;
+}
+
 int StateManager::currentInstruction() {
     return instance()->d->currentInstruction;
 }
@@ -292,7 +315,7 @@ QString StateManager::Instruction::humanReadableString(int distance) {
     return tr("In %n blocks, %1", nullptr, distance).arg(instructionString());
 }
 
-QString StateManager::Instruction::instructionString() {
+QString StateManager::Instruction::instructionString() const {
     switch (type) {
         case StateManager::Instruction::Departure:
             return tr("Depart");
@@ -410,3 +433,22 @@ QString StateManager::Instruction::imageName() {
 
 
 //-600,320
+
+QString StateManager::InstructionVoicePrompt::speech() {
+    Instruction inst = StateManager::currentInstructions().at(forInstruction);
+
+    //Round the number
+    int log = log10(StateManager::blocksToNextInstruction());
+    int roundIncrements = pow(10, log) / 20;
+    if (roundIncrements == 0) roundIncrements = 5;
+    double blocks = StateManager::blocksToNextInstruction();
+    blocks = qRound(blocks / roundIncrements) * roundIncrements;
+
+    if (StateManager::blocksToNextInstruction() < 15) {
+        return inst.instructionString();
+    } else if (StateManager::blocksToNextInstruction() > 500) {
+        return tr("Stay on %1 for %n blocks", nullptr, blocks).arg(inst.fromEdge->road()->name());
+    } else {
+        return inst.humanReadableString(static_cast<int>(blocks));
+    }
+}

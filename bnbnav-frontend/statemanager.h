@@ -62,11 +62,18 @@ class StateManager : public QObject {
             double turnAngle;
 
             QString humanReadableString(int distance);
-            QString instructionString();
+            QString instructionString() const;
 
             int height();
             void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);
             QString imageName();
+        };
+
+        struct InstructionVoicePrompt {
+            int forInstruction;
+            int atBlocks;
+
+            QString speech();
         };
 
         static StateManager* instance();
@@ -81,6 +88,7 @@ class StateManager : public QObject {
         static void setCurrentRoute(QList<Edge*> edges);
         static QList<Edge*> currentRoute();
         static QList<Instruction> currentInstructions();
+        static QList<InstructionVoicePrompt> voicePrompts();
         static int currentInstruction();
         static double blocksToNextInstruction();
 
