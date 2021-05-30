@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QFontDatabase>
+#include "texttospeechengine.h"
 
 int main(int argc, char* argv[]) {
     QApplication a(argc, argv);
@@ -42,5 +43,8 @@ int main(int argc, char* argv[]) {
     MainWindow* w = new MainWindow();
     w->setFont(a.font());
     w->show();
+
+    TextToSpeechEngine::instance();
+
     return a.exec();
 }

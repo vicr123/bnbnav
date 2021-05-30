@@ -29,6 +29,7 @@
 #include "statemanager.h"
 #include "datamanager.h"
 #include "instructionmodel.h"
+#include "texttospeechengine.h"
 
 struct StateDialogPrivate {
     QTimer* recalculateTimer;

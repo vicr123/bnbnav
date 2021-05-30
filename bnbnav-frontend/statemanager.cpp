@@ -278,33 +278,37 @@ void StateManager::calculateCurrentInstruction() {
 }
 
 QString StateManager::Instruction::humanReadableString(int distance) {
+    return tr("In %n blocks, %1", nullptr, distance).arg(instructionString());
+}
+
+QString StateManager::Instruction::instructionString() {
     switch (type) {
         case StateManager::Instruction::Departure:
             return tr("Depart");
         case StateManager::Instruction::Arrival:
-            return tr("Arrive in %n blocks", nullptr, distance);
+            return tr("Arrive at the destination");
         case StateManager::Instruction::ContinueStraight:
-            return tr("In %n blocks, continue onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Continue onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::BearLeft:
-            return tr("In %n blocks, bear left onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Bear left onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::TurnLeft:
-            return tr("In %n blocks, turn left onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Turn left onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::SharpLeft:
-            return tr("In %n blocks, sharp left onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Sharp left onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::TurnAround:
-            return tr("In %n blocks, perform a U-turn onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Perform a U-turn onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::SharpRight:
-            return tr("In %n blocks, sharp right onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Sharp right onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::TurnRight:
-            return tr("In %n blocks, turn right onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Turn right onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::BearRight:
-            return tr("In %n blocks, bear right onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Bear right onto %1").arg(toEdge->road()->name());
         case StateManager::Instruction::ExitLeft:
-            return tr("In %n blocks, take the %1 exit on the left", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Take the %1 exit on the left").arg(toEdge->road()->name());
         case StateManager::Instruction::ExitRight:
-            return tr("In %n blocks, take the %1 exit on the right", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Take the %1 exit on the right").arg(toEdge->road()->name());
         case StateManager::Instruction::Merge:
-            return tr("In %n blocks, merge onto %1", nullptr, distance).arg(toEdge->road()->name());
+            return tr("Merge onto %1").arg(toEdge->road()->name());
     }
     return tr("Get onto %1").arg(toEdge->road()->name());
 }

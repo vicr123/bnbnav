@@ -61,6 +61,7 @@ class StateManager : public QObject {
             double turnAngle;
 
             QString humanReadableString(int distance);
+            QString instructionString();
 
             int height();
             void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);

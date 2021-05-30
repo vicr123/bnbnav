@@ -1,5 +1,9 @@
 QT       += core gui svg websockets
 
+!wasm {
+    QT += texttospeech
+}
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 CONFIG += c++11
@@ -28,7 +32,9 @@ SOURCES += \
     splashwidget.cpp \
     statedialog.cpp \
     statemanager.cpp \
-    topwidget.cpp
+    texttospeechengine.cpp \
+    topwidget.cpp \
+    ttsengines/dummyttsengine.cpp
 
 HEADERS += \
     datagatherer.h \
@@ -49,7 +55,9 @@ HEADERS += \
     splashwidget.h \
     statedialog.h \
     statemanager.h \
-    topwidget.h
+    texttospeechengine.h \
+    topwidget.h \
+    ttsengines/dummyttsengine.h
 
 FORMS += \
     loginwidget.ui \
@@ -60,6 +68,14 @@ FORMS += \
     splashwidget.ui \
     statedialog.ui \
     topwidget.ui
+
+wasm {
+    HEADERS += ttsengines/wasmttsengine.h
+    SOURCES += ttsengines/wasmttsengine.cpp
+} else {
+    HEADERS += ttsengines/localttsengine.h
+    SOURCES += ttsengines/localttsengine.cpp
+}
 
 DEFINES += BASE_URL=\\\"bnbnav.aircs.racing\\\"
 DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
