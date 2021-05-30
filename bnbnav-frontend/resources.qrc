@@ -30,5 +30,6 @@
         <file>landmarks/generic-red.svg</file>
         <file>landmarks/invisible.svg</file>
         <file>Overpass-Regular.ttf</file>
+        <file>pin.svg</file>
     </qresource>
 </RCC>

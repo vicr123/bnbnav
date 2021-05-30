@@ -29,6 +29,7 @@
 #include <QSvgRenderer>
 #include <QPicture>
 #include <QBuffer>
+#include <QVariantAnimation>
 #include "nodeconnectdialog.h"
 #include "newlandmarkdialog.h"
 #include "datamanager.h"
@@ -113,6 +114,22 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     updateBaseMap();
 }
 
+void MapWidget::focusMap(QPoint point) {
+    if (StateManager::followMe()) StateManager::setFollowMe(false);
+
+    QVariantAnimation* anim = new QVariantAnimation();
+    anim->setStartValue(d->origin);
+    anim->setEndValue(QPointF(-point * d->scale + QPoint(this->width() / 2, this->height() / 2)));
+    connect(anim, &QVariantAnimation::valueChanged, this, [ = ](QVariant value) {
+        d->origin = value.toPointF();
+        this->update();
+    });
+    connect(anim, &QVariantAnimation::finished, anim, &QVariantAnimation::deleteLater);
+    anim->setEasingCurve(QEasingCurve::InOutCubic);
+    anim->setDuration(500);
+    anim->start();
+}
+
 QPointF MapWidget::toMapCoordinates(QPointF widget) {
     return currentTransform().inverted().map(widget);
 }
@@ -125,30 +142,42 @@ QTransform MapWidget::currentTransform() {
 }
 
 void MapWidget::doClick() {
-    if (StateManager::currentState() == StateManager::Edit && !d->hoverTargets.isEmpty()) {
+    if (d->hoverTargets.isEmpty()) {
+        StateManager::setSelectedLandmark(nullptr);
+    } else {
         //TODO: more than one hover target
         Node* hoverNode = qobject_cast<Node*>(d->hoverTargets.first());
         Edge* hoverEdge = qobject_cast<Edge*>(d->hoverTargets.first());
+        Landmark* hoverLandmark = qobject_cast<Landmark*>(d->hoverTargets.first());
 
-        if (hoverNode) {
-            if (d->firstNode) {
-                Node* first = d->firstNode;
-                Node* second = hoverNode;
-                d->firstNode = nullptr;
+        if (StateManager::currentState() == StateManager::Edit) {
+            if (hoverNode) {
+                if (d->firstNode) {
+                    Node* first = d->firstNode;
+                    Node* second = hoverNode;
+                    d->firstNode = nullptr;
 
-                if (first == second) return;
-                if (DataManager::edgeForNodes(first, second)) return;
+                    if (first == second) return;
+                    if (DataManager::edgeForNodes(first, second)) return;
 
-                //Connect these nodes!
-                NodeConnectDialog* dialog = new NodeConnectDialog(first, second);
-                dialog->setWindowModality(Qt::ApplicationModal);
-                connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
-                dialog->open();
-            } else {
-                d->firstNode = hoverNode;
+                    //Connect these nodes!
+                    NodeConnectDialog* dialog = new NodeConnectDialog(first, second);
+                    dialog->setWindowModality(Qt::ApplicationModal);
+                    connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
+                    dialog->open();
+                } else {
+                    d->firstNode = hoverNode;
+                }
+            } else if (hoverEdge) {
+                //TODO: Edit edge
             }
-        } else if (hoverEdge) {
-            //TODO: Edit edge
+        }
+
+        if (hoverLandmark) {
+            StateManager::setSelectedLandmark(hoverLandmark);
+            emit landmarkClicked(hoverLandmark);
+        } else {
+            StateManager::setSelectedLandmark(nullptr);
         }
     }
 }
@@ -176,7 +205,7 @@ void MapWidget::updateBaseMap() {
             return true;
         }
     });
-    for (Edge* edge : edges) {
+    for (Edge* edge : qAsConst(edges)) {
         //Draw the edge
         if (edge->isTemporary()) continue;
         painter.setPen(edge->road()->pen(edge));
@@ -184,12 +213,8 @@ void MapWidget::updateBaseMap() {
     }
 
     for (Landmark* landmark : DataManager::landmarks().values()) {
-        QRectF landmarkPin;
-        landmarkPin.setSize(QSizeF(8, 8));
-        landmarkPin.moveCenter(QPointF(landmark->node()->x(), landmark->node()->z()));
-
         QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
-        renderer.render(&painter, landmarkPin);
+        renderer.render(&painter, landmark->hitbox());
     }
 
     painter.end();
@@ -307,6 +332,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         painter.setFont(font);
 
         //Draw players
+        painter.save();
         QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
         for (Player* player : DataManager::players()) {
             if (goMode && player != StateManager::loggedInPlayer()) continue;
@@ -373,6 +399,16 @@ void MapWidget::paintEvent(QPaintEvent* event) {
                 painter.drawText(roadText, Qt::AlignCenter, player->snappedEdge()->road()->name());
             }
         }
+        painter.restore();
+
+        //Draw pin
+        if (!goMode && StateManager::selectedLandmark()) {
+            QSvgRenderer pinRenderer(QStringLiteral(":/pin.svg"));
+            QRectF rect(QPointF(0, 0), pinRenderer.defaultSize());
+            rect.moveCenter(StateManager::selectedLandmark()->hitbox().center());
+            rect.moveBottom(StateManager::selectedLandmark()->hitbox().center().y());
+            pinRenderer.render(&painter, rect);
+        }
     }
 }
 
@@ -417,13 +453,15 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
     if (d->dragNode) {
         d->dragNodeCoordinates = toMapCoordinates(event->pos()).toPoint();
     } else if (d->dragging) {
-        if (!StateManager::followMe()) d->origin += event->globalPos() - d->dragStart;
+        if (StateManager::followMe()) StateManager::setFollowMe(false);
+        d->origin += event->globalPos() - d->dragStart;
         d->dragStart = event->globalPos();
     } else {
         //Figure out what we're on
+        d->hoverTargets.clear();
+        QPointF mapPos = toMapCoordinates(event->pos());
+
         if (StateManager::currentState() == StateManager::Edit) {
-            d->hoverTargets.clear();
-            QPointF mapPos = toMapCoordinates(event->pos());
             for (Node* node : DataManager::nodes().values()) {
                 if (node->isTemporary()) continue;
                 if (node->nodeRect(d->scale).contains(mapPos)) d->hoverTargets.append(node);
@@ -434,6 +472,10 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
                 double width = edge->road()->pen(edge).widthF();
                 if (edge->hitbox(width).containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
             }
+        }
+
+        for (Landmark* landmark : DataManager::landmarks().values()) {
+            if (landmark->hitbox().contains(mapPos)) d->hoverTargets.append(landmark);
         }
     }
 

@@ -58,6 +58,7 @@ SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 		../bnbnav-frontend/instructionmodel.cpp \
 		../bnbnav-frontend/landmark.cpp \
 		../bnbnav-frontend/locationentrybox.cpp \
+		../bnbnav-frontend/locationentrycompleter.cpp \
 		../bnbnav-frontend/loginwidget.cpp \
 		../bnbnav-frontend/main.cpp \
 		../bnbnav-frontend/mainwindow.cpp \
@@ -82,6 +83,7 @@ SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 		moc_instructionmodel.cpp \
 		moc_landmark.cpp \
 		moc_locationentrybox.cpp \
+		moc_locationentrycompleter.cpp \
 		moc_loginwidget.cpp \
 		moc_mainwindow.cpp \
 		moc_mapwidget.cpp \
@@ -104,6 +106,7 @@ OBJECTS       = datagatherer.o \
 		instructionmodel.o \
 		landmark.o \
 		locationentrybox.o \
+		locationentrycompleter.o \
 		loginwidget.o \
 		main.o \
 		mainwindow.o \
@@ -129,6 +132,7 @@ OBJECTS       = datagatherer.o \
 		moc_instructionmodel.o \
 		moc_landmark.o \
 		moc_locationentrybox.o \
+		moc_locationentrycompleter.o \
 		moc_loginwidget.o \
 		moc_mainwindow.o \
 		moc_mapwidget.o \
@@ -243,6 +247,7 @@ DIST          = /opt/qt5-wasm/mkspecs/features/spec_pre.prf \
 		../bnbnav-frontend/instructionmodel.h \
 		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/locationentrybox.h \
+		../bnbnav-frontend/locationentrycompleter.h \
 		../bnbnav-frontend/loginwidget.h \
 		../bnbnav-frontend/mainwindow.h \
 		../bnbnav-frontend/mapwidget.h \
@@ -264,6 +269,7 @@ DIST          = /opt/qt5-wasm/mkspecs/features/spec_pre.prf \
 		../bnbnav-frontend/instructionmodel.cpp \
 		../bnbnav-frontend/landmark.cpp \
 		../bnbnav-frontend/locationentrybox.cpp \
+		../bnbnav-frontend/locationentrycompleter.cpp \
 		../bnbnav-frontend/loginwidget.cpp \
 		../bnbnav-frontend/main.cpp \
 		../bnbnav-frontend/mainwindow.cpp \
@@ -522,8 +528,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents ../bnbnav-frontend/resources.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5-wasm/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.h ../bnbnav-frontend/datamanager.h ../bnbnav-frontend/edge.h ../bnbnav-frontend/instructionmodel.h ../bnbnav-frontend/landmark.h ../bnbnav-frontend/locationentrybox.h ../bnbnav-frontend/loginwidget.h ../bnbnav-frontend/mainwindow.h ../bnbnav-frontend/mapwidget.h ../bnbnav-frontend/newlandmarkdialog.h ../bnbnav-frontend/newroaddialog.h ../bnbnav-frontend/node.h ../bnbnav-frontend/nodeconnectdialog.h ../bnbnav-frontend/player.h ../bnbnav-frontend/road.h ../bnbnav-frontend/splashwidget.h ../bnbnav-frontend/statedialog.h ../bnbnav-frontend/statemanager.h ../bnbnav-frontend/texttospeechengine.h ../bnbnav-frontend/topwidget.h ../bnbnav-frontend/ttsengines/dummyttsengine.h ../bnbnav-frontend/ttsengines/wasmttsengine.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/instructionmodel.cpp ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/locationentrybox.cpp ../bnbnav-frontend/loginwidget.cpp ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/node.cpp ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/player.cpp ../bnbnav-frontend/road.cpp ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/texttospeechengine.cpp ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/ttsengines/dummyttsengine.cpp ../bnbnav-frontend/ttsengines/wasmttsengine.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.h ../bnbnav-frontend/datamanager.h ../bnbnav-frontend/edge.h ../bnbnav-frontend/instructionmodel.h ../bnbnav-frontend/landmark.h ../bnbnav-frontend/locationentrybox.h ../bnbnav-frontend/locationentrycompleter.h ../bnbnav-frontend/loginwidget.h ../bnbnav-frontend/mainwindow.h ../bnbnav-frontend/mapwidget.h ../bnbnav-frontend/newlandmarkdialog.h ../bnbnav-frontend/newroaddialog.h ../bnbnav-frontend/node.h ../bnbnav-frontend/nodeconnectdialog.h ../bnbnav-frontend/player.h ../bnbnav-frontend/road.h ../bnbnav-frontend/splashwidget.h ../bnbnav-frontend/statedialog.h ../bnbnav-frontend/statemanager.h ../bnbnav-frontend/texttospeechengine.h ../bnbnav-frontend/topwidget.h ../bnbnav-frontend/ttsengines/dummyttsengine.h ../bnbnav-frontend/ttsengines/wasmttsengine.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/instructionmodel.cpp ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/locationentrybox.cpp ../bnbnav-frontend/locationentrycompleter.cpp ../bnbnav-frontend/loginwidget.cpp ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/node.cpp ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/player.cpp ../bnbnav-frontend/road.cpp ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/texttospeechengine.cpp ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/ttsengines/dummyttsengine.cpp ../bnbnav-frontend/ttsengines/wasmttsengine.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../bnbnav-frontend/loginwidget.ui ../bnbnav-frontend/mainwindow.ui ../bnbnav-frontend/newlandmarkdialog.ui ../bnbnav-frontend/newroaddialog.ui ../bnbnav-frontend/nodeconnectdialog.ui ../bnbnav-frontend/splashwidget.ui ../bnbnav-frontend/statedialog.ui ../bnbnav-frontend/topwidget.ui $(DISTDIR)/
 
 
@@ -575,6 +581,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		/opt/qt5-wasm/bin/rcc \
 		../bnbnav-frontend/playermark.svg \
 		../bnbnav-frontend/logo.svg \
+		../bnbnav-frontend/pin.svg \
 		../bnbnav-frontend/Overpass-Regular.ttf \
 		../bnbnav-frontend/landmarks/walnut.svg \
 		../bnbnav-frontend/landmarks/airport.svg \
@@ -611,9 +618,9 @@ compiler_moc_predefs_clean:
 moc_predefs.h: /opt/qt5-wasm/mkspecs/features/data/dummy.cpp
 	em++ -pipe -g -std=gnu++11 -s ALLOW_MEMORY_GROWTH=1 -Wall -Wextra -dM -E -o moc_predefs.h /opt/qt5-wasm/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all: moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_instructionmodel.cpp moc_landmark.cpp moc_locationentrybox.cpp moc_loginwidget.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_splashwidget.cpp moc_statedialog.cpp moc_statemanager.cpp moc_texttospeechengine.cpp moc_topwidget.cpp moc_dummyttsengine.cpp moc_wasmttsengine.cpp
+compiler_moc_header_make_all: moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_instructionmodel.cpp moc_landmark.cpp moc_locationentrybox.cpp moc_locationentrycompleter.cpp moc_loginwidget.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_splashwidget.cpp moc_statedialog.cpp moc_statemanager.cpp moc_texttospeechengine.cpp moc_topwidget.cpp moc_dummyttsengine.cpp moc_wasmttsengine.cpp
 compiler_moc_header_clean:
-	-$(DEL_FILE) moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_instructionmodel.cpp moc_landmark.cpp moc_locationentrybox.cpp moc_loginwidget.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_splashwidget.cpp moc_statedialog.cpp moc_statemanager.cpp moc_texttospeechengine.cpp moc_topwidget.cpp moc_dummyttsengine.cpp moc_wasmttsengine.cpp
+	-$(DEL_FILE) moc_datagatherer.cpp moc_datamanager.cpp moc_edge.cpp moc_instructionmodel.cpp moc_landmark.cpp moc_locationentrybox.cpp moc_locationentrycompleter.cpp moc_loginwidget.cpp moc_mainwindow.cpp moc_mapwidget.cpp moc_newlandmarkdialog.cpp moc_newroaddialog.cpp moc_node.cpp moc_nodeconnectdialog.cpp moc_player.cpp moc_road.cpp moc_splashwidget.cpp moc_statedialog.cpp moc_statemanager.cpp moc_texttospeechengine.cpp moc_topwidget.cpp moc_dummyttsengine.cpp moc_wasmttsengine.cpp
 moc_datagatherer.cpp: ../bnbnav-frontend/datagatherer.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
 		/opt/qt5-wasm/include/QtCore/qobject.h \
@@ -1083,6 +1090,77 @@ moc_locationentrybox.cpp: ../bnbnav-frontend/locationentrybox.h \
 		moc_predefs.h \
 		/opt/qt5-wasm/bin/moc
 	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/locationentrybox.h -o moc_locationentrybox.cpp
+
+moc_locationentrycompleter.cpp: ../bnbnav-frontend/locationentrycompleter.h \
+		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		moc_predefs.h \
+		/opt/qt5-wasm/bin/moc
+	/opt/qt5-wasm/bin/moc $(DEFINES) --include /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/moc_predefs.h -I/opt/qt5-wasm/mkspecs/wasm-emscripten -I/home/victor/Documents/Git/bnbnav/bnbnav-frontend -I/opt/qt5-wasm/include -I/opt/qt5-wasm/include/QtSvg -I/opt/qt5-wasm/include/QtWidgets -I/opt/qt5-wasm/include/QtGui -I/opt/qt5-wasm/include/QtWebSockets -I/opt/qt5-wasm/include/QtNetwork -I/opt/qt5-wasm/include/QtCore -I. ../bnbnav-frontend/locationentrycompleter.h -o moc_locationentrycompleter.cpp
 
 moc_loginwidget.cpp: ../bnbnav-frontend/loginwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QWidget \
@@ -3274,7 +3352,12 @@ landmark.o: ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/landmark.h \
 		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h
+		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QRectF \
+		/opt/qt5-wasm/include/QtCore/qrect.h \
+		/opt/qt5-wasm/include/QtCore/qmargins.h \
+		/opt/qt5-wasm/include/QtCore/qsize.h \
+		../bnbnav-frontend/node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o landmark.o ../bnbnav-frontend/landmark.cpp
 
 locationentrybox.o: ../bnbnav-frontend/locationentrybox.cpp ../bnbnav-frontend/locationentrybox.h \
@@ -3392,8 +3475,88 @@ locationentrybox.o: ../bnbnav-frontend/locationentrybox.cpp ../bnbnav-frontend/l
 		/opt/qt5-wasm/include/QtCore/QRegularExpression \
 		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		../bnbnav-frontend/player.h \
-		../bnbnav-frontend/datamanager.h
+		../bnbnav-frontend/datamanager.h \
+		/opt/qt5-wasm/include/QtWidgets/QCompleter \
+		/opt/qt5-wasm/include/QtWidgets/qcompleter.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		../bnbnav-frontend/locationentrycompleter.h \
+		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
+		../bnbnav-frontend/landmark.h \
+		../bnbnav-frontend/node.h \
+		/opt/qt5-wasm/include/QtCore/QDebug
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o locationentrybox.o ../bnbnav-frontend/locationentrybox.cpp
+
+locationentrycompleter.o: ../bnbnav-frontend/locationentrycompleter.cpp ../bnbnav-frontend/locationentrycompleter.h \
+		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qatomic.h \
+		/opt/qt5-wasm/include/QtCore/qglobal.h \
+		/opt/qt5-wasm/include/QtCore/qconfig-bootstrapped.h \
+		/opt/qt5-wasm/include/QtCore/qconfig.h \
+		/opt/qt5-wasm/include/QtCore/qtcore-config.h \
+		/opt/qt5-wasm/include/QtCore/qsystemdetection.h \
+		/opt/qt5-wasm/include/QtCore/qprocessordetection.h \
+		/opt/qt5-wasm/include/QtCore/qcompilerdetection.h \
+		/opt/qt5-wasm/include/QtCore/qtypeinfo.h \
+		/opt/qt5-wasm/include/QtCore/qsysinfo.h \
+		/opt/qt5-wasm/include/QtCore/qlogging.h \
+		/opt/qt5-wasm/include/QtCore/qflags.h \
+		/opt/qt5-wasm/include/QtCore/qglobalstatic.h \
+		/opt/qt5-wasm/include/QtCore/qmutex.h \
+		/opt/qt5-wasm/include/QtCore/qnumeric.h \
+		/opt/qt5-wasm/include/QtCore/qversiontagging.h \
+		/opt/qt5-wasm/include/QtCore/qbasicatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_bootstrap.h \
+		/opt/qt5-wasm/include/QtCore/qgenericatomic.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_cxx11.h \
+		/opt/qt5-wasm/include/QtCore/qatomic_msvc.h \
+		/opt/qt5-wasm/include/QtCore/qbytearray.h \
+		/opt/qt5-wasm/include/QtCore/qrefcount.h \
+		/opt/qt5-wasm/include/QtCore/qnamespace.h \
+		/opt/qt5-wasm/include/QtCore/qarraydata.h \
+		/opt/qt5-wasm/include/QtCore/qlist.h \
+		/opt/qt5-wasm/include/QtCore/qalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qiterator.h \
+		/opt/qt5-wasm/include/QtCore/qhashfunctions.h \
+		/opt/qt5-wasm/include/QtCore/qstring.h \
+		/opt/qt5-wasm/include/QtCore/qchar.h \
+		/opt/qt5-wasm/include/QtCore/qstringliteral.h \
+		/opt/qt5-wasm/include/QtCore/qstringalgorithms.h \
+		/opt/qt5-wasm/include/QtCore/qstringview.h \
+		/opt/qt5-wasm/include/QtCore/qstringbuilder.h \
+		/opt/qt5-wasm/include/QtCore/qpair.h \
+		/opt/qt5-wasm/include/QtCore/qvector.h \
+		/opt/qt5-wasm/include/QtCore/qcontainertools_impl.h \
+		/opt/qt5-wasm/include/QtCore/qpoint.h \
+		/opt/qt5-wasm/include/QtCore/qbytearraylist.h \
+		/opt/qt5-wasm/include/QtCore/qstringlist.h \
+		/opt/qt5-wasm/include/QtCore/qregexp.h \
+		/opt/qt5-wasm/include/QtCore/qstringmatcher.h \
+		/opt/qt5-wasm/include/QtCore/qmetatype.h \
+		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
+		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs.h \
+		/opt/qt5-wasm/include/QtCore/qobjectdefs_impl.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qobject.h \
+		/opt/qt5-wasm/include/QtCore/qcoreevent.h \
+		/opt/qt5-wasm/include/QtCore/qscopedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		../bnbnav-frontend/datamanager.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		../bnbnav-frontend/landmark.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o locationentrycompleter.o ../bnbnav-frontend/locationentrycompleter.cpp
 
 loginwidget.o: ../bnbnav-frontend/loginwidget.cpp ../bnbnav-frontend/loginwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QWidget \
@@ -3789,7 +3952,8 @@ mainwindow.o: ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mainwindow.h 
 		../bnbnav-frontend/statedialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
 		/opt/qt5-wasm/include/QtWidgets/qdialog.h \
-		../bnbnav-frontend/statemanager.h
+		../bnbnav-frontend/statemanager.h \
+		../bnbnav-frontend/landmark.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o mainwindow.o ../bnbnav-frontend/mainwindow.cpp
 
 mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
@@ -3920,6 +4084,12 @@ mapwidget.o: ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/mapwidget.h \
 		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h \
 		/opt/qt5-wasm/include/QtGui/QPicture \
 		/opt/qt5-wasm/include/QtGui/qpicture.h \
+		/opt/qt5-wasm/include/QtCore/QBuffer \
+		/opt/qt5-wasm/include/QtCore/qbuffer.h \
+		/opt/qt5-wasm/include/QtCore/QVariantAnimation \
+		/opt/qt5-wasm/include/QtCore/qvariantanimation.h \
+		/opt/qt5-wasm/include/QtCore/qeasingcurve.h \
+		/opt/qt5-wasm/include/QtCore/qabstractanimation.h \
 		../bnbnav-frontend/nodeconnectdialog.h \
 		/opt/qt5-wasm/include/QtWidgets/QDialog \
 		../bnbnav-frontend/newlandmarkdialog.h \
@@ -4607,6 +4777,9 @@ player.o: ../bnbnav-frontend/player.cpp ../bnbnav-frontend/player.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QTimer \
+		/opt/qt5-wasm/include/QtCore/qtimer.h \
+		/opt/qt5-wasm/include/QtCore/qbasictimer.h \
 		../bnbnav-frontend/edge.h \
 		../bnbnav-frontend/road.h \
 		../bnbnav-frontend/datamanager.h \
@@ -5024,7 +5197,9 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
 		/opt/qt5-wasm/include/QtWidgets/QStyledItemDelegate \
 		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h \
-		../bnbnav-frontend/texttospeechengine.h
+		../bnbnav-frontend/texttospeechengine.h \
+		../bnbnav-frontend/landmark.h \
+		../bnbnav-frontend/node.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o statedialog.o ../bnbnav-frontend/statedialog.cpp
 
 statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemanager.h \
@@ -5494,6 +5669,9 @@ moc_landmark.o: moc_landmark.cpp
 
 moc_locationentrybox.o: moc_locationentrybox.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_locationentrybox.o moc_locationentrybox.cpp
+
+moc_locationentrycompleter.o: moc_locationentrycompleter.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_locationentrycompleter.o moc_locationentrycompleter.cpp
 
 moc_loginwidget.o: moc_loginwidget.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_loginwidget.o moc_loginwidget.cpp

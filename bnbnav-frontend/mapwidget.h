@@ -22,11 +22,14 @@
 
 #include <QWidget>
 
+class Landmark;
 struct MapWidgetPrivate;
 class MapWidget : public QWidget {
         Q_OBJECT
     public:
         explicit MapWidget(QWidget* parent = nullptr);
+
+        void focusMap(QPoint point);
 
         QPointF toMapCoordinates(QPointF widget);
 
@@ -36,6 +39,7 @@ class MapWidget : public QWidget {
         void pan(int x, int y);
         void routeTo(QPoint location);
         void routeFrom(QPoint location);
+        void landmarkClicked(Landmark* landmark);
 
     private:
         MapWidgetPrivate* d;

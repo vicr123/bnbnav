@@ -30,6 +30,8 @@
 #include "datamanager.h"
 #include "instructionmodel.h"
 #include "texttospeechengine.h"
+#include "landmark.h"
+#include "node.h"
 
 struct StateDialogPrivate {
     QTimer* recalculateTimer;
@@ -87,6 +89,7 @@ StateDialog::StateDialog(QWidget* parent) :
             }
         }
     });
+    connect(StateManager::instance(), &StateManager::selectedLandmarkChanged, this, &StateDialog::updateLandmark);
 
     QPalette pal = ui->currentInstructionWidget->palette();
     pal.setBrush(QPalette::Window, QColor(100, 100, 100));
@@ -113,6 +116,13 @@ void StateDialog::routeFrom(QPoint location) {
     ui->tabWidget->setCurrentWidget(ui->directionsTab);
     ui->startLocationBox->setText(QStringLiteral("%1,%2").arg(location.x()).arg(location.y()));
     ui->getDirectionsButton->click();
+    this->show();
+}
+
+void StateDialog::showLandmark(Landmark* landmark) {
+    if (StateManager::currentState() == StateManager::Go) return;
+
+    ui->tabWidget->setCurrentWidget(ui->discoverTab);
     this->show();
 }
 
@@ -162,6 +172,17 @@ void StateDialog::recalculateRoute() {
     d->recalculateTimer->start();
 }
 
+void StateDialog::updateLandmark() {
+    Landmark* l = StateManager::selectedLandmark();
+    if (l) {
+        ui->landmarkName->setText(l->name());
+        ui->landmarkCoordinates->setText(tr("%1 at x: %2  y: %3  z: %4").arg(l->humanReadableType()).arg(l->node()->x()).arg(l->node()->y()).arg(l->node()->z()));
+        ui->discoverStack->setCurrentWidget(ui->landmarkPage);
+    } else {
+        ui->discoverStack->setCurrentWidget(ui->noLandmarkPage);
+    }
+}
+
 bool StateDialog::eventFilter(QObject* watched, QEvent* event) {
     if (watched == ui->currentInstructionWidget) {
         if (event->type() == QEvent::Paint) {
@@ -188,3 +209,16 @@ bool StateDialog::eventFilter(QObject* watched, QEvent* event) {
     }
     return false;
 }
+
+void StateDialog::on_directionsToLandmarkButton_clicked() {
+    routeTo(QPoint(StateManager::selectedLandmark()->node()->x(), StateManager::selectedLandmark()->node()->z()));
+}
+
+
+void StateDialog::on_searchButton_clicked() {
+    if (ui->searchBox->landmark()) {
+        StateManager::setSelectedLandmark(ui->searchBox->landmark());
+        focusMap(ui->searchBox->location());
+    }
+}
+

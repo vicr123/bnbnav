@@ -26,6 +26,7 @@
 #include "datamanager.h"
 #include "statedialog.h"
 #include "statemanager.h"
+#include "landmark.h"
 
 struct MainWindowPrivate {
     MapWidget* map;
@@ -75,6 +76,8 @@ MainWindow::MainWindow(QWidget* parent)
 
     connect(d->map, &MapWidget::routeFrom, d->stateDialog, &StateDialog::routeFrom);
     connect(d->map, &MapWidget::routeTo, d->stateDialog, &StateDialog::routeTo);
+    connect(d->map, &MapWidget::landmarkClicked, d->stateDialog, &StateDialog::showLandmark);
+    connect(d->stateDialog, &StateDialog::focusMap, d->map, &MapWidget::focusMap);
 
     connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
         if (StateManager::currentState() == StateManager::Go && d->login->isVisible()) d->login->setVisible(false);

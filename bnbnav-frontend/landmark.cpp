@@ -21,6 +21,8 @@
 
 #include "datamanager.h"
 #include <QJsonObject>
+#include <QRectF>
+#include "node.h"
 
 struct LandmarkPrivate {
     Node* node;
@@ -57,6 +59,20 @@ QString Landmark::name() {
 
 QString Landmark::type() {
     return d->type;
+}
+
+QString Landmark::humanReadableType() {
+    for (const QPair<QString, QString>& landmark : this->landmarks()) {
+        if (landmark.first == d->type) return landmark.second;
+    }
+    return tr("Unknown");
+}
+
+QRectF Landmark::hitbox() {
+    QRectF landmarkPin;
+    landmarkPin.setSize(QSizeF(8, 8));
+    landmarkPin.moveCenter(QPointF(d->node->x(), d->node->z()));
+    return landmarkPin;
 }
 
 QList<QPair<QString, QString>> Landmark::landmarks() {

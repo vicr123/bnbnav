@@ -22,15 +22,22 @@
 
 #include <QLineEdit>
 
+class Landmark;
+struct LocationEntryBoxPrivate;
 class LocationEntryBox : public QLineEdit {
         Q_OBJECT
     public:
         explicit LocationEntryBox(QWidget* parent = nullptr);
+        ~LocationEntryBox();
 
         QPoint location();
+        Landmark* landmark();
 
     signals:
+        void go();
 
+    private:
+        LocationEntryBoxPrivate* d;
 };
 
 #endif // LOCATIONENTRYBOX_H

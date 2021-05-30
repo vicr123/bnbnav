@@ -36,6 +36,10 @@ class Landmark : public QObject {
         QString name();
         QString type();
 
+        QString humanReadableType();
+
+        QRectF hitbox();
+
         static QList<QPair<QString, QString>> landmarks();
 
     signals:

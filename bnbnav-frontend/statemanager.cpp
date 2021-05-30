@@ -43,6 +43,8 @@ struct StateManagerPrivate {
     bool isSnappedToRoute = false;
     QElapsedTimer lastSnappedToRoute;
 
+    Landmark* selectedLandmark;
+
     bool followMe;
 };
 
@@ -204,6 +206,15 @@ void StateManager::setFollowMe(bool follow) {
 
 bool StateManager::followMe() {
     return instance()->d->followMe;
+}
+
+void StateManager::setSelectedLandmark(Landmark* landmark) {
+    instance()->d->selectedLandmark = landmark;
+    emit instance()->selectedLandmarkChanged();
+}
+
+Landmark* StateManager::selectedLandmark() {
+    return instance()->d->selectedLandmark;
 }
 
 StateManager::StateManager(QObject* parent) : QObject(parent) {

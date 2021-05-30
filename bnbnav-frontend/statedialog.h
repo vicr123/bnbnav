@@ -26,6 +26,7 @@ namespace Ui {
     class StateDialog;
 }
 
+class Landmark;
 struct StateDialogPrivate;
 class StateDialog : public QDialog {
         Q_OBJECT
@@ -37,6 +38,8 @@ class StateDialog : public QDialog {
         void routeTo(QPoint location);
         void routeFrom(QPoint location);
 
+        void showLandmark(Landmark* landmark);
+
     private slots:
         void on_getDirectionsButton_clicked();
 
@@ -46,11 +49,19 @@ class StateDialog : public QDialog {
 
         void on_goModeButton_clicked();
 
+        void on_directionsToLandmarkButton_clicked();
+
+        void on_searchButton_clicked();
+
+    signals:
+        void focusMap(QPoint location);
+
     private:
         Ui::StateDialog* ui;
         StateDialogPrivate* d;
 
         void recalculateRoute();
+        void updateLandmark();
 
         // QObject interface
     public:

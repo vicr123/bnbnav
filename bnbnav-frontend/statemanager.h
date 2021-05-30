@@ -26,6 +26,7 @@ class QPainter;
 class Edge;
 class Node;
 class Player;
+class Landmark;
 struct StateManagerPrivate;
 class StateManager : public QObject {
         Q_OBJECT
@@ -86,12 +87,16 @@ class StateManager : public QObject {
         static void setFollowMe(bool follow);
         static bool followMe();
 
+        static void setSelectedLandmark(Landmark* landmark);
+        static Landmark* selectedLandmark();
+
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);
         void followMeChanged(bool followMe);
         void routeChanged();
         void currentInstructionChanged();
+        void selectedLandmarkChanged();
 
     private:
         explicit StateManager(QObject* parent = nullptr);

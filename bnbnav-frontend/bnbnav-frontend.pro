@@ -19,6 +19,7 @@ SOURCES += \
     instructionmodel.cpp \
     landmark.cpp \
     locationentrybox.cpp \
+    locationentrycompleter.cpp \
     loginwidget.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -43,6 +44,7 @@ HEADERS += \
     instructionmodel.h \
     landmark.h \
     locationentrybox.h \
+    locationentrycompleter.h \
     loginwidget.h \
     mainwindow.h \
     mapwidget.h \

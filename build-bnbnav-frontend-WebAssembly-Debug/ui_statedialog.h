@@ -34,6 +34,19 @@ public:
     QVBoxLayout *verticalLayout_3;
     QTabWidget *tabWidget;
     QWidget *discoverTab;
+    QVBoxLayout *verticalLayout_5;
+    QHBoxLayout *horizontalLayout_3;
+    LocationEntryBox *searchBox;
+    QPushButton *searchButton;
+    QStackedWidget *discoverStack;
+    QWidget *noLandmarkPage;
+    QVBoxLayout *verticalLayout_6;
+    QWidget *landmarkPage;
+    QVBoxLayout *verticalLayout_7;
+    QLabel *landmarkName;
+    QLabel *landmarkCoordinates;
+    QPushButton *directionsToLandmarkButton;
+    QSpacerItem *verticalSpacer;
     QWidget *directionsTab;
     QVBoxLayout *verticalLayout_2;
     QLabel *label;
@@ -70,6 +83,61 @@ public:
         tabWidget->setObjectName(QString::fromUtf8("tabWidget"));
         discoverTab = new QWidget();
         discoverTab->setObjectName(QString::fromUtf8("discoverTab"));
+        verticalLayout_5 = new QVBoxLayout(discoverTab);
+        verticalLayout_5->setObjectName(QString::fromUtf8("verticalLayout_5"));
+        horizontalLayout_3 = new QHBoxLayout();
+        horizontalLayout_3->setObjectName(QString::fromUtf8("horizontalLayout_3"));
+        searchBox = new LocationEntryBox(discoverTab);
+        searchBox->setObjectName(QString::fromUtf8("searchBox"));
+
+        horizontalLayout_3->addWidget(searchBox);
+
+        searchButton = new QPushButton(discoverTab);
+        searchButton->setObjectName(QString::fromUtf8("searchButton"));
+
+        horizontalLayout_3->addWidget(searchButton);
+
+
+        verticalLayout_5->addLayout(horizontalLayout_3);
+
+        discoverStack = new QStackedWidget(discoverTab);
+        discoverStack->setObjectName(QString::fromUtf8("discoverStack"));
+        noLandmarkPage = new QWidget();
+        noLandmarkPage->setObjectName(QString::fromUtf8("noLandmarkPage"));
+        verticalLayout_6 = new QVBoxLayout(noLandmarkPage);
+        verticalLayout_6->setObjectName(QString::fromUtf8("verticalLayout_6"));
+        discoverStack->addWidget(noLandmarkPage);
+        landmarkPage = new QWidget();
+        landmarkPage->setObjectName(QString::fromUtf8("landmarkPage"));
+        verticalLayout_7 = new QVBoxLayout(landmarkPage);
+        verticalLayout_7->setObjectName(QString::fromUtf8("verticalLayout_7"));
+        verticalLayout_7->setContentsMargins(0, 0, 0, 0);
+        landmarkName = new QLabel(landmarkPage);
+        landmarkName->setObjectName(QString::fromUtf8("landmarkName"));
+        QFont font;
+        font.setPointSize(20);
+        landmarkName->setFont(font);
+
+        verticalLayout_7->addWidget(landmarkName);
+
+        landmarkCoordinates = new QLabel(landmarkPage);
+        landmarkCoordinates->setObjectName(QString::fromUtf8("landmarkCoordinates"));
+
+        verticalLayout_7->addWidget(landmarkCoordinates);
+
+        directionsToLandmarkButton = new QPushButton(landmarkPage);
+        directionsToLandmarkButton->setObjectName(QString::fromUtf8("directionsToLandmarkButton"));
+
+        verticalLayout_7->addWidget(directionsToLandmarkButton);
+
+        verticalSpacer = new QSpacerItem(20, 240, QSizePolicy::Minimum, QSizePolicy::Expanding);
+
+        verticalLayout_7->addItem(verticalSpacer);
+
+        discoverStack->addWidget(landmarkPage);
+
+        verticalLayout_5->addWidget(discoverStack);
+
         tabWidget->addTab(discoverTab, QString());
         directionsTab = new QWidget();
         directionsTab->setObjectName(QString::fromUtf8("directionsTab"));
@@ -77,9 +145,9 @@ public:
         verticalLayout_2->setObjectName(QString::fromUtf8("verticalLayout_2"));
         label = new QLabel(directionsTab);
         label->setObjectName(QString::fromUtf8("label"));
-        QFont font;
-        font.setPointSize(15);
-        label->setFont(font);
+        QFont font1;
+        font1.setPointSize(15);
+        label->setFont(font1);
 
         verticalLayout_2->addWidget(label);
 
@@ -151,9 +219,13 @@ public:
 
 
         retranslateUi(StateDialog);
+        QObject::connect(startLocationBox, SIGNAL(go()), endLocationBox, SLOT(setFocus()));
+        QObject::connect(endLocationBox, SIGNAL(go()), getDirectionsButton, SLOT(click()));
+        QObject::connect(searchBox, SIGNAL(go()), searchButton, SLOT(click()));
 
         stackedWidget->setCurrentIndex(0);
-        tabWidget->setCurrentIndex(1);
+        tabWidget->setCurrentIndex(0);
+        discoverStack->setCurrentIndex(0);
 
 
         QMetaObject::connectSlotsByName(StateDialog);
@@ -162,6 +234,11 @@ public:
     void retranslateUi(QDialog *StateDialog)
     {
         StateDialog->setWindowTitle(QCoreApplication::translate("StateDialog", "bnbnav", nullptr));
+        searchBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Search", nullptr));
+        searchButton->setText(QCoreApplication::translate("StateDialog", "Search", nullptr));
+        landmarkName->setText(QCoreApplication::translate("StateDialog", "TextLabel", nullptr));
+        landmarkCoordinates->setText(QCoreApplication::translate("StateDialog", "TextLabel", nullptr));
+        directionsToLandmarkButton->setText(QCoreApplication::translate("StateDialog", "Directions to here", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(discoverTab), QCoreApplication::translate("StateDialog", "Discover", nullptr));
         label->setText(QCoreApplication::translate("StateDialog", "Get Directions", nullptr));
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));
