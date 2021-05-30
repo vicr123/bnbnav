@@ -89,6 +89,9 @@ QList<QPair<QString, QString>> Landmark::landmarks() {
         {"generic-blue", tr("Generic Blue")},
         {"generic-green", tr("Generic Green")},
         {"generic-red", tr("Generic Red")},
-        {"generic-gray", tr("Generic Gray")}
+        {"generic-gray", tr("Generic Gray")},
+        {"city-hall", tr("City Hall")},
+        {"cafe", tr("Coffee Shop")},
+        {"shopping", tr("Store")}
     };
 }

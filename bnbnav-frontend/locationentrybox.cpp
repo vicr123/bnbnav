@@ -28,6 +28,7 @@
 #include "landmark.h"
 #include "node.h"
 #include <QDebug>
+#include <QAbstractItemView>
 
 struct LocationEntryBoxPrivate {
     Landmark* selectedLandmark = nullptr;
@@ -45,6 +46,7 @@ LocationEntryBox::LocationEntryBox(QWidget* parent) : QLineEdit(parent) {
     connect(completer, QOverload<const QModelIndex&>::of(&QCompleter::activated), this, [ = ](QModelIndex index) {
         d->selectedLandmark = index.data(Qt::UserRole).value<Landmark*>();
     });
+    completer->popup()->setItemDelegate(new LocationEntryCompleterDelegate(this));
     this->setCompleter(completer);
 
     connect(this, &QLineEdit::textEdited, this, [ = ](QString text) {

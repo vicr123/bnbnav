@@ -31,5 +31,8 @@
         <file>landmarks/invisible.svg</file>
         <file>Overpass-Regular.ttf</file>
         <file>pin.svg</file>
+        <file>landmarks/city-hall.svg</file>
+        <file>landmarks/shopping.svg</file>
+        <file>landmarks/cafe.svg</file>
     </qresource>
 </RCC>

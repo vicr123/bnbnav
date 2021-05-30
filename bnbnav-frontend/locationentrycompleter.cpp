@@ -19,6 +19,8 @@
  * *************************************/
 #include "locationentrycompleter.h"
 
+#include <QPainter>
+#include <QSvgRenderer>
 #include "datamanager.h"
 #include "landmark.h"
 
@@ -55,4 +57,63 @@ QVariant LocationEntryCompleter::data(const QModelIndex& index, int role) const 
     }
 
     return QVariant();
+}
+
+LocationEntryCompleterDelegate::LocationEntryCompleterDelegate(QObject* parent) : QStyledItemDelegate(parent) {
+
+}
+
+
+void LocationEntryCompleterDelegate::paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const {
+    Landmark* l = index.data(Qt::UserRole).value<Landmark*>();
+
+    if (option.state & QStyle::State_Selected) {
+        painter->setBrush(option.palette.color(QPalette::Highlight));
+        painter->setPen(Qt::transparent);
+        painter->drawRect(option.rect);
+
+        painter->setPen(option.palette.color(QPalette::HighlightedText));
+    }
+
+    QFont font = option.font;
+    font.setPointSizeF(font.pointSizeF() * 1.5);
+
+    QRect iconRect = option.rect;
+    iconRect.adjust(9, 9, -9, -9);
+    iconRect.setWidth(iconRect.height());
+
+    QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(l->type()));
+    renderer.render(painter, iconRect);
+
+    QRect titleRect = iconRect;
+    titleRect.setLeft(iconRect.right() + 9);
+    titleRect.setRight(option.rect.right() - 9);
+    titleRect.setHeight(QFontMetrics(font).height());
+
+    QRect catRect = titleRect;
+    catRect.moveTop(titleRect.bottom());
+    catRect.setHeight(option.fontMetrics.height());
+
+    painter->save();
+    double width = QFontMetrics(font).horizontalAdvance(l->name());
+    painter->setFont(font);
+    if (width > titleRect.width()) {
+        painter->scale(titleRect.width() / width, 1);
+        titleRect.moveLeft(titleRect.left() * width / titleRect.width());
+        titleRect.setWidth(width + 1);
+    }
+    painter->drawText(titleRect, l->name());
+    painter->restore();
+
+
+    painter->setFont(option.font);
+    painter->drawText(catRect, l->humanReadableType());
+}
+
+QSize LocationEntryCompleterDelegate::sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const {
+    QFont font = option.font;
+    font.setPointSizeF(font.pointSizeF() * 1.5);
+
+    int height = option.fontMetrics.height() + QFontMetrics(font).height() + 18;
+    return QSize(300, height);
 }

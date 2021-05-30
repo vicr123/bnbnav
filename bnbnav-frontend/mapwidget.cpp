@@ -286,24 +286,6 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             }
         }
 
-
-        if (StateManager::currentState() == StateManager::Edit) {
-            for (Node* node : DataManager::nodes().values()) {
-                //Draw the node
-                //Don't draw temporary nodes
-                if (node->isTemporary()) continue;
-
-                painter.setPen(QPen(Qt::black, 2 / d->scale));
-                painter.setBrush(Qt::white);
-                if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
-                if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
-
-                QRectF nodeRect = node->nodeRect(d->scale);
-                if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
-                painter.drawRect(nodeRect);
-            }
-        }
-
         painter.end();
     }
 
@@ -409,7 +391,25 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             rect.moveBottom(StateManager::selectedLandmark()->hitbox().center().y());
             pinRenderer.render(&painter, rect);
         }
+
+        if (StateManager::currentState() == StateManager::Edit) {
+            for (Node* node : DataManager::nodes().values()) {
+                //Draw the node
+                //Don't draw temporary nodes
+                if (node->isTemporary()) continue;
+
+                painter.setPen(QPen(Qt::black, 2 / d->scale));
+                painter.setBrush(Qt::white);
+                if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
+                if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+
+                QRectF nodeRect = node->nodeRect(d->scale);
+                if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+                painter.drawRect(nodeRect);
+            }
+        }
     }
+
 }
 
 void MapWidget::mousePressEvent(QMouseEvent* event) {

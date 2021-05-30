@@ -21,20 +21,31 @@
 #define LOCATIONENTRYCOMPLETER_H
 
 #include <QAbstractListModel>
+#include <QStyledItemDelegate>
 
-class LocationEntryCompleter : public QAbstractListModel
-{
+class LocationEntryCompleter : public QAbstractListModel {
         Q_OBJECT
 
     public:
-        explicit LocationEntryCompleter(QObject *parent = nullptr);
+        explicit LocationEntryCompleter(QObject* parent = nullptr);
 
         // Basic functionality:
-        int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+        int rowCount(const QModelIndex& parent = QModelIndex()) const override;
 
-        QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const override;
+        QVariant data(const QModelIndex& index, int role = Qt::DisplayRole) const override;
 
     private:
+};
+
+class LocationEntryCompleterDelegate : public QStyledItemDelegate {
+        Q_OBJECT
+    public:
+        explicit LocationEntryCompleterDelegate(QObject* parent = nullptr);
+
+        // QAbstractItemDelegate interface
+    public:
+        void paint(QPainter* painter, const QStyleOptionViewItem& option, const QModelIndex& index) const;
+        QSize sizeHint(const QStyleOptionViewItem& option, const QModelIndex& index) const;
 };
 
 #endif // LOCATIONENTRYCOMPLETER_H
