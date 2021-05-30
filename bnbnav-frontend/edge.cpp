@@ -88,6 +88,10 @@ double Edge::length() {
     return this->line().length();
 }
 
+double Edge::routePenalty() {
+    return length() * d->road->penalty();
+}
+
 QPointF Edge::closestPointTo(QPointF point) {
     QLineF intersectionLine(point, point + QPointF(5, 0));
     intersectionLine.setAngle(line().normalVector().angle());

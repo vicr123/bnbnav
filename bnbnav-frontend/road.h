@@ -36,6 +36,8 @@ class Road : public QObject {
         QString type();
         QPen pen(Edge* edge);
 
+        double penalty();
+
         void redefine(QJsonObject definition);
 
     signals:

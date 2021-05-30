@@ -23,6 +23,7 @@
 #include <QLineF>
 #include <QPen>
 #include <QJsonObject>
+#include <QTimer>
 #include "edge.h"
 #include "road.h"
 #include "datamanager.h"
@@ -34,11 +35,40 @@ struct PlayerPrivate {
 
     Edge* snappedEdge = nullptr;
     QList<QPair<qint64, QPointF>> posHistory;
+
+    double markerAngle = 0;
 };
 
 Player::Player(QString name, QObject* parent) : QObject(parent) {
     d = new PlayerPrivate();
     d->name = name;
+
+    QTimer* timer = new QTimer();
+    timer->setInterval(50);
+    timer->start();
+    connect(timer, &QTimer::timeout, this, [ = ] {
+        double targetAngle;
+
+        if (d->snappedEdge) {
+            targetAngle = d->snappedEdge->line().angle();
+        } else {
+            targetAngle = velocity().angle();
+        }
+
+        QLineF line1(0, 0, 1, 0);
+        line1.setAngle(d->markerAngle);
+        QLineF line2(0, 0, 1, 0);
+        line2.setAngle(targetAngle);
+
+        double angleDifference = line1.angleTo(line2);
+        if (angleDifference < 1 || angleDifference > 359) {
+            d->markerAngle = targetAngle;
+        } else if (angleDifference >= 180) {
+            d->markerAngle -= (360 - angleDifference) * 0.1;
+        } else if (angleDifference < 180) {
+            d->markerAngle += angleDifference * 0.1;
+        }
+    });
 }
 
 Player::~Player() {
@@ -127,11 +157,7 @@ QPointF Player::markerCoordinates() {
 }
 
 double Player::markerAngle() {
-    if (d->snappedEdge) {
-        return d->snappedEdge->line().angle();
-    } else {
-        return velocity().angle();
-    }
+    return d->markerAngle;
 }
 
 QLineF Player::velocity() {

@@ -28,6 +28,7 @@
 #include <QMessageBox>
 #include <QSvgRenderer>
 #include <QPicture>
+#include <QBuffer>
 #include "nodeconnectdialog.h"
 #include "newlandmarkdialog.h"
 #include "datamanager.h"
@@ -89,6 +90,12 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
         updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::updatedEdge, this, [ = ] {
+        updateBaseMap();
+    });
+    connect(DataManager::instance(), &DataManager::updatedNode, this, [ = ] {
+        updateBaseMap();
+    });
+    connect(DataManager::instance(), &DataManager::updatedRoad, this, [ = ] {
         updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
@@ -191,127 +198,180 @@ void MapWidget::updateBaseMap() {
 }
 
 void MapWidget::paintEvent(QPaintEvent* event) {
-    QPainter painter(this);
-    painter.setTransform(currentTransform());
-    painter.setRenderHint(QPainter::Antialiasing);
+    QPicture pic;
 
-    //Draw the base map
-    d->baseMap.play(&painter);
-
-    QFont font = painter.font();
+    QFont font = this->font();
     font.setPointSizeF(20 / d->scale);
-    painter.setFont(font);
 
-    for (Edge* edge : StateManager::currentRoute()) {
-        QPen pen = edge->road()->pen(edge);
-        pen.setColor(QColor(0, 150, 255));
-        painter.setPen(pen);
-        painter.drawLine(edge->line());
-    }
+    {
+        QPainter painter;
+        painter.begin(&pic);
 
-    for (QObject* target : d->hoverTargets) {
-        Edge* edge = qobject_cast<Edge*>(target);
-        if (edge) {
+        //Draw the base map
+        d->baseMap.play(&painter);
+
+        painter.setFont(font);
+
+        for (Edge* edge : StateManager::currentRoute()) {
             QPen pen = edge->road()->pen(edge);
-            pen.setColor(Qt::blue);
+            pen.setColor(QColor(0, 150, 255));
             painter.setPen(pen);
             painter.drawLine(edge->line());
         }
-    }
 
-    if (StateManager::currentInstruction() != -1) {
-        StateManager::Instruction inst = StateManager::currentInstructions().at(StateManager::currentInstruction());
-        if (inst.fromEdge && inst.toEdge) {
-            QPolygonF arrow;
-            QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(100, 0) / d->scale);
-            fromLine.setAngle(inst.fromEdge->line().angle());
-
-            arrow.append(fromLine.pointAt(-1));
-            arrow.append(fromLine.pointAt(0));
-            fromLine.setAngle(inst.toEdge->line().angle());
-            arrow.append(fromLine.pointAt(1));
-
-            painter.setPen(QPen(QColor(100, 50, 150), 50 / d->scale, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
-            painter.setBrush(QColor(100, 50, 150));
-
-            QPolygonF arrowHead;
-            arrowHead.append(fromLine.pointAt(1));
-
-            QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(50, 0) / d->scale);
-            arrowHeadBase.setAngle(fromLine.normalVector().angle());
-
-            fromLine.setLength(fromLine.length() + 50 / d->scale);
-
-            arrowHead.append(arrowHeadBase.pointAt(1));
-            arrowHead.append(fromLine.pointAt(1));
-            arrowHead.append(arrowHeadBase.pointAt(-1));
-
-            painter.drawPolyline(arrow);
-            painter.drawPolygon(arrowHead);
+        for (QObject* target : d->hoverTargets) {
+            Edge* edge = qobject_cast<Edge*>(target);
+            if (edge) {
+                QPen pen = edge->road()->pen(edge);
+                pen.setColor(Qt::blue);
+                painter.setPen(pen);
+                painter.drawLine(edge->line());
+            }
         }
-    }
 
-    //Draw players
-    QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
-    for (Player* player : DataManager::players()) {
-        QRectF circle;
-        circle.setSize(QSizeF(15, 15) * d->scale);
-        circle.moveCenter(QPointF(0, 0));
+        if (StateManager::currentInstruction() != -1) {
+            StateManager::Instruction inst = StateManager::currentInstructions().at(StateManager::currentInstruction());
+            if (inst.fromEdge && inst.toEdge) {
+                QPolygonF arrow;
+                QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(100, 0) / d->scale);
+                fromLine.setAngle(inst.fromEdge->line().angle());
 
-        QPointF markerCoordinates = player->markerCoordinates();
+                arrow.append(fromLine.pointAt(-1));
+                arrow.append(fromLine.pointAt(0));
+                fromLine.setAngle(inst.toEdge->line().angle());
+                arrow.append(fromLine.pointAt(1));
 
-        painter.save();
-        painter.resetTransform();
-        painter.translate(currentTransform().map(markerCoordinates));
-        painter.rotate(-player->markerAngle());
-        playerMarkRenderer.render(&painter, circle);
-        painter.restore();
+                painter.setPen(QPen(QColor(100, 50, 150), inst.fromEdge->road()->pen(inst.fromEdge).widthF(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+                painter.setBrush(QColor(100, 50, 150));
 
-        painter.setPen(Qt::black);
+                QPolygonF arrowHead;
+                arrowHead.append(fromLine.pointAt(1));
 
-        circle.setSize(QSizeF(15, 15));
-        circle.moveCenter(markerCoordinates);
+                QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(50, 0) / d->scale);
+                arrowHeadBase.setAngle(fromLine.normalVector().angle());
 
-        QRectF text;
-        text.setHeight(painter.fontMetrics().height());
-        text.setWidth(painter.fontMetrics().horizontalAdvance(player->name()));
-        text.moveCenter(circle.center());
-        text.moveTop(circle.bottom() + 10 / d->scale);
-        painter.drawText(text, player->name());
+                fromLine.setLength(fromLine.length() + 50 / d->scale);
 
-        if (player->snappedEdge()) {
-            QRectF roadText;
-            roadText.setHeight(painter.fontMetrics().height());
-            roadText.setWidth(painter.fontMetrics().horizontalAdvance(player->snappedEdge()->road()->name()) + 20 / d->scale);
-            roadText.moveCenter(text.center());
+                arrowHead.append(arrowHeadBase.pointAt(1));
+                arrowHead.append(fromLine.pointAt(1));
+                arrowHead.append(arrowHeadBase.pointAt(-1));
 
-            QRectF roadBacking = roadText.adjusted(-20 / d->scale, -5 / d->scale, 20 / d->scale, 5 / d->scale);
-            roadBacking.moveTop(text.bottom() + 10 / d->scale);
-
-            painter.setBrush(QColor(0, 130, 120));
-            painter.setPen(Qt::transparent);
-            painter.drawRoundedRect(roadBacking, roadBacking.height() / 2, roadBacking.height() / 2, Qt::AbsoluteSize);
-
-            roadText.moveCenter(roadBacking.center());
-            painter.setPen(Qt::white);
-            painter.drawText(roadText, Qt::AlignCenter, player->snappedEdge()->road()->name());
+                painter.drawPolyline(arrow);
+                painter.drawPolygon(arrowHead);
+            }
         }
+
+
+        if (StateManager::currentState() == StateManager::Edit) {
+            for (Node* node : DataManager::nodes().values()) {
+                //Draw the node
+                //Don't draw temporary nodes
+                if (node->isTemporary()) continue;
+
+                painter.setPen(QPen(Qt::black, 2 / d->scale));
+                painter.setBrush(Qt::white);
+                if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
+                if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+
+                QRectF nodeRect = node->nodeRect(d->scale);
+                if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+                painter.drawRect(nodeRect);
+            }
+        }
+
+        painter.end();
     }
 
-    if (StateManager::currentState() == StateManager::Edit) {
-        for (Node* node : DataManager::nodes().values()) {
-            //Draw the node
-            //Don't draw temporary nodes
-            if (node->isTemporary()) continue;
+    bool goMode = StateManager::currentState() == StateManager::Go;
+    QPointF goModeOrigin(this->width() / 2, this->height() * 0.8);
+    {
+        QPainter painter(this);
+        painter.setWorldTransform(currentTransform());
+        painter.setRenderHint(QPainter::Antialiasing);
 
-            painter.setPen(QPen(Qt::black, 2 / d->scale));
-            painter.setBrush(Qt::white);
-            if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
-            if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+        Player* player = StateManager::loggedInPlayer();
+        if (goMode) {
+            QTransform playerTransform;
+            playerTransform.rotate(player->markerAngle() - 90);
+            playerTransform.scale(d->scale, d->scale);
 
-            QRectF nodeRect = node->nodeRect(d->scale);
-            if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
-            painter.drawRect(nodeRect);
+            QRect viewport(goModeOrigin.toPoint(), QSize(this->width(), this->height()));
+            painter.setViewport(viewport);
+
+            painter.setTransform(playerTransform);
+            painter.drawPicture(-player->markerCoordinates(), pic);
+        } else {
+            painter.drawPicture(0, 0, pic);
+        }
+
+        painter.setFont(font);
+
+        //Draw players
+        QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
+        for (Player* player : DataManager::players()) {
+            if (goMode && player != StateManager::loggedInPlayer()) continue;
+
+            QRectF circle;
+            circle.setSize(QSizeF(15, 15) * d->scale);
+            circle.moveCenter(QPointF(0, 0));
+
+            QPointF markerCoordinates = player->markerCoordinates();
+
+            painter.save();
+            painter.resetTransform();
+            if (goMode) {
+                painter.translate(goModeOrigin);
+                painter.rotate(-90);
+            } else {
+                painter.translate(currentTransform().map(markerCoordinates));
+                painter.rotate(-player->markerAngle());
+            }
+            playerMarkRenderer.render(&painter, circle);
+            painter.restore();
+
+            painter.setPen(Qt::black);
+
+            circle.setSize(QSizeF(15, 15));
+            if (goMode) {
+                painter.resetTransform();
+//                painter.translate(goModeOrigin);
+//                painter.scale(d->scale, d->scale);
+                circle.moveCenter(goModeOrigin);
+                painter.setFont(this->font());
+            } else {
+                circle.moveCenter(markerCoordinates);
+            }
+
+            double scale = goMode ? 1 : d->scale;
+
+            QRectF text;
+            text.setHeight(painter.fontMetrics().height());
+            text.setWidth(painter.fontMetrics().horizontalAdvance(player->name()));
+            text.moveCenter(circle.center());
+            text.moveTop(circle.bottom() + 10 / scale);
+            if (!goMode) painter.drawText(text, player->name());
+
+            if (player->snappedEdge()) {
+                QRectF roadText;
+                roadText.setHeight(painter.fontMetrics().height());
+                roadText.setWidth(painter.fontMetrics().horizontalAdvance(player->snappedEdge()->road()->name()) + 20 / scale);
+                roadText.moveCenter(text.center());
+
+                QRectF roadBacking = roadText.adjusted(-20 / scale, -5 / scale, 20 / scale, 5 / scale);
+                if (goMode) {
+                    roadBacking.moveTop(text.bottom() + 10 * d->scale);
+                } else {
+                    roadBacking.moveTop(text.bottom() + 10 / d->scale);
+                }
+
+                painter.setBrush(QColor(0, 130, 120));
+                painter.setPen(Qt::transparent);
+                painter.drawRoundedRect(roadBacking, roadBacking.height() / 2, roadBacking.height() / 2, Qt::AbsoluteSize);
+
+                roadText.moveCenter(roadBacking.center());
+                painter.setPen(Qt::white);
+                painter.drawText(roadText, Qt::AlignCenter, player->snappedEdge()->road()->name());
+            }
         }
     }
 }

@@ -216,7 +216,7 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
 
         for (Edge* edge : edgesFromNode(top->node)) {
             SearchNode* otherNode = searchNodes.value(edge->to());
-            double distance = edge->length();
+            double distance = edge->routePenalty();
 
             if (otherNode->distance > top->distance + distance || !otherNode->visited) {
                 otherNode->distance = top->distance + distance;

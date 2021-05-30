@@ -36,6 +36,16 @@ struct RoadPrivate {
         {"waterway", QColor(0, 110, 150)},
         {"private", QColor(100, 100, 100)}
     };
+
+    const QMap<QString, double> roadPenalties = {
+        {"local", 1},
+        {"main", 0.8},
+        {"highway", 0.7},
+        {"motorway", 0.6},
+        {"footpath", 1.5},
+        {"waterway", 1},
+        {"private", 2}
+    };
 };
 
 Road::Road(QJsonObject definition, QObject* parent) : QObject(parent) {
@@ -86,6 +96,10 @@ QPen Road::pen(Edge* edge) {
         thickness = 10;
     }
     return QPen(col, thickness, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
+}
+
+double Road::penalty() {
+    return d->roadPenalties.value(d->type, 1);
 }
 
 void Road::redefine(QJsonObject definition) {

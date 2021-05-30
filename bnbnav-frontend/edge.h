@@ -41,6 +41,7 @@ class Edge : public QObject {
         QPolygonF hitbox(double width);
 
         double length();
+        double routePenalty();
 
         QPointF closestPointTo(QPointF point);
         double distanceTo(QPointF point, bool* ok = nullptr);
