@@ -106,7 +106,9 @@ QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
     return roads;
 }
 
-QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
+QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEntity, QObject* toEntity) {
+    Player* fromPlayer = qobject_cast<Player*>(fromEntity);
+
     //Find the closest edge for each point
     QMultiMap<double, Edge*> point1Candidates, point2Candidates;
     for (Edge* edge : edges().values()) {
@@ -133,25 +135,27 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to) {
 
     if (point1Candidates.isEmpty() || point2Candidates.isEmpty()) return QList<Edge*>();
 
-    //TODO: Consider the other edges
-//    Node* fromNode = point1Candidates.first()->from();
-//    Node* toNode = point2Candidates.first()->to();
-
     Node* fromNode = nextTemporaryNode(from.x(), point1Candidates.first()->averageY(), from.y());
     Node* toNode = nextTemporaryNode(to.x(), point2Candidates.first()->averageY(), to.y());
 
     //Construct edges and nodes to each candiate road
-    double shortest1 = point1Candidates.firstKey();
-    for (Edge* edge : point1Candidates.values(shortest1)) {
-        QPointF closest = edge->closestPointTo(from);
-        if (closest.isNull()) {
-            nextTemporaryEdge(fromNode, edge->to(), edge->road());
-        } else {
-            Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
-            nextTemporaryEdge(fromNode, node, edge->road());
-            nextTemporaryEdge(node, edge->to(), edge->road());
+    if (fromPlayer && fromPlayer->snappedEdge()) {
+        //Only consider the road that the player is snapped on
+        nextTemporaryEdge(fromNode, fromPlayer->snappedEdge()->to(), fromPlayer->snappedEdge()->road());
+    } else {
+        double shortest1 = point1Candidates.firstKey();
+        for (Edge* edge : point1Candidates.values(shortest1)) {
+            QPointF closest = edge->closestPointTo(from);
+            if (closest.isNull()) {
+                nextTemporaryEdge(fromNode, edge->to(), edge->road());
+            } else {
+                Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
+                nextTemporaryEdge(fromNode, node, edge->road());
+                nextTemporaryEdge(node, edge->to(), edge->road());
+            }
         }
     }
+
     double shortest2 = point2Candidates.firstKey();
     for (Edge* edge : point2Candidates.values(shortest2)) {
         QPointF closest = edge->closestPointTo(to);

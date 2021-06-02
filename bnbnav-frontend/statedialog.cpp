@@ -157,9 +157,12 @@ void StateDialog::showLandmark(Landmark* landmark) {
 void StateDialog::on_getDirectionsButton_clicked() {
     QPoint start = ui->startLocationBox->location();
     QPoint end = ui->endLocationBox->location();
+    QObject* fromEntity = nullptr;
+    QObject* toEntity = nullptr;
 
     if (start.isNull() && StateManager::loggedInPlayer()) {
         start = QPoint(StateManager::loggedInPlayer()->x(), StateManager::loggedInPlayer()->z());
+        fromEntity = StateManager::loggedInPlayer();
     }
 
     if (start.isNull() || end.isNull()) {
@@ -168,7 +171,7 @@ void StateDialog::on_getDirectionsButton_clicked() {
     }
 
     DataManager::resetTemporaries();
-    StateManager::setCurrentRoute(DataManager::shortestPath(start, end));
+    StateManager::setCurrentRoute(DataManager::shortestPath(start, end, fromEntity, toEntity));
 }
 
 void StateDialog::on_startLocationBox_textChanged(const QString& arg1) {
@@ -196,7 +199,7 @@ void StateDialog::recalculateRoute() {
     QPoint start(player->x(), player->z());
 
     DataManager::resetTemporaries();
-    StateManager::setCurrentRoute(DataManager::shortestPath(start, ui->endLocationBox->location()));
+    StateManager::setCurrentRoute(DataManager::shortestPath(start, ui->endLocationBox->location(), StateManager::loggedInPlayer()));
 
     d->lastPrompt = -1;
 
