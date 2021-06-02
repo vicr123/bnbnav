@@ -1293,11 +1293,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 9715440,
+    STACK_BASE = 9715504,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 4472560,
-    DYNAMIC_BASE = 9715440,
-    DYNAMICTOP_PTR = 4472384;
+    STACK_MAX = 4472624,
+    DYNAMIC_BASE = 9715504,
+    DYNAMICTOP_PTR = 4472448;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1832,7 +1832,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
 
 
 
-// STATICTOP = STATIC_BASE + 4471536;
+// STATICTOP = STATIC_BASE + 4471600;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -8306,7 +8306,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 4472384;
+      return 4472448;
     }
 
   
@@ -12675,7 +12675,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
   }
   
   
-  var _fetch_work_queue=4472544;function __emscripten_get_fetch_work_queue() {
+  var _fetch_work_queue=4472608;function __emscripten_get_fetch_work_queue() {
       return _fetch_work_queue;
     }function _emscripten_start_fetch(fetch, successcb, errorcb, progresscb, readystatechangecb) {
     if (typeof noExitRuntime !== 'undefined') noExitRuntime = true; // If we are the main Emscripten runtime, we should not be closing down.
@@ -13295,10 +13295,10 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
     }
 
   
-  var ___tm_current=4472400;
+  var ___tm_current=4472464;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 4472448, 4), 4472448);
+  var ___tm_timezone=(stringToUTF8("GMT", 4472512, 4), 4472512);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.

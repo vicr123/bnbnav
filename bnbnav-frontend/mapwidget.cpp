@@ -222,42 +222,42 @@ void MapWidget::updateBaseMap() {
         if (drawnEdges.contains(edge)) continue;
         if (edge->isTemporary()) continue;
 
-//        QPolygonF poly;
-//        poly.append(QPointF(edge->from()->x(), edge->from()->z()));
-//        poly.append(QPointF(edge->to()->x(), edge->to()->z()));
+        QPolygonF poly;
+        poly.append(QPointF(edge->from()->x(), edge->from()->z()));
+        poly.append(QPointF(edge->to()->x(), edge->to()->z()));
 
-//        Edge* tracking = edge;
-//        QList<Edge*> trackingEdges;
+        Edge* tracking = edge;
+        QList<Edge*> trackingEdges;
 
-//        do {
-//            trackingEdges = DataManager::edgesToNode(tracking->from());
-//            for (Edge* edge : trackingEdges) {
-//                if (edge->road() == tracking->road() && !drawnEdges.contains(edge)) {
-//                    poly.prepend(QPointF(edge->from()->x(), edge->from()->z()));
-//                    tracking = edge;
-//                    drawnEdges.insert(edge);
-//                    break;
-//                }
-//            }
-//        } while (trackingEdges.contains(tracking));
+        do {
+            trackingEdges = DataManager::edgesToNode(tracking->from());
+            for (Edge* edge : trackingEdges) {
+                if (edge->road() == tracking->road() && edge->line().angle() == tracking->line().angle() && !drawnEdges.contains(edge)) {
+                    poly.prepend(QPointF(edge->from()->x(), edge->from()->z()));
+                    tracking = edge;
+                    drawnEdges.insert(edge);
+                    break;
+                }
+            }
+        } while (trackingEdges.contains(tracking));
 
-//        tracking = edge;
+        tracking = edge;
 
-//        do {
-//            trackingEdges = DataManager::edgesFromNode(tracking->to());
-//            for (Edge* edge : trackingEdges) {
-//                if (edge->road() == tracking->road() && !drawnEdges.contains(edge)) {
-//                    poly.append(QPointF(edge->to()->x(), edge->to()->z()));
-//                    tracking = edge;
-//                    drawnEdges.insert(edge);
-//                    break;
-//                }
-//            }
-//        } while (trackingEdges.contains(tracking));
+        do {
+            trackingEdges = DataManager::edgesFromNode(tracking->to());
+            for (Edge* edge : trackingEdges) {
+                if (edge->road() == tracking->road() && edge->line().angle() == tracking->line().angle() && !drawnEdges.contains(edge)) {
+                    poly.append(QPointF(edge->to()->x(), edge->to()->z()));
+                    tracking = edge;
+                    drawnEdges.insert(edge);
+                    break;
+                }
+            }
+        } while (trackingEdges.contains(tracking));
 
         painter.setPen(edge->road()->pen(edge));
-        painter.drawLine(edge->line());
-//        painter.drawPolyline(poly);
+//        painter.drawLine(edge->line());
+        painter.drawPolyline(poly);
 
         drawnEdges.insert(edge);
     }
