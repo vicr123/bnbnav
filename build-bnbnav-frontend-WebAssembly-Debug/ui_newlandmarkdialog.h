@@ -93,6 +93,9 @@ public:
 
         retranslateUi(NewLandmarkDialog);
 
+        okButton->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(NewLandmarkDialog);
     } // setupUi
 

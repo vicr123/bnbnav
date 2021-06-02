@@ -48,8 +48,9 @@ NodeConnectDialog::NodeConnectDialog(Node* first, Node* second, QWidget* parent)
     roads.unite(DataManager::roadsConnectedToNode(first));
     roads.unite(DataManager::roadsConnectedToNode(second));
 
-    for (QString road : roads) {
-        ui->roadSelectionBox->addItem(DataManager::roads().value(road)->name(), road);
+    for (QString r : roads) {
+        Road* road = DataManager::roads().value(r);
+        ui->roadSelectionBox->addItem(QStringLiteral("%1 (%2)").arg(road->name(), road->humanReadableType()), r);
     }
 
     d->firstKey = DataManager::nodes().key(d->first);

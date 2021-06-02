@@ -87,6 +87,13 @@ QString Road::type() {
     return d->type;
 }
 
+QString Road::humanReadableType() {
+    for (QPair<QString, QString> type : roadTypes()) {
+        if (type.first == d->type) return type.second;
+    }
+    return tr("Unknown");
+}
+
 QPen Road::pen(Edge* edge) {
     QBrush col = StateManager::nightMode() ? d->roadNightColours.value(d->type) : d->roadDayColours.value(d->type);
     double thickness = 5;

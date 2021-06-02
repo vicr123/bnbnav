@@ -34,6 +34,7 @@ class Road : public QObject {
 
         QString name();
         QString type();
+        QString humanReadableType();
         QPen pen(Edge* edge);
 
         double penalty();

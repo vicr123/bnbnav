@@ -93,6 +93,9 @@ public:
 
         retranslateUi(NewRoadDialog);
 
+        okButton->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(NewRoadDialog);
     } // setupUi
 

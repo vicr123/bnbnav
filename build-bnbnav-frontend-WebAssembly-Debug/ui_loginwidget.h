@@ -119,6 +119,7 @@ public:
 
 
         retranslateUi(LoginWidget);
+        QObject::connect(loginUsernameBox, SIGNAL(returnPressed()), loginButton, SLOT(click()));
 
         stackedWidget->setCurrentIndex(0);
 

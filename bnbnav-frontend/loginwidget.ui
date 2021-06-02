@@ -125,5 +125,22 @@
   </layout>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>loginUsernameBox</sender>
+   <signal>returnPressed()</signal>
+   <receiver>loginButton</receiver>
+   <slot>click()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>350</x>
+     <y>55</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>350</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

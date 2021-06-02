@@ -94,6 +94,9 @@ public:
 
         retranslateUi(NodeConnectDialog);
 
+        okButton->setDefault(true);
+
+
         QMetaObject::connectSlotsByName(NodeConnectDialog);
     } // setupUi
 
