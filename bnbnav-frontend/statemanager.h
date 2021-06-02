@@ -98,6 +98,9 @@ class StateManager : public QObject {
         static void setSelectedLandmark(Landmark* landmark);
         static Landmark* selectedLandmark();
 
+        static void setNightMode(bool nightMode);
+        static bool nightMode();
+
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);
@@ -105,6 +108,7 @@ class StateManager : public QObject {
         void routeChanged();
         void currentInstructionChanged();
         void selectedLandmarkChanged();
+        void nightModeChanged();
 
     private:
         explicit StateManager(QObject* parent = nullptr);

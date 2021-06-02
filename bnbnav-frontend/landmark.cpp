@@ -92,6 +92,9 @@ QList<QPair<QString, QString>> Landmark::landmarks() {
         {"generic-gray", tr("Generic Gray")},
         {"city-hall", tr("City Hall")},
         {"cafe", tr("Coffee Shop")},
-        {"shopping", tr("Store")}
+        {"shopping", tr("Store")},
+        {"restaurant", tr("Restaurant")},
+        {"park", tr("Park")},
+        {"court", tr("Courthouse")}
     };
 }

@@ -46,7 +46,8 @@ struct StateManagerPrivate {
 
     Landmark* selectedLandmark;
 
-    bool followMe;
+    bool followMe = false;
+    bool nightMode = false;
 };
 
 StateManager* StateManager::instance() {
@@ -238,6 +239,15 @@ void StateManager::setSelectedLandmark(Landmark* landmark) {
 
 Landmark* StateManager::selectedLandmark() {
     return instance()->d->selectedLandmark;
+}
+
+void StateManager::setNightMode(bool nightMode) {
+    instance()->d->nightMode = nightMode;
+    emit instance()->nightModeChanged();
+}
+
+bool StateManager::nightMode() {
+    return instance()->d->nightMode;
 }
 
 StateManager::StateManager(QObject* parent) : QObject(parent) {

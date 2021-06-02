@@ -583,22 +583,25 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/logo.svg \
 		../bnbnav-frontend/pin.svg \
 		../bnbnav-frontend/Overpass-Regular.ttf \
-		../bnbnav-frontend/landmarks/walnut.svg \
-		../bnbnav-frontend/landmarks/airport.svg \
-		../bnbnav-frontend/landmarks/cafe.svg \
-		../bnbnav-frontend/landmarks/generic-blue.svg \
-		../bnbnav-frontend/landmarks/hospital.svg \
-		../bnbnav-frontend/landmarks/parking.svg \
-		../bnbnav-frontend/landmarks/tourist-attraction.svg \
 		../bnbnav-frontend/landmarks/invisible.svg \
-		../bnbnav-frontend/landmarks/generic-gray.svg \
-		../bnbnav-frontend/landmarks/aircs.svg \
-		../bnbnav-frontend/landmarks/generic-red.svg \
-		../bnbnav-frontend/landmarks/shopping.svg \
 		../bnbnav-frontend/landmarks/immigration-check.svg \
-		../bnbnav-frontend/landmarks/squid-transit.svg \
 		../bnbnav-frontend/landmarks/generic-green.svg \
+		../bnbnav-frontend/landmarks/park.svg \
+		../bnbnav-frontend/landmarks/walnut.svg \
+		../bnbnav-frontend/landmarks/restaurant.svg \
+		../bnbnav-frontend/landmarks/tourist-attraction.svg \
+		../bnbnav-frontend/landmarks/shopping.svg \
+		../bnbnav-frontend/landmarks/squid-transit.svg \
+		../bnbnav-frontend/landmarks/hospital.svg \
+		../bnbnav-frontend/landmarks/aircs.svg \
 		../bnbnav-frontend/landmarks/city-hall.svg \
+		../bnbnav-frontend/landmarks/court.svg \
+		../bnbnav-frontend/landmarks/airport.svg \
+		../bnbnav-frontend/landmarks/generic-blue.svg \
+		../bnbnav-frontend/landmarks/cafe.svg \
+		../bnbnav-frontend/landmarks/generic-gray.svg \
+		../bnbnav-frontend/landmarks/parking.svg \
+		../bnbnav-frontend/landmarks/generic-red.svg \
 		../bnbnav-frontend/directions/turn-aroud.svg \
 		../bnbnav-frontend/directions/merge.svg \
 		../bnbnav-frontend/directions/turn-around.svg \
@@ -5019,7 +5022,8 @@ road.o: ../bnbnav-frontend/road.cpp ../bnbnav-frontend/road.h \
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
-		../bnbnav-frontend/edge.h
+		../bnbnav-frontend/edge.h \
+		../bnbnav-frontend/statemanager.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o road.o ../bnbnav-frontend/road.cpp
 
 splashwidget.o: ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/splashwidget.h \

@@ -46,6 +46,9 @@ TopWidget::TopWidget(QWidget* parent) :
         ui->loginButton->setEnabled(StateManager::currentState() != StateManager::Go);
         ui->editModeButton->setChecked(StateManager::currentState() == StateManager::Edit);
     });
+    connect(StateManager::instance(), &StateManager::nightModeChanged, this, [ = ] {
+        ui->nightModeButton->setChecked(StateManager::nightMode());
+    });
 }
 
 TopWidget::~TopWidget() {
@@ -62,5 +65,10 @@ void TopWidget::on_editModeButton_toggled(bool checked) {
 
 void TopWidget::on_loginButton_clicked() {
     emit showLoginWidget();
+}
+
+
+void TopWidget::on_nightModeButton_toggled(bool checked) {
+    StateManager::setNightMode(checked);
 }
 

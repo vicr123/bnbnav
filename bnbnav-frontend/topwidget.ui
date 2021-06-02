@@ -45,6 +45,16 @@
     </widget>
    </item>
    <item>
+    <widget class="QPushButton" name="nightModeButton">
+     <property name="text">
+      <string>Night Mode</string>
+     </property>
+     <property name="checkable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item>
     <widget class="QPushButton" name="loginButton">
      <property name="text">
       <string notr="true">Log In</string>

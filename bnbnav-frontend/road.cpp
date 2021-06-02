@@ -22,15 +22,25 @@
 #include <QPen>
 #include <QJsonObject>
 #include "edge.h"
+#include "statemanager.h"
 
 struct RoadPrivate {
     QString name;
     QString type;
 
-    const QMap<QString, QColor> roadTypes = {
+    const QMap<QString, QColor> roadDayColours = {
         {"local", QColor(Qt::black)},
         {"main", QColor(245, 179, 66)},
         {"highway", QColor(173, 25, 9)},
+        {"motorway", QColor(105, 9, 173)},
+        {"footpath", QColor(150, 150, 150)},
+        {"waterway", QColor(0, 110, 150)},
+        {"private", QColor(100, 100, 100)}
+    };
+    const QMap<QString, QColor> roadNightColours = {
+        {"local", QColor(QColor(0, 80, 140))},
+        {"main", QColor(150, 100, 50)},
+        {"highway", QColor(115, 15, 0)},
         {"motorway", QColor(105, 9, 173)},
         {"footpath", QColor(150, 150, 150)},
         {"waterway", QColor(0, 110, 150)},
@@ -78,20 +88,23 @@ QString Road::type() {
 }
 
 QPen Road::pen(Edge* edge) {
-    QBrush col = d->roadTypes.value(d->type);
+    QBrush col = StateManager::nightMode() ? d->roadNightColours.value(d->type) : d->roadDayColours.value(d->type);
     double thickness = 5;
     if (d->type == "motorway") {
         QLineF perpendicular = edge->line();
         perpendicular.setLength(5);
         perpendicular = perpendicular.normalVector();
 
+        QColor outer = StateManager::nightMode() ? QColor(50, 0, 0) : QColor(100, 0, 0);
+        QColor inner = StateManager::nightMode() ? QColor(100, 100, 0) : QColor(200, 200, 0);
+
         QLinearGradient grad(perpendicular.pointAt(-1), perpendicular.pointAt(1));
-        grad.setColorAt(0, QColor(100, 0, 0));
-        grad.setColorAt(0.3, QColor(100, 0, 0));
-        grad.setColorAt(0.3001, QColor(200, 200, 0));
-        grad.setColorAt(0.6999, QColor(200, 200, 0));
-        grad.setColorAt(0.7, QColor(100, 0, 0));
-        grad.setColorAt(1, QColor(100, 0, 0));
+        grad.setColorAt(0, outer);
+        grad.setColorAt(0.3, outer);
+        grad.setColorAt(0.3001, inner);
+        grad.setColorAt(0.6999, inner);
+        grad.setColorAt(0.7, outer);
+        grad.setColorAt(1, outer);
         col = grad;
         thickness = 10;
     }

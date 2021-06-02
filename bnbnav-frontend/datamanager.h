@@ -42,6 +42,7 @@ class DataManager : public QObject {
 
         static Edge* edgeForNodes(Node* from, Node* to);
         static QList<Edge*> edgesFromNode(Node* from);
+        static QList<Edge*> edgesToNode(Node* to);
         static QSet<QString> roadsConnectedToNode(Node* node);
 
         static QList<Edge*> shortestPath(QPoint from, QPoint to);

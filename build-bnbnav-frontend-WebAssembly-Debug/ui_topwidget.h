@@ -26,6 +26,7 @@ public:
     QLabel *panLabel;
     QSpacerItem *horizontalSpacer;
     QPushButton *editModeButton;
+    QPushButton *nightModeButton;
     QPushButton *loginButton;
 
     void setupUi(QWidget *TopWidget)
@@ -52,6 +53,12 @@ public:
 
         horizontalLayout->addWidget(editModeButton);
 
+        nightModeButton = new QPushButton(TopWidget);
+        nightModeButton->setObjectName(QString::fromUtf8("nightModeButton"));
+        nightModeButton->setCheckable(true);
+
+        horizontalLayout->addWidget(nightModeButton);
+
         loginButton = new QPushButton(TopWidget);
         loginButton->setObjectName(QString::fromUtf8("loginButton"));
         loginButton->setText(QString::fromUtf8("Log In"));
@@ -67,6 +74,7 @@ public:
     void retranslateUi(QWidget *TopWidget)
     {
         editModeButton->setText(QCoreApplication::translate("TopWidget", "Edit Mode", nullptr));
+        nightModeButton->setText(QCoreApplication::translate("TopWidget", "Night Mode", nullptr));
         (void)TopWidget;
     } // retranslateUi
 

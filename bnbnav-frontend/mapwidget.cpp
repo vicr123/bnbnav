@@ -111,6 +111,20 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
         followPlayer();
     });
 
+
+    connect(StateManager::instance(), &StateManager::nightModeChanged, this, [ = ] {
+        QPalette pal;
+        if (StateManager::nightMode()) {
+            pal.setColor(QPalette::Window, QColor(0, 30, 50));
+            pal.setColor(QPalette::WindowText, Qt::white);
+        } else {
+            pal.setColor(QPalette::Window, Qt::white);
+            pal.setColor(QPalette::WindowText, Qt::black);
+        }
+        this->setPalette(pal);
+        updateBaseMap();
+    });
+
     updateBaseMap();
 }
 
@@ -194,6 +208,7 @@ void MapWidget::followPlayer() {
 void MapWidget::updateBaseMap() {
     QPainter painter(&d->baseMap);
 
+    QSet<Edge*> drawnEdges;
     QList<Edge*> edges = DataManager::edges().values();
     //Sort edges by average Y height
     std::stable_sort(edges.begin(), edges.end(), [ = ](Edge * first, Edge * second) {
@@ -207,9 +222,47 @@ void MapWidget::updateBaseMap() {
     });
     for (Edge* edge : qAsConst(edges)) {
         //Draw the edge
+        if (drawnEdges.contains(edge)) continue;
         if (edge->isTemporary()) continue;
+
+//        QPolygonF poly;
+//        poly.append(QPointF(edge->from()->x(), edge->from()->z()));
+//        poly.append(QPointF(edge->to()->x(), edge->to()->z()));
+
+//        Edge* tracking = edge;
+//        QList<Edge*> trackingEdges;
+
+//        do {
+//            trackingEdges = DataManager::edgesToNode(tracking->from());
+//            for (Edge* edge : trackingEdges) {
+//                if (edge->road() == tracking->road() && !drawnEdges.contains(edge)) {
+//                    poly.prepend(QPointF(edge->from()->x(), edge->from()->z()));
+//                    tracking = edge;
+//                    drawnEdges.insert(edge);
+//                    break;
+//                }
+//            }
+//        } while (trackingEdges.contains(tracking));
+
+//        tracking = edge;
+
+//        do {
+//            trackingEdges = DataManager::edgesFromNode(tracking->to());
+//            for (Edge* edge : trackingEdges) {
+//                if (edge->road() == tracking->road() && !drawnEdges.contains(edge)) {
+//                    poly.append(QPointF(edge->to()->x(), edge->to()->z()));
+//                    tracking = edge;
+//                    drawnEdges.insert(edge);
+//                    break;
+//                }
+//            }
+//        } while (trackingEdges.contains(tracking));
+
         painter.setPen(edge->road()->pen(edge));
         painter.drawLine(edge->line());
+//        painter.drawPolyline(poly);
+
+        drawnEdges.insert(edge);
     }
 
     for (Landmark* landmark : DataManager::landmarks().values()) {
@@ -293,6 +346,10 @@ void MapWidget::paintEvent(QPaintEvent* event) {
     QPointF goModeOrigin(this->width() / 2, this->height() * 0.8);
     {
         QPainter painter(this);
+
+        //Draw the background
+        painter.fillRect(0, 0, this->width(), this->height(), this->palette().color(QPalette::Window));
+
         painter.setWorldTransform(currentTransform());
         painter.setRenderHint(QPainter::Antialiasing);
 
@@ -337,7 +394,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             playerMarkRenderer.render(&painter, circle);
             painter.restore();
 
-            painter.setPen(Qt::black);
+            painter.setPen(StateManager::nightMode() ? Qt::white : Qt::black);
 
             circle.setSize(QSizeF(15, 15));
             if (goMode) {

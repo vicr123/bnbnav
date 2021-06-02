@@ -88,6 +88,14 @@ QList<Edge*> DataManager::edgesFromNode(Node* from) {
     return edges;
 }
 
+QList<Edge*> DataManager::edgesToNode(Node* to) {
+    QList<Edge*> edges;
+    for (Edge* edge : instance()->d->edges.values()) {
+        if (edge->to() == to) edges.append(edge);
+    }
+    return edges;
+}
+
 QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
     QSet<QString> roads;
     for (Edge* edge : instance()->d->edges.values()) {

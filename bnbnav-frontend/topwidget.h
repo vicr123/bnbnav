@@ -44,6 +44,8 @@ class TopWidget : public QWidget {
 
         void on_loginButton_clicked();
 
+        void on_nightModeButton_toggled(bool checked);
+
     private:
         Ui::TopWidget* ui;
 };

@@ -34,5 +34,8 @@
         <file>landmarks/city-hall.svg</file>
         <file>landmarks/shopping.svg</file>
         <file>landmarks/cafe.svg</file>
+        <file>landmarks/court.svg</file>
+        <file>landmarks/park.svg</file>
+        <file>landmarks/restaurant.svg</file>
     </qresource>
 </RCC>
