@@ -1,4 +1,4 @@
-name: Windows build
+name: macOS build
 
 on:
   push:
@@ -8,30 +8,27 @@ on:
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: macos-latest
     defaults:
       run:
         working-directory: ./bnbnav-frontend
     steps:
     - uses: actions/checkout@v2
-    - uses: ilammy/msvc-dev-cmd@v1
     - name: Install Qt
-      uses: jurplel/install-qt-action@v2
+      run: brew install qt@5
     - name: Run qmake
       run: qmake bnbnav-frontend.pro
     - name: Build
-      run: nmake
+      run: make
     - name: Prepare for deployment
       run: |
-        mkdir bnbnav-win
-        cp release/bnbnav.exe bnbnav-win
-        cp "C:/Program Files/OpenSSL/libcrypto-1_1-x64.dll" bnbnav-win
-        cp "C:/Program Files/OpenSSL/libssl-1_1-x64.dll" bnbnav-win
+        mkdir bnbnav-macos
+        cp -r bnbnav.app bnbnav-macos
     - name: Deploy
-      run: windeployqt bnbnav-win
+      run: macdeployqt bnbnav-macos/bnbnav-win
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.3
       with:
         # Artifact name
-        name: bnbnav-win
-        path: bnbnav-frontend/bnbnav-win
+        name: bnbnav-macos
+        path: bnbnav-frontend/bnbnav-macos

@@ -1,4 +1,5 @@
 QT       += core gui svg websockets
+TARGET = bnbnav
 
 !wasm {
     QT += texttospeech
@@ -93,6 +94,10 @@ DEFINES += WS_URL=\\\"wss://bnbnav.aircs.racing/ws\\\"
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
+
+macx {
+    ICON = icon.icns
+}
 
 RESOURCES += \
     resources.qrc \
