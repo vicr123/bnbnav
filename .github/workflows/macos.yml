@@ -29,4 +29,4 @@ jobs:
       with:
         # Artifact name
         name: bnbnav-macos.dmg
-        path: bnbnav-frontend/bnbnav-macos.dmg
+        path: bnbnav-frontend/bnbnav.dmg
