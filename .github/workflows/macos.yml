@@ -15,11 +15,11 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Install Qt
-      run: brew install qt@5
-    - name: Run qmake
       run: |
-        qmake bnbnav-frontend.pro
+        brew install qt@5
         echo "/usr/local/opt/qt@5/bin" >> $GITHUB_PATH
+    - name: Run qmake
+      run: qmake bnbnav-frontend.pro
     - name: Build
       run: make
     - name: Prepare for deployment
