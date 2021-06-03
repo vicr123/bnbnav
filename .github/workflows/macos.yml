@@ -27,7 +27,7 @@ jobs:
         mkdir bnbnav-macos
         cp -r bnbnav.app bnbnav-macos
     - name: Deploy
-      run: macdeployqt bnbnav-macos/bnbnav-win
+      run: macdeployqt bnbnav-macos/bnbnav.app
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.3
       with:
