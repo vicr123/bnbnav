@@ -71,6 +71,13 @@ FORMS += \
     statedialog.ui \
     topwidget.ui
 
+TRANSLATIONS += \
+    translations/vi_VN.ts \
+    translations/pt_BR.ts \
+    translations/nl_NL.ts \
+    translations/de_DE.ts \
+    translations/da_DK.ts
+
 wasm {
     HEADERS += ttsengines/wasmttsengine.h
     SOURCES += ttsengines/wasmttsengine.cpp
@@ -88,4 +95,5 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 RESOURCES += \
-    resources.qrc
+    resources.qrc \
+    translations.qrc

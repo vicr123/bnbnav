@@ -77,6 +77,7 @@ SOURCES       = ../bnbnav-frontend/datagatherer.cpp \
 		../bnbnav-frontend/ttsengines/dummyttsengine.cpp \
 		../bnbnav-frontend/ttsengines/wasmttsengine.cpp /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/bnbnav-frontend.js_plugin_import.cpp \
 		qrc_resources.cpp \
+		qrc_translations.cpp \
 		moc_datagatherer.cpp \
 		moc_datamanager.cpp \
 		moc_edge.cpp \
@@ -126,6 +127,7 @@ OBJECTS       = datagatherer.o \
 		wasmttsengine.o \
 		bnbnav-frontend.js_plugin_import.o \
 		qrc_resources.o \
+		qrc_translations.o \
 		moc_datagatherer.o \
 		moc_datamanager.o \
 		moc_edge.o \
@@ -393,6 +395,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 		/opt/qt5-wasm/mkspecs/features/lex.prf \
 		../bnbnav-frontend/bnbnav-frontend.pro \
 		../bnbnav-frontend/resources.qrc \
+		../bnbnav-frontend/translations.qrc \
 		/opt/qt5-wasm/plugins/platforms/libqwasm.prl \
 		/opt/qt5-wasm/plugins/iconengines/libqsvgicon.prl \
 		/opt/qt5-wasm/plugins/imageformats/libqgif.prl \
@@ -500,6 +503,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 /opt/qt5-wasm/mkspecs/features/lex.prf:
 ../bnbnav-frontend/bnbnav-frontend.pro:
 ../bnbnav-frontend/resources.qrc:
+../bnbnav-frontend/translations.qrc:
 /opt/qt5-wasm/plugins/platforms/libqwasm.prl:
 /opt/qt5-wasm/plugins/iconengines/libqsvgicon.prl:
 /opt/qt5-wasm/plugins/imageformats/libqgif.prl:
@@ -526,11 +530,12 @@ dist: distdir FORCE
 distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
-	$(COPY_FILE) --parents ../bnbnav-frontend/resources.qrc $(DISTDIR)/
+	$(COPY_FILE) --parents ../bnbnav-frontend/resources.qrc ../bnbnav-frontend/translations.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/qt5-wasm/mkspecs/features/data/dummy.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.h ../bnbnav-frontend/datamanager.h ../bnbnav-frontend/edge.h ../bnbnav-frontend/instructionmodel.h ../bnbnav-frontend/landmark.h ../bnbnav-frontend/locationentrybox.h ../bnbnav-frontend/locationentrycompleter.h ../bnbnav-frontend/loginwidget.h ../bnbnav-frontend/mainwindow.h ../bnbnav-frontend/mapwidget.h ../bnbnav-frontend/newlandmarkdialog.h ../bnbnav-frontend/newroaddialog.h ../bnbnav-frontend/node.h ../bnbnav-frontend/nodeconnectdialog.h ../bnbnav-frontend/player.h ../bnbnav-frontend/road.h ../bnbnav-frontend/splashwidget.h ../bnbnav-frontend/statedialog.h ../bnbnav-frontend/statemanager.h ../bnbnav-frontend/texttospeechengine.h ../bnbnav-frontend/topwidget.h ../bnbnav-frontend/ttsengines/dummyttsengine.h ../bnbnav-frontend/ttsengines/wasmttsengine.h $(DISTDIR)/
 	$(COPY_FILE) --parents ../bnbnav-frontend/datagatherer.cpp ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/instructionmodel.cpp ../bnbnav-frontend/landmark.cpp ../bnbnav-frontend/locationentrybox.cpp ../bnbnav-frontend/locationentrycompleter.cpp ../bnbnav-frontend/loginwidget.cpp ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mapwidget.cpp ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/node.cpp ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend/player.cpp ../bnbnav-frontend/road.cpp ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/texttospeechengine.cpp ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/ttsengines/dummyttsengine.cpp ../bnbnav-frontend/ttsengines/wasmttsengine.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../bnbnav-frontend/loginwidget.ui ../bnbnav-frontend/mainwindow.ui ../bnbnav-frontend/newlandmarkdialog.ui ../bnbnav-frontend/newroaddialog.ui ../bnbnav-frontend/nodeconnectdialog.ui ../bnbnav-frontend/splashwidget.ui ../bnbnav-frontend/statedialog.ui ../bnbnav-frontend/topwidget.ui $(DISTDIR)/
+	$(COPY_FILE) --parents translations/vi_VN.ts translations/pt_BR.ts translations/nl_NL.ts translations/de_DE.ts translations/da_DK.ts $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -574,9 +579,9 @@ compiler_appjs_clean:
 compiler_appsvg_make_all:
 compiler_appsvg_clean:
 	-$(DEL_FILE) qtlogo.svg
-compiler_rcc_make_all: qrc_resources.cpp
+compiler_rcc_make_all: qrc_resources.cpp qrc_translations.cpp
 compiler_rcc_clean:
-	-$(DEL_FILE) qrc_resources.cpp
+	-$(DEL_FILE) qrc_resources.cpp qrc_translations.cpp
 qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		/opt/qt5-wasm/bin/rcc \
 		../bnbnav-frontend/playermark.svg \
@@ -617,6 +622,11 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/directions/exit-left.svg \
 		../bnbnav-frontend/directions/continue-straight.svg
 	/opt/qt5-wasm/bin/rcc -name resources ../bnbnav-frontend/resources.qrc -o qrc_resources.cpp
+
+qrc_translations.cpp: ../bnbnav-frontend/translations.qrc \
+		/opt/qt5-wasm/bin/rcc \
+		../bnbnav-frontend/translations/vi_VN.qm
+	/opt/qt5-wasm/bin/rcc -name translations ../bnbnav-frontend/translations.qrc -o qrc_translations.cpp
 
 compiler_moc_predefs_make_all: moc_predefs.h
 compiler_moc_predefs_clean:
@@ -3953,6 +3963,8 @@ main.o: ../bnbnav-frontend/main.cpp ../bnbnav-frontend/mainwindow.h \
 		/opt/qt5-wasm/include/QtWidgets/qstylefactory.h \
 		/opt/qt5-wasm/include/QtGui/QFontDatabase \
 		/opt/qt5-wasm/include/QtGui/qfontdatabase.h \
+		/opt/qt5-wasm/include/QtCore/QTranslator \
+		/opt/qt5-wasm/include/QtCore/qtranslator.h \
 		../bnbnav-frontend/texttospeechengine.h \
 		/opt/qt5-wasm/include/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../bnbnav-frontend/main.cpp
@@ -5156,7 +5168,9 @@ splashwidget.o: ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/splashwid
 		/opt/qt5-wasm/include/QtSvg/QSvgRenderer \
 		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
 		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
-		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h
+		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h \
+		../bnbnav-frontend/datamanager.h \
+		/opt/qt5-wasm/include/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o splashwidget.o ../bnbnav-frontend/splashwidget.cpp
 
 statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog.h \
@@ -5337,7 +5351,11 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h \
 		../bnbnav-frontend/texttospeechengine.h \
 		../bnbnav-frontend/landmark.h \
-		../bnbnav-frontend/node.h
+		../bnbnav-frontend/node.h \
+		/opt/qt5-wasm/include/QtSvg/QSvgRenderer \
+		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
+		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
+		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o statedialog.o ../bnbnav-frontend/statedialog.cpp
 
 statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemanager.h \
@@ -5789,6 +5807,9 @@ bnbnav-frontend.js_plugin_import.o: /home/victor/Documents/Git/bnbnav/build-bnbn
 
 qrc_resources.o: qrc_resources.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_resources.o qrc_resources.cpp
+
+qrc_translations.o: qrc_translations.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o qrc_translations.o qrc_translations.cpp
 
 moc_datagatherer.o: moc_datagatherer.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o moc_datagatherer.o moc_datagatherer.cpp

@@ -120,7 +120,7 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
 
         if (edge->isTemporary()) continue;
 
-        bool isMultiRoad = false;
+        bool isMultiRoad = DataManager::edgesToNode(edge->from()).count() != DataManager::edgesFromNode(edge->from()).count();
         for (QString roadId : DataManager::roadsConnectedToNode(edge->from())) {
             if (DataManager::roads().value(roadId)->name() != edge->road()->name()) isMultiRoad = true;
         }
@@ -444,7 +444,7 @@ QString StateManager::Instruction::imageName() {
 
 //-600,320
 
-QString StateManager::InstructionVoicePrompt::speech() {
+QString StateManager::InstructionVoicePrompt::speech(InstructionVoicePrompt* thenInstruction) {
     Instruction inst = StateManager::currentInstructions().at(forInstruction);
 
     //Round the number
@@ -455,7 +455,9 @@ QString StateManager::InstructionVoicePrompt::speech() {
     blocks = qRound(blocks / roundIncrements) * roundIncrements;
 
     if (StateManager::blocksToNextInstruction() < 15) {
-        return inst.instructionString();
+        QString instructionString = inst.instructionString();
+        if (thenInstruction) instructionString += tr("Then, %1").arg(StateManager::currentInstructions().at(thenInstruction->forInstruction).instructionString());
+        return instructionString;
     } else if (StateManager::blocksToNextInstruction() > 500) {
         return tr("Stay on %1 for %n blocks", nullptr, blocks).arg(inst.fromEdge->road()->name());
     } else {

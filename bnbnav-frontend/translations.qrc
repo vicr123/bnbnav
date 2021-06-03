@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>translations/vi_VN.qm</file>
+    </qresource>
+</RCC>

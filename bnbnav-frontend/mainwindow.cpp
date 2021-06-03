@@ -73,6 +73,10 @@ MainWindow::MainWindow(QWidget* parent)
         d->splash->hide();
         d->stateDialog->show();
     });
+    connect(DataManager::instance(), &DataManager::loadError, this, [ = ] {
+        d->splash->show();
+        d->stateDialog->hide();
+    });
 
     connect(d->map, &MapWidget::routeFrom, d->stateDialog, &StateDialog::routeFrom);
     connect(d->map, &MapWidget::routeTo, d->stateDialog, &StateDialog::routeTo);

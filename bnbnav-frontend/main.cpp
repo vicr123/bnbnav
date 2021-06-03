@@ -22,6 +22,7 @@
 #include <QApplication>
 #include <QStyleFactory>
 #include <QFontDatabase>
+#include <QTranslator>
 #include "texttospeechengine.h"
 
 int main(int argc, char* argv[]) {
@@ -29,6 +30,10 @@ int main(int argc, char* argv[]) {
     a.setApplicationName("bnbnav");
     a.setOrganizationName("theSuite");
     a.setOrganizationDomain("vicr123.com");
+
+    QTranslator* translator = new QTranslator();
+    translator->load(QLocale(), "", "", ":/translations");
+    a.installTranslator(translator);
 
     QFontDatabase::addApplicationFont(":/Overpass-Regular.ttf");
     a.setFont(QFont("Overpass", 15));

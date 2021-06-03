@@ -293,12 +293,10 @@ void DataManager::resetTemporaries() {
     instance()->d->currentTemporaryNode = 0;
 }
 
-DataManager::DataManager(QObject* parent) : QObject(parent) {
-    d = new DataManagerPrivate();
-
-    connect(new DataGatherer("/data"), &DataGatherer::ready, this, [ = ](QByteArray data, bool error) {
+void DataManager::connectToServer() {
+    connect(new DataGatherer("/data"), &DataGatherer::ready, [ = ](QByteArray data, bool error) {
         if (error) {
-            emit loadError();
+            emit instance()->loadError();
             return;
         }
 
@@ -306,83 +304,104 @@ DataManager::DataManager(QObject* parent) : QObject(parent) {
 
         QJsonObject nodes = root.value("nodes").toObject();
         for (QString nodeId : nodes.keys()) {
-            d->nodes.insert(nodeId, new Node(nodes.value(nodeId).toObject()));
+            if (instance()->d->nodes.contains(nodeId)) {
+                instance()->d->nodes.value(nodeId)->redefine(nodes.value(nodeId).toObject());
+            } else {
+                instance()->d->nodes.insert(nodeId, new Node(nodes.value(nodeId).toObject()));
+            }
         }
 
         QJsonObject roads = root.value("roads").toObject();
         for (QString roadId : roads.keys()) {
-            d->roads.insert(roadId, new Road(roads.value(roadId).toObject()));
+            if (instance()->d->roads.contains(roadId)) {
+                instance()->d->roads.value(roadId)->redefine(roads.value(roadId).toObject());
+            } else {
+                instance()->d->roads.insert(roadId, new Road(roads.value(roadId).toObject()));
+            }
         }
 
         QJsonObject edges = root.value("edges").toObject();
         for (QString edgeId : edges.keys()) {
-            d->edges.insert(edgeId, new Edge(edges.value(edgeId).toObject()));
+            if (instance()->d->edges.contains(edgeId)) {
+                instance()->d->edges.value(edgeId)->redefine(edges.value(edgeId).toObject());
+            } else {
+                instance()->d->edges.insert(edgeId, new Edge(edges.value(edgeId).toObject()));
+            }
         }
 
         QJsonObject landmarks = root.value("landmarks").toObject();
         for (QString landmarkId : landmarks.keys()) {
-            d->landmarks.insert(landmarkId, new Landmark(landmarks.value(landmarkId).toObject()));
+            if (instance()->d->landmarks.contains(landmarkId)) {
+                instance()->d->landmarks.value(landmarkId)->redefine(landmarks.value(landmarkId).toObject());
+            } else {
+                instance()->d->landmarks.insert(landmarkId, new Landmark(landmarks.value(landmarkId).toObject()));
+            }
         }
 
-        emit ready();
+        emit instance()->ready();
     });
 
 
     QWebSocket* ws = new QWebSocket("localhost:4000");
     ws->open(QUrl(WS_URL));
-    connect(ws, &QWebSocket::aboutToClose, this, [ = ] {
-        emit loadError();
+    connect(ws, &QWebSocket::disconnected, [ = ] {
+        emit instance()->loadError();
     });
-    connect(ws, &QWebSocket::textMessageReceived, this, [ = ](QString message) {
+    connect(ws, &QWebSocket::textMessageReceived, [ = ](QString message) {
         QJsonObject object = QJsonDocument::fromJson(message.toUtf8()).object();
         QString type = object.value("type").toString();
         QString id = object.value("id").toString();
 
         if (type == "newNode") {
-            d->nodes.insert(id, new Node(object));
-            emit newNode();
+            instance()->d->nodes.insert(id, new Node(object));
+            emit instance()->newNode();
         } else if (type == "newRoad") {
-            d->roads.insert(id, new Road(object));
-            emit newRoad();
+            instance()->d->roads.insert(id, new Road(object));
+            emit instance()->newRoad();
         } else if (type == "newEdge") {
-            d->edges.insert(id, new Edge(object));
-            emit newEdge();
+            instance()->d->edges.insert(id, new Edge(object));
+            emit instance()->newEdge();
         } else if (type == "newLandmark") {
-            d->landmarks.insert(id, new Landmark(object));
-            emit newLandmark();
+            instance()->d->landmarks.insert(id, new Landmark(object));
+            emit instance()->newLandmark();
         } else if (type == "edgeRemoved") {
-            d->edges.remove(id);
-            emit removedEdge();
+            instance()->d->edges.remove(id);
+            emit instance()->removedEdge();
         } else if (type == "roadRemoved") {
-            d->roads.remove(id);
-            emit removedRoad();
+            instance()->d->roads.remove(id);
+            emit instance()->removedRoad();
         } else if (type == "nodeRemoved") {
-            d->nodes.remove(id);
-            emit removedNode();
+            instance()->d->nodes.remove(id);
+            emit instance()->removedNode();
         } else if (type == "landmarkRemoved") {
-            d->landmarks.remove(id);
-            emit removedLandmark();
+            instance()->d->landmarks.remove(id);
+            emit instance()->removedLandmark();
         } else if (type == "nodeUpdated") {
-            d->nodes.value(id)->redefine(object);
-            emit updatedNode();
+            instance()->d->nodes.value(id)->redefine(object);
+            emit instance()->updatedNode();
         } else if (type == "roadUpdated") {
-            d->roads.value(id)->redefine(object);
-            emit updatedRoad();
+            instance()->d->roads.value(id)->redefine(object);
+            emit instance()->updatedRoad();
         } else if (type == "playerMove") {
-            if (!d->players.contains(id)) {
-                if (d->allPlayers.contains(id)) {
-                    d->players.insert(id, d->allPlayers.value(id));
+            if (!instance()->d->players.contains(id)) {
+                if (instance()->d->allPlayers.contains(id)) {
+                    instance()->d->players.insert(id, instance()->d->allPlayers.value(id));
                 } else {
                     Player* p = new Player(id);
-                    d->allPlayers.insert(id, p);
-                    d->players.insert(id, p);
+                    instance()->d->allPlayers.insert(id, p);
+                    instance()->d->players.insert(id, p);
                 }
             }
-            d->players.value(id)->update(object);
-            emit playerUpdate(id);
+            instance()->d->players.value(id)->update(object);
+            emit instance()->playerUpdate(id);
         } else if (type == "playerGone") {
-            d->players.remove(id);
-            emit removedPlayer();
+            instance()->d->players.remove(id);
+            emit instance()->removedPlayer();
         }
     });
+}
+
+DataManager::DataManager(QObject* parent) : QObject(parent) {
+    d = new DataManagerPrivate();
+    connectToServer();
 }

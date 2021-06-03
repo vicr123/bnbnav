@@ -26,16 +26,18 @@ namespace Ui {
     class SplashWidget;
 }
 
-class SplashWidget : public QWidget
-{
+class SplashWidget : public QWidget {
         Q_OBJECT
 
     public:
-        explicit SplashWidget(QWidget *parent = nullptr);
+        explicit SplashWidget(QWidget* parent = nullptr);
         ~SplashWidget();
 
+    private slots:
+        void on_reconnectButton_clicked();
+
     private:
-        Ui::SplashWidget *ui;
+        Ui::SplashWidget* ui;
 };
 
 #endif // SPLASHWIDGET_H

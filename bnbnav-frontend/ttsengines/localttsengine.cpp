@@ -30,6 +30,7 @@ LocalTtsEngine::LocalTtsEngine(QObject* parent) : TextToSpeechEngine(parent) {
     QString preferredEngine;
     if (QTextToSpeech::availableEngines().contains("speechd")) preferredEngine = "speechd";
     d->tts = new QTextToSpeech(preferredEngine);
+    d->tts->setLocale(QLocale());
 }
 
 LocalTtsEngine::~LocalTtsEngine() {

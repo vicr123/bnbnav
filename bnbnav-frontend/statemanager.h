@@ -73,7 +73,7 @@ class StateManager : public QObject {
             int forInstruction;
             int atBlocks;
 
-            QString speech();
+            QString speech(InstructionVoicePrompt* thenInstruction);
         };
 
         static StateManager* instance();

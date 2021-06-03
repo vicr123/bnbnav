@@ -51,6 +51,8 @@ class DataManager : public QObject {
         static Edge* nextTemporaryEdge(Node* from, Node* to, Road* road);
         static void resetTemporaries();
 
+        static void connectToServer();
+
     signals:
         void ready();
         void newNode();

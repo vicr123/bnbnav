@@ -65,6 +65,10 @@ public:
     QWidget *currentRouteWidget;
     QHBoxLayout *horizontalLayout_4;
     QLabel *routeInformationLabel;
+    QWidget *thenWidget;
+    QHBoxLayout *horizontalLayout_5;
+    QLabel *label_2;
+    QLabel *thenIcon;
 
     void setupUi(QDialog *StateDialog)
     {
@@ -224,11 +228,38 @@ public:
         sizePolicy.setHeightForWidth(currentRouteWidget->sizePolicy().hasHeightForWidth());
         currentRouteWidget->setSizePolicy(sizePolicy);
         horizontalLayout_4 = new QHBoxLayout(currentRouteWidget);
+        horizontalLayout_4->setSpacing(0);
         horizontalLayout_4->setObjectName(QString::fromUtf8("horizontalLayout_4"));
+        horizontalLayout_4->setContentsMargins(0, 0, 0, 0);
         routeInformationLabel = new QLabel(currentRouteWidget);
         routeInformationLabel->setObjectName(QString::fromUtf8("routeInformationLabel"));
+        QSizePolicy sizePolicy1(QSizePolicy::Expanding, QSizePolicy::Preferred);
+        sizePolicy1.setHorizontalStretch(0);
+        sizePolicy1.setVerticalStretch(0);
+        sizePolicy1.setHeightForWidth(routeInformationLabel->sizePolicy().hasHeightForWidth());
+        routeInformationLabel->setSizePolicy(sizePolicy1);
+        routeInformationLabel->setMargin(9);
 
         horizontalLayout_4->addWidget(routeInformationLabel);
+
+        thenWidget = new QWidget(currentRouteWidget);
+        thenWidget->setObjectName(QString::fromUtf8("thenWidget"));
+        thenWidget->setAutoFillBackground(true);
+        horizontalLayout_5 = new QHBoxLayout(thenWidget);
+        horizontalLayout_5->setObjectName(QString::fromUtf8("horizontalLayout_5"));
+        label_2 = new QLabel(thenWidget);
+        label_2->setObjectName(QString::fromUtf8("label_2"));
+
+        horizontalLayout_5->addWidget(label_2);
+
+        thenIcon = new QLabel(thenWidget);
+        thenIcon->setObjectName(QString::fromUtf8("thenIcon"));
+        thenIcon->setText(QString::fromUtf8(""));
+
+        horizontalLayout_5->addWidget(thenIcon);
+
+
+        horizontalLayout_4->addWidget(thenWidget);
 
 
         verticalLayout_4->addWidget(currentRouteWidget);
@@ -267,6 +298,7 @@ public:
         goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(directionsTab), QCoreApplication::translate("StateDialog", "Directions", nullptr));
         routeInformationLabel->setText(QCoreApplication::translate("StateDialog", "Calculating...", nullptr));
+        label_2->setText(QCoreApplication::translate("StateDialog", "then", nullptr));
     } // retranslateUi
 
 };

@@ -22,6 +22,7 @@
 
 #include <QPainter>
 #include <QSvgRenderer>
+#include "datamanager.h"
 
 SplashWidget::SplashWidget(QWidget* parent) :
     QWidget(parent),
@@ -38,8 +39,18 @@ SplashWidget::SplashWidget(QWidget* parent) :
     renderer.render(&painter);
 
     ui->logoLabel->setPixmap(px);
+
+    connect(DataManager::instance(), &DataManager::loadError, this, [ = ] {
+        ui->stackedWidget->setCurrentWidget(ui->disconnectPage);
+    });
 }
 
 SplashWidget::~SplashWidget() {
     delete ui;
 }
+
+void SplashWidget::on_reconnectButton_clicked() {
+    DataManager::connectToServer();
+    ui->stackedWidget->setCurrentWidget(ui->splashPage);
+}
+

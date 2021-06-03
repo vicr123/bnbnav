@@ -32,6 +32,7 @@
 #include "texttospeechengine.h"
 #include "landmark.h"
 #include "node.h"
+#include <QSvgRenderer>
 
 struct StateDialogPrivate {
     QTimer* recalculateTimer;
@@ -78,6 +79,30 @@ StateDialog::StateDialog(QWidget* parent) :
 
         ui->currentInstructionWidget->update();
 
+        bool showNextInstruction = false;
+        if (instruction != StateManager::currentInstructions().length() - 1) {
+            StateManager::Instruction nextInstruction = StateManager::currentInstructions().value(instruction + 1);
+            if (nextInstruction.distance < 50) showNextInstruction = true;
+        }
+
+        if (showNextInstruction) {
+            StateManager::Instruction nextInstruction = StateManager::currentInstructions().value(instruction + 1);
+            ui->thenWidget->setVisible(true);
+
+            QPixmap px(QSize(16, 16));
+            px.fill(Qt::transparent);
+
+            QPainter painter(&px);
+
+            QSvgRenderer renderer(QStringLiteral(":/directions/%1.svg").arg(nextInstruction.imageName()));
+            renderer.render(&painter);
+            painter.end();
+
+            ui->thenIcon->setPixmap(px);
+        } else {
+            ui->thenWidget->setVisible(false);
+        }
+
         if (instruction == -1 && StateManager::currentState() == StateManager::Go) {
             ui->routeInformationLabel->setText(tr("Calculating..."));
             recalculateRoute();
@@ -107,7 +132,12 @@ StateDialog::StateDialog(QWidget* parent) :
                     StateManager::InstructionVoicePrompt prompt = StateManager::voicePrompts().at(i);
                     if (prompt.atBlocks > blocksToDestination) {
                         if (d->lastPrompt != prompt.atBlocks) {
-                            TextToSpeechEngine::instance()->say(prompt.speech());
+                            if (showNextInstruction) {
+                                StateManager::InstructionVoicePrompt thenPrompt = StateManager::voicePrompts().at(i - 1);
+                                TextToSpeechEngine::instance()->say(prompt.speech(&thenPrompt));
+                            } else {
+                                TextToSpeechEngine::instance()->say(prompt.speech(nullptr));
+                            }
                             d->lastPrompt = prompt.atBlocks;
                         }
                         break;
@@ -124,8 +154,18 @@ StateDialog::StateDialog(QWidget* parent) :
     pal.setBrush(QPalette::WindowText, Qt::white);
     ui->currentInstructionWidget->setPalette(pal);
 
+    QPalette thenPal = ui->thenWidget->palette();
+    pal.setBrush(QPalette::Window, QColor(0, 100, 0));
+    pal.setBrush(QPalette::WindowText, Qt::white);
+    ui->thenWidget->setPalette(pal);
+
     ui->currentInstructionWidget->installEventFilter(this);
     ui->stackedWidget->setCurrentWidget(ui->normalModePage);
+    ui->thenWidget->setVisible(false);
+
+    connect(DataManager::instance(), &DataManager::ready, this, [ = ] {
+        if (StateManager::currentState() == StateManager::Go) recalculateRoute();
+    });
 }
 
 StateDialog::~StateDialog() {

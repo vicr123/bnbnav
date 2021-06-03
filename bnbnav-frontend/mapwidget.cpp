@@ -225,6 +225,7 @@ void MapWidget::updateBaseMap() {
         QPolygonF poly;
         poly.append(QPointF(edge->from()->x(), edge->from()->z()));
         poly.append(QPointF(edge->to()->x(), edge->to()->z()));
+        drawnEdges.insert(edge);
 
         Edge* tracking = edge;
         QList<Edge*> trackingEdges;
@@ -259,7 +260,11 @@ void MapWidget::updateBaseMap() {
 //        painter.drawLine(edge->line());
         painter.drawPolyline(poly);
 
-        drawnEdges.insert(edge);
+        //Draw the road text
+
+        QString text = edge->road()->name();
+
+
     }
 
     for (Landmark* landmark : DataManager::landmarks().values()) {
@@ -539,8 +544,14 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
 void MapWidget::wheelEvent(QWheelEvent* event) {
     double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
-    d->scale *= factor;
+    double newScale = d->scale * factor;
+    if (newScale < 0.1) newScale = 0.1;
+    if (newScale > 50) newScale = 50;
+    factor = newScale / d->scale;
+
     d->origin = (d->origin - event->position()) * factor + event->position();
+    d->scale = newScale;
+
     this->update();
 }
 
