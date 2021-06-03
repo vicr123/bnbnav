@@ -22,15 +22,11 @@ jobs:
       run: qmake bnbnav-frontend.pro
     - name: Build
       run: make
-    - name: Prepare for deployment
-      run: |
-        mkdir bnbnav-macos
-        cp -r bnbnav.app bnbnav-macos
     - name: Deploy
-      run: macdeployqt bnbnav-macos/bnbnav.app
+      run: macdeployqt bnbnav.app -dmg
     - name: Upload a Build Artifact
       uses: actions/upload-artifact@v2.2.3
       with:
         # Artifact name
-        name: bnbnav-macos
-        path: bnbnav-frontend/bnbnav-macos
+        name: bnbnav-macos.dmg
+        path: bnbnav-frontend/bnbnav-macos.dmg
