@@ -47,6 +47,7 @@ class MapWidget : public QWidget {
         void doClick();
         void followPlayer();
         void updateBaseMap();
+        void zoom(double factor, QPointF origin);
 
         // QWidget interface
     protected:
@@ -56,6 +57,10 @@ class MapWidget : public QWidget {
         void mouseMoveEvent(QMouseEvent* event);
         void wheelEvent(QWheelEvent* event);
         void contextMenuEvent(QContextMenuEvent* event);
+
+        // QObject interface
+    public:
+        bool event(QEvent* event);
 };
 
 #endif // MAPWIDGET_H

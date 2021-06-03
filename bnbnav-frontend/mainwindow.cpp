@@ -63,6 +63,7 @@ MainWindow::MainWindow(QWidget* parent)
     d->login->installEventFilter(this);
 
     d->stateDialog = new StateDialog(this);
+    d->stateDialog->setWindowFlags(Qt::Tool);
 
     d->splash = new SplashWidget(this);
     d->splash->move(0, 0);

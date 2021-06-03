@@ -29,6 +29,8 @@
 #include <QSvgRenderer>
 #include <QPicture>
 #include <QBuffer>
+#include <QGestureEvent>
+#include <QPinchGesture>
 #include <QVariantAnimation>
 #include "nodeconnectdialog.h"
 #include "newlandmarkdialog.h"
@@ -126,6 +128,7 @@ MapWidget::MapWidget(QWidget* parent) : QWidget(parent) {
     });
 
     updateBaseMap();
+    grabGesture(Qt::PinchGesture);
 }
 
 void MapWidget::focusMap(QPoint point) {
@@ -273,6 +276,18 @@ void MapWidget::updateBaseMap() {
     }
 
     painter.end();
+
+    this->update();
+}
+
+void MapWidget::zoom(double factor, QPointF origin) {
+    double newScale = d->scale * factor;
+    if (newScale < 0.1) newScale = 0.1;
+    if (newScale > 50) newScale = 50;
+    factor = newScale / d->scale;
+
+    d->origin = (d->origin - origin) * factor + origin;
+    d->scale = newScale;
 
     this->update();
 }
@@ -543,16 +558,13 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 }
 
 void MapWidget::wheelEvent(QWheelEvent* event) {
-    double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
-    double newScale = d->scale * factor;
-    if (newScale < 0.1) newScale = 0.1;
-    if (newScale > 50) newScale = 50;
-    factor = newScale / d->scale;
-
-    d->origin = (d->origin - event->position()) * factor + event->position();
-    d->scale = newScale;
-
-    this->update();
+    if (event->phase() == Qt::NoScrollPhase) {
+        double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
+        zoom(factor, event->position());
+    } else {
+        d->origin += event->angleDelta();
+        this->update();
+    }
 }
 
 void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
@@ -627,4 +639,16 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
 
     menu->popup(event->globalPos());
     connect(menu, &QMenu::aboutToHide, menu, &QMenu::deleteLater);
+}
+
+
+bool MapWidget::event(QEvent* event) {
+    if (event->type() == QEvent::Gesture) {
+        QGestureEvent* e = static_cast<QGestureEvent*>(event);
+        QPinchGesture* gesture = qobject_cast<QPinchGesture*>(e->gesture(Qt::PinchGesture));
+        if (gesture) {
+            zoom(gesture->scaleFactor(), gesture->centerPoint());
+        }
+    }
+    return QWidget::event(event);
 }
