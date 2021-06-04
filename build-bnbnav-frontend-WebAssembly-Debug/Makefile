@@ -617,6 +617,8 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/directions/bear-right.svg \
 		../bnbnav-frontend/directions/bear-left.svg \
 		../bnbnav-frontend/directions/exit-right.svg \
+		../bnbnav-frontend/directions/enter-roundabout.svg \
+		../bnbnav-frontend/directions/leave-roundabout.svg \
 		../bnbnav-frontend/directions/turn-right.svg \
 		../bnbnav-frontend/directions/arrive.svg \
 		../bnbnav-frontend/directions/exit-left.svg \
@@ -5151,16 +5153,22 @@ splashwidget.o: ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/splashwid
 		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
 		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
 		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
-		/opt/qt5-wasm/include/QtWidgets/QLabel \
-		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
-		/opt/qt5-wasm/include/QtWidgets/qframe.h \
-		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
-		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
-		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
 		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
 		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
 		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
 		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
+		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
 		/opt/qt5-wasm/include/QtGui/QPainter \
 		/opt/qt5-wasm/include/QtGui/qpainter.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \

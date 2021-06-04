@@ -35,7 +35,8 @@ struct RoadPrivate {
         {"motorway", QColor(105, 9, 173)},
         {"footpath", QColor(150, 150, 150)},
         {"waterway", QColor(0, 110, 150)},
-        {"private", QColor(100, 100, 100)}
+        {"private", QColor(100, 100, 100)},
+        {"roundabout", QColor(Qt::black)},
     };
     const QMap<QString, QColor> roadNightColours = {
         {"local", QColor(QColor(0, 80, 140))},
@@ -44,7 +45,8 @@ struct RoadPrivate {
         {"motorway", QColor(105, 9, 173)},
         {"footpath", QColor(150, 150, 150)},
         {"waterway", QColor(0, 110, 150)},
-        {"private", QColor(100, 100, 100)}
+        {"private", QColor(100, 100, 100)},
+        {"roundabout", QColor(QColor(0, 80, 140))},
     };
 
     const QMap<QString, double> roadPenalties = {
@@ -54,7 +56,8 @@ struct RoadPrivate {
         {"motorway", 0.6},
         {"footpath", 1.5},
         {"waterway", 1},
-        {"private", 2}
+        {"private", 2},
+        {"roundabout", 1},
     };
 };
 
@@ -75,7 +78,8 @@ QList<QPair<QString, QString>> Road::roadTypes() {
         {"motorway", tr("Motorway")},
         {"footpath", tr("Footpath")},
         {"waterway", tr("Waterway")},
-        {"private", tr("Private Use Road")}
+        {"private", tr("Private Use Road")},
+        {"roundabout", tr("Roundabout")}
     };
 }
 

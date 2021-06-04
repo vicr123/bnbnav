@@ -37,5 +37,7 @@
         <file>landmarks/court.svg</file>
         <file>landmarks/park.svg</file>
         <file>landmarks/restaurant.svg</file>
+        <file>directions/enter-roundabout.svg</file>
+        <file>directions/leave-roundabout.svg</file>
     </qresource>
 </RCC>

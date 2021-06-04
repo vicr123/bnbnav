@@ -51,7 +51,9 @@ class StateManager : public QObject {
                 BearRight,
                 ExitLeft,
                 ExitRight,
-                Merge
+                Merge,
+                EnterRoundabout,
+                LeaveRoundabout
             };
 
             Node* node;
@@ -61,12 +63,17 @@ class StateManager : public QObject {
             double distance;
             double turnAngle;
 
+            int roundaboutExit = -1;
+            Edge* roundaboutExitEdge = nullptr;
+            double roundaboutExitAngle;
+
             QString humanReadableString(int distance);
             QString instructionString() const;
 
             int height();
             void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);
-            QString imageName();
+//            QString imageName();
+            QPixmap image(QSize size);
         };
 
         struct InstructionVoicePrompt {

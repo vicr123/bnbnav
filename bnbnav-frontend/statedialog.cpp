@@ -88,17 +88,7 @@ StateDialog::StateDialog(QWidget* parent) :
         if (showNextInstruction) {
             StateManager::Instruction nextInstruction = StateManager::currentInstructions().value(instruction + 1);
             ui->thenWidget->setVisible(true);
-
-            QPixmap px(QSize(16, 16));
-            px.fill(Qt::transparent);
-
-            QPainter painter(&px);
-
-            QSvgRenderer renderer(QStringLiteral(":/directions/%1.svg").arg(nextInstruction.imageName()));
-            renderer.render(&painter);
-            painter.end();
-
-            ui->thenIcon->setPixmap(px);
+            ui->thenIcon->setPixmap(nextInstruction.image(QSize(16, 16)));
         } else {
             ui->thenWidget->setVisible(false);
         }

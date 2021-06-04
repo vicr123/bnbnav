@@ -128,7 +128,30 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
         double turnAngle = 360 - edge->line().angleTo(previousEdge->line());
         inst.turnAngle = turnAngle;
 
-        if (turnAngle < 10 || turnAngle > 350) { //Straight!
+        if (edge->road()->type() == "roundabout") {
+            if (previousEdge->road()->type() == "roundabout") continue;
+
+            for (int j = i + 1; j < currentRoute().length(); j++) {
+                Edge* testEdge = currentRoute().at(j);
+                if (testEdge->road()->type() != "roundabout") {
+                    inst.roundaboutExit = j - i;
+                    inst.roundaboutExitEdge = testEdge;
+
+                    QLineF firstLine = previousEdge->line();
+                    firstLine.setAngle(firstLine.angle() - 180);
+                    inst.roundaboutExitAngle = firstLine.angleTo(testEdge->line());
+                    break;
+                }
+            }
+
+            inst.type = Instruction::EnterRoundabout;
+            instructions.append(inst);
+            currentLength = 0;
+        } else if (previousEdge->road()->type() == "roundabout") {
+            inst.type = Instruction::LeaveRoundabout;
+            instructions.append(inst);
+            currentLength = 0;
+        } else if (turnAngle < 10 || turnAngle > 350) { //Straight!
             if (isSameRoad) continue;
 
             inst.type = Instruction::ContinueStraight;
@@ -353,6 +376,14 @@ QString StateManager::Instruction::instructionString() const {
             return tr("Take the %1 exit on the right").arg(toEdge->road()->name());
         case StateManager::Instruction::Merge:
             return tr("Merge onto %1").arg(toEdge->road()->name());
+        case StateManager::Instruction::EnterRoundabout:
+            if (!roundaboutExitEdge) {
+                return tr("Enter the roundabout");
+            } else {
+                return tr("At the roundabout, take exit %1 onto %2").arg(roundaboutExit).arg(roundaboutExitEdge->road()->name());
+            }
+        case StateManager::Instruction::LeaveRoundabout:
+            return tr("Exit the roundabout onto %1").arg(toEdge->road()->name());
     }
     return tr("Get onto %1").arg(toEdge->road()->name());
 }
@@ -380,8 +411,7 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     imageRect.moveCenter(distanceText.center());
     imageRect.moveBottom(distanceText.top() - 9);
 
-    QSvgRenderer renderer(QStringLiteral(":/directions/%1.svg").arg(imageName()));
-    renderer.render(painter, imageRect);
+    painter->drawPixmap(imageRect, image(imageRect.size()));
 
     QRect roadText = rect;
     roadText.setLeft(distanceText.right() + 9);
@@ -392,7 +422,9 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     painter->setFont(roadFont);
 
     QString text;
-    if (toEdge) {
+    if (roundaboutExitEdge) {
+        text = roundaboutExitEdge->road()->name();
+    } else if (toEdge) {
         text = toEdge->road()->name();
     } else {
         text = tr("Arrive at the destination");
@@ -409,38 +441,99 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     painter->restore();
 }
 
-QString StateManager::Instruction::imageName() {
+QPixmap StateManager::Instruction::image(QSize size) {
+    QPixmap px(size);
+    px.fill(Qt::transparent);
+
+    QPainter painter(&px);
+
+    QString filename;
     switch (type) {
         case StateManager::Instruction::Departure:
-            return "depart";
+            filename = "depart";
+            break;
         case StateManager::Instruction::Arrival:
-            return "arrive";
+            filename = "arrive";
+            break;
         case StateManager::Instruction::ContinueStraight:
-            return "continue-straight";
+            filename = "continue-straight";
+            break;
         case StateManager::Instruction::BearLeft:
-            return "bear-left";
+            filename = "bear-left";
+            break;
         case StateManager::Instruction::TurnLeft:
-            return "turn-left";
+            filename = "turn-left";
+            break;
         case StateManager::Instruction::SharpLeft:
-            return "sharp-left";
+            filename = "sharp-left";
+            break;
         case StateManager::Instruction::TurnAround:
-            return "turn-around";
+            filename = "turn-around";
+            break;
         case StateManager::Instruction::SharpRight:
-            return "sharp-right";
+            filename = "sharp-right";
+            break;
         case StateManager::Instruction::TurnRight:
-            return "turn-right";
+            filename = "turn-right";
+            break;
         case StateManager::Instruction::BearRight:
-            return "bear-right";
+            filename = "bear-right";
+            break;
         case StateManager::Instruction::ExitLeft:
-            return "turn-left";
+            filename = "exit-left";
+            break;
         case StateManager::Instruction::ExitRight:
-            return "exit-right";
+            filename = "exit-right";
+            break;
         case StateManager::Instruction::Merge:
-            return "merge";
-    }
-    return "";
-}
+            filename = "merge";
+            break;
+        case StateManager::Instruction::EnterRoundabout:
+            if (roundaboutExit == -1) {
+                filename = "enter-roundabout";
+            } else {
+                QPen pen(QColor(255, 255, 255, 100), 0.2, Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin);
 
+                painter.setRenderHint(QPainter::Antialiasing);
+                painter.setWindow(QRect(-1, -1, 2, 2));
+                painter.setViewport(QRect(0, 0, size.width(), size.height()));
+                painter.setBrush(Qt::transparent);
+
+                QRectF circleRect(-0.2, -0.2, 0.4, 0.4);
+                painter.setPen(pen);
+                painter.drawEllipse(circleRect);
+
+                pen.setColor(Qt::white);
+                painter.setPen(pen);
+                painter.drawArc(circleRect, -90 * 16, this->roundaboutExitAngle * 16);
+
+                QLineF line(0, 0, 0, 1);
+                painter.drawLine(line.pointAt(0.2), line.pointAt(0.7));
+                line.setAngle(this->roundaboutExitAngle - 90);
+                painter.drawLine(line.pointAt(0.2), line.pointAt(0.7));
+
+                QPolygonF arrowhead;
+                arrowhead.append(QPointF(-0.3, -0.4));
+                arrowhead.append(QPointF(0, -0.7));
+                arrowhead.append(QPointF(0.3, -0.4));
+                painter.rotate(180 - this->roundaboutExitAngle);
+                painter.drawPolyline(arrowhead);
+
+                painter.end();
+                return px;
+            }
+            break;
+        case StateManager::Instruction::LeaveRoundabout:
+            filename = "leave-roundabout";
+            break;
+    }
+    QSvgRenderer renderer(QStringLiteral(":/directions/%1.svg").arg(filename));
+
+    renderer.render(&painter);
+    painter.end();
+
+    return px;
+}
 
 //-600,320
 
