@@ -95,6 +95,13 @@ qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
+wasm {
+    copydata.commands = $(COPY_DIR) $$PWD/data $$PWD/index.html $$OUT_PWD
+    first.depends = $(first) copydata
+    export(first.depends)
+    export(copydata.commands)
+    QMAKE_EXTRA_TARGETS += first copydata
+}
 macx {
     ICON = icon.icns
 }
