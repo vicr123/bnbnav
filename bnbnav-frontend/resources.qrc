@@ -39,5 +39,7 @@
         <file>landmarks/restaurant.svg</file>
         <file>directions/enter-roundabout.svg</file>
         <file>directions/leave-roundabout.svg</file>
+        <file>landmarks/bank.svg</file>
+        <file>landmarks/embassy.svg</file>
     </qresource>
 </RCC>

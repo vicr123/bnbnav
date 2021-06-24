@@ -221,6 +221,7 @@ DIST          = /opt/qt5-wasm/mkspecs/features/spec_pre.prf \
 		/opt/qt5-wasm/mkspecs/features/qt_config.prf \
 		/opt/qt5-wasm/mkspecs/wasm-emscripten/qmake.conf \
 		/opt/qt5-wasm/mkspecs/features/spec_post.prf \
+		../bnbnav-frontend/.qmake.stash \
 		/opt/qt5-wasm/mkspecs/features/exclusive_builds.prf \
 		/opt/qt5-wasm/mkspecs/features/toolchain.prf \
 		/opt/qt5-wasm/mkspecs/features/default_pre.prf \
@@ -370,6 +371,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 		/opt/qt5-wasm/mkspecs/features/qt_config.prf \
 		/opt/qt5-wasm/mkspecs/wasm-emscripten/qmake.conf \
 		/opt/qt5-wasm/mkspecs/features/spec_post.prf \
+		.qmake.stash \
 		/opt/qt5-wasm/mkspecs/features/exclusive_builds.prf \
 		/opt/qt5-wasm/mkspecs/features/toolchain.prf \
 		/opt/qt5-wasm/mkspecs/features/default_pre.prf \
@@ -477,6 +479,7 @@ Makefile: ../bnbnav-frontend/bnbnav-frontend.pro /opt/qt5-wasm/mkspecs/wasm-emsc
 /opt/qt5-wasm/mkspecs/features/qt_config.prf:
 /opt/qt5-wasm/mkspecs/wasm-emscripten/qmake.conf:
 /opt/qt5-wasm/mkspecs/features/spec_post.prf:
+.qmake.stash:
 /opt/qt5-wasm/mkspecs/features/exclusive_builds.prf:
 /opt/qt5-wasm/mkspecs/features/toolchain.prf:
 /opt/qt5-wasm/mkspecs/features/default_pre.prf:
@@ -590,6 +593,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/logo.svg \
 		../bnbnav-frontend/pin.svg \
 		../bnbnav-frontend/Overpass-Regular.ttf \
+		../bnbnav-frontend/landmarks/embassy.svg \
 		../bnbnav-frontend/landmarks/invisible.svg \
 		../bnbnav-frontend/landmarks/immigration-check.svg \
 		../bnbnav-frontend/landmarks/generic-green.svg \
@@ -605,6 +609,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/landmarks/court.svg \
 		../bnbnav-frontend/landmarks/airport.svg \
 		../bnbnav-frontend/landmarks/generic-blue.svg \
+		../bnbnav-frontend/landmarks/bank.svg \
 		../bnbnav-frontend/landmarks/cafe.svg \
 		../bnbnav-frontend/landmarks/generic-gray.svg \
 		../bnbnav-frontend/landmarks/parking.svg \
@@ -3814,6 +3819,37 @@ loginwidget.o: ../bnbnav-frontend/loginwidget.cpp ../bnbnav-frontend/loginwidget
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_loginwidget.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QGridLayout \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QLineEdit \
+		/opt/qt5-wasm/include/QtWidgets/qlineedit.h \
+		/opt/qt5-wasm/include/QtGui/qtextcursor.h \
+		/opt/qt5-wasm/include/QtGui/qtextformat.h \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtextoption.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
+		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
 		../bnbnav-frontend/statemanager.h \
 		/opt/qt5-wasm/include/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o loginwidget.o ../bnbnav-frontend/loginwidget.cpp
@@ -4050,8 +4086,23 @@ mainwindow.o: ../bnbnav-frontend/mainwindow.cpp ../bnbnav-frontend/mainwindow.h 
 		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
 		/opt/qt5-wasm/include/QtGui/qicon.h \
 		ui_mainwindow.h \
-		../bnbnav-frontend/mapwidget.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
 		/opt/qt5-wasm/include/QtWidgets/QWidget \
+		../bnbnav-frontend/topwidget.h \
+		../bnbnav-frontend/mapwidget.h \
 		../bnbnav-frontend/loginwidget.h \
 		../bnbnav-frontend/splashwidget.h \
 		../bnbnav-frontend/datamanager.h \
@@ -4320,13 +4371,54 @@ newlandmarkdialog.o: ../bnbnav-frontend/newlandmarkdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_newlandmarkdialog.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QComboBox \
+		/opt/qt5-wasm/include/QtWidgets/qcombobox.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/QGridLayout \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/QLineEdit \
+		/opt/qt5-wasm/include/QtWidgets/qlineedit.h \
+		/opt/qt5-wasm/include/QtGui/qtextcursor.h \
+		/opt/qt5-wasm/include/QtGui/qtextformat.h \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtextoption.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
 		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
 		/opt/qt5-wasm/include/QtCore/qdatetime.h \
 		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
@@ -4442,13 +4534,54 @@ newroaddialog.o: ../bnbnav-frontend/newroaddialog.cpp ../bnbnav-frontend/newroad
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_newroaddialog.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QComboBox \
+		/opt/qt5-wasm/include/QtWidgets/qcombobox.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/QGridLayout \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/QLineEdit \
+		/opt/qt5-wasm/include/QtWidgets/qlineedit.h \
+		/opt/qt5-wasm/include/QtGui/qtextcursor.h \
+		/opt/qt5-wasm/include/QtGui/qtextformat.h \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtextoption.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		/opt/qt5-wasm/include/QtCore/QJsonDocument \
 		/opt/qt5-wasm/include/QtCore/qjsondocument.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
 		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
 		/opt/qt5-wasm/include/QtCore/qdatetime.h \
 		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
@@ -4650,6 +4783,44 @@ nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_nodeconnectdialog.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QCheckBox \
+		/opt/qt5-wasm/include/QtWidgets/qcheckbox.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QComboBox \
+		/opt/qt5-wasm/include/QtWidgets/qcombobox.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/QGridLayout \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		/opt/qt5-wasm/include/QtCore/QSet \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
@@ -4657,7 +4828,6 @@ nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
 		/opt/qt5-wasm/include/QtCore/qdatetime.h \
 		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
@@ -4986,6 +5156,30 @@ splashwidget.o: ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/splashwid
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_splashwidget.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
+		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
 		/opt/qt5-wasm/include/QtGui/QPainter \
 		/opt/qt5-wasm/include/QtGui/qpainter.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \
@@ -5104,15 +5298,62 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_statedialog.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QListView \
+		/opt/qt5-wasm/include/QtWidgets/qlistview.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemview.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractscrollarea.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtCore/qitemselectionmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
+		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
+		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/QTabWidget \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QWidget \
+		../bnbnav-frontend/locationentrybox.h \
+		/opt/qt5-wasm/include/QtWidgets/QLineEdit \
+		/opt/qt5-wasm/include/QtWidgets/qlineedit.h \
+		/opt/qt5-wasm/include/QtGui/qtextcursor.h \
+		/opt/qt5-wasm/include/QtGui/qtextformat.h \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtextoption.h \
 		/opt/qt5-wasm/include/QtGui/QPainter \
 		/opt/qt5-wasm/include/QtGui/qpainter.h \
-		/opt/qt5-wasm/include/QtGui/qtextoption.h \
-		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
 		/opt/qt5-wasm/include/QtWidgets/QMenu \
 		/opt/qt5-wasm/include/QtWidgets/qmenu.h \
-		/opt/qt5-wasm/include/QtGui/qicon.h \
 		/opt/qt5-wasm/include/QtWidgets/qaction.h \
 		/opt/qt5-wasm/include/QtWidgets/qactiongroup.h \
 		/opt/qt5-wasm/include/QtGui/QMouseEvent \
@@ -5125,21 +5366,8 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/instructionmodel.h \
 		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
-		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
 		/opt/qt5-wasm/include/QtWidgets/QStyledItemDelegate \
 		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
-		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
-		/opt/qt5-wasm/include/QtGui/qvalidator.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
-		/opt/qt5-wasm/include/QtWidgets/qslider.h \
-		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
-		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
-		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
-		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
-		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
-		/opt/qt5-wasm/include/QtWidgets/qframe.h \
 		../bnbnav-frontend/texttospeechengine.h \
 		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/node.h \
@@ -5425,6 +5653,27 @@ topwidget.o: ../bnbnav-frontend/topwidget.cpp ../bnbnav-frontend/topwidget.h \
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_topwidget.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		/opt/qt5-wasm/include/QtCore/QSettings \
 		/opt/qt5-wasm/include/QtCore/qsettings.h \
 		../bnbnav-frontend/statemanager.h \
@@ -5663,7 +5912,7 @@ uninstall_target: FORCE
 
 install_js_file: first FORCE
 	@test -d $(INSTALL_ROOT)/opt/bnbnav/bin || mkdir -p $(INSTALL_ROOT)/opt/bnbnav/bin
-	$(QINSTALL_PROGRAM) /home/victor/Documents/Git/bnbnav/bnbnav-frontend/bnbnav.js $(INSTALL_ROOT)/opt/bnbnav/bin/bnbnav.js
+	$(QINSTALL) /home/victor/Documents/Git/bnbnav/build-bnbnav-frontend-WebAssembly-Debug/bnbnav.js $(INSTALL_ROOT)/opt/bnbnav/bin/bnbnav.js
 
 uninstall_js_file: FORCE
 	-$(DEL_FILE) -r $(INSTALL_ROOT)/opt/bnbnav/bin/bnbnav.js

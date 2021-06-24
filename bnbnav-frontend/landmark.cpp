@@ -95,6 +95,8 @@ QList<QPair<QString, QString>> Landmark::landmarks() {
         {"shopping", tr("Store")},
         {"restaurant", tr("Restaurant")},
         {"park", tr("Park")},
-        {"court", tr("Courthouse")}
+        {"court", tr("Courthouse")},
+        {"bank", tr("Bank")},
+        {"embassy", tr("Embassy")}
     };
 }
