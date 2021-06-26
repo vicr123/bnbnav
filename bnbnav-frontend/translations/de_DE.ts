@@ -6,32 +6,32 @@
     <message>
         <location filename="../landmark.cpp" line="68"/>
         <source>Unknown</source>
-        <translation type="unfinished"></translation>
+        <translation>Unbekannt</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="80"/>
         <source>AirCS Station</source>
-        <translation type="unfinished"></translation>
+        <translation>AirCS Station</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="81"/>
         <source>Airport</source>
-        <translation type="unfinished"></translation>
+        <translation>Flughafen</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="82"/>
         <source>Hospital</source>
-        <translation type="unfinished"></translation>
+        <translation>Spital</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="83"/>
         <source>Squid Transit Station</source>
-        <translation type="unfinished"></translation>
+        <translation>Squid Transit Station</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="84"/>
         <source>Parking Lot</source>
-        <translation type="unfinished"></translation>
+        <translation>Parkplatz</translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="85"/>
