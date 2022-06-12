@@ -37,50 +37,55 @@ class StateManager : public QObject {
             Go
         };
 
+        enum RouteOption {
+            AvoidDuongWarp = 0x1
+        };
+        typedef QFlags<RouteOption> RouteOptions;
+
         struct Instruction {
-            enum InstructionType {
-                Departure,
-                Arrival,
-                ContinueStraight,
-                BearLeft,
-                TurnLeft,
-                SharpLeft,
-                TurnAround,
-                SharpRight,
-                TurnRight,
-                BearRight,
-                ExitLeft,
-                ExitRight,
-                Merge,
-                EnterRoundabout,
-                LeaveRoundabout
-            };
+                enum InstructionType {
+                    Departure,
+                    Arrival,
+                    ContinueStraight,
+                    BearLeft,
+                    TurnLeft,
+                    SharpLeft,
+                    TurnAround,
+                    SharpRight,
+                    TurnRight,
+                    BearRight,
+                    ExitLeft,
+                    ExitRight,
+                    Merge,
+                    EnterRoundabout,
+                    LeaveRoundabout
+                };
 
-            Node* node;
-            Edge* fromEdge;
-            Edge* toEdge;
-            InstructionType type;
-            double distance;
-            double turnAngle;
+                Node* node;
+                Edge* fromEdge;
+                Edge* toEdge;
+                InstructionType type;
+                double distance;
+                double turnAngle;
 
-            int roundaboutExit = -1;
-            Edge* roundaboutExitEdge = nullptr;
-            double roundaboutExitAngle;
+                int roundaboutExit = -1;
+                Edge* roundaboutExitEdge = nullptr;
+                double roundaboutExitAngle;
 
-            QString humanReadableString(int distance);
-            QString instructionString() const;
+                QString humanReadableString(int distance);
+                QString instructionString() const;
 
-            int height();
-            void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);
-//            QString imageName();
-            QPixmap image(QSize size);
+                int height();
+                void render(QPainter* painter, QRect rect, QFont font, QPalette pal, int distance);
+                //            QString imageName();
+                QPixmap image(QSize size);
         };
 
         struct InstructionVoicePrompt {
-            int forInstruction;
-            int atBlocks;
+                int forInstruction;
+                int atBlocks;
 
-            QString speech(InstructionVoicePrompt* thenInstruction);
+                QString speech(InstructionVoicePrompt* thenInstruction);
         };
 
         static StateManager* instance();
@@ -108,6 +113,9 @@ class StateManager : public QObject {
         static void setNightMode(bool nightMode);
         static bool nightMode();
 
+        static RouteOptions routeOptions();
+        static void setRouteOption(RouteOption option, bool on = true);
+
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);
@@ -116,6 +124,7 @@ class StateManager : public QObject {
         void currentInstructionChanged();
         void selectedLandmarkChanged();
         void nightModeChanged();
+        void routeOptionsChanged(RouteOptions options);
 
     private:
         explicit StateManager(QObject* parent = nullptr);

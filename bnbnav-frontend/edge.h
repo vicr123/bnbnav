@@ -33,6 +33,7 @@ class Edge : public QObject {
 
         QString id();
         bool isTemporary();
+        bool canSnapTo();
 
         Node* from();
         Node* to();

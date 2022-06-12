@@ -19,35 +19,37 @@
  * *************************************/
 #include "statemanager.h"
 
-#include <QSettings>
-#include <QSet>
 #include "datamanager.h"
 #include "edge.h"
-#include "road.h"
 #include "node.h"
 #include "player.h"
-#include <QLineF>
+#include "road.h"
 #include <QElapsedTimer>
+#include <QLineF>
 #include <QPainter>
 #include <QPalette>
+#include <QSet>
+#include <QSettings>
 #include <QSvgRenderer>
 #include <math.h>
 
 struct StateManagerPrivate {
-    StateManager::GlobalState state = StateManager::Browse;
-    QString login;
-    QList<Edge*> currentRoute;
+        StateManager::GlobalState state = StateManager::Browse;
+        QString login;
+        QList<Edge*> currentRoute;
 
-    QList<StateManager::Instruction> instructions;
-    int currentInstruction = -1;
-    double blocksToNextInstruction = 0;
-    bool isSnappedToRoute = false;
-    QElapsedTimer lastSnappedToRoute;
+        QList<StateManager::Instruction> instructions;
+        int currentInstruction = -1;
+        double blocksToNextInstruction = 0;
+        bool isSnappedToRoute = false;
+        QElapsedTimer lastSnappedToRoute;
 
-    Landmark* selectedLandmark;
+        Landmark* selectedLandmark;
 
-    bool followMe = false;
-    bool nightMode = false;
+        StateManager::RouteOptions routeOptions = 0;
+
+        bool followMe = false;
+        bool nightMode = false;
 };
 
 StateManager* StateManager::instance() {
@@ -97,7 +99,7 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
 
     QList<Instruction> instructions;
 
-    //Always add a departure instruction
+    // Always add a departure instruction
     Instruction departure;
     departure.type = Instruction::Departure;
     departure.node = currentRoute().first()->from();
@@ -151,43 +153,43 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
             inst.type = Instruction::LeaveRoundabout;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 10 || turnAngle > 350) { //Straight!
+        } else if (turnAngle < 10 || turnAngle > 350) { // Straight!
             if (isSameRoad) continue;
 
             inst.type = Instruction::ContinueStraight;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 80) { //Bear Left!
+        } else if (turnAngle < 80) { // Bear Left!
             if (!isMultiRoad) continue;
 
             inst.type = edge->road()->type() == "motorway" ? Instruction::Merge : (previousEdge->road()->type() == "motorway" ? Instruction::ExitLeft : Instruction::BearLeft);
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 100) { //Turn Left!
+        } else if (turnAngle < 100) { // Turn Left!
             if (!isMultiRoad) continue;
 
             inst.type = Instruction::TurnLeft;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 160) { //Sharp Left!
+        } else if (turnAngle < 160) { // Sharp Left!
             inst.type = Instruction::SharpLeft;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 200) { //U-turn!
+        } else if (turnAngle < 200) { // U-turn!
             inst.type = Instruction::TurnAround;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 260) { //Sharp Right!
+        } else if (turnAngle < 260) { // Sharp Right!
             inst.type = Instruction::SharpRight;
             instructions.append(inst);
             currentLength = 0;
-        } else if (turnAngle < 280) { //Turn Right!
+        } else if (turnAngle < 280) { // Turn Right!
             if (!isMultiRoad) continue;
 
             inst.type = Instruction::TurnRight;
             instructions.append(inst);
             currentLength = 0;
-        } else { //Bear Right!
+        } else { // Bear Right!
             if (!isMultiRoad) continue;
 
             inst.type = edge->road()->type() == "motorway" ? Instruction::Merge : (previousEdge->road()->type() == "motorway" ? Instruction::ExitRight : Instruction::BearRight);
@@ -196,7 +198,7 @@ void StateManager::setCurrentRoute(QList<Edge*> edges) {
         }
     }
 
-    //Always add an arrive instruction
+    // Always add an arrive instruction
     Instruction arrival;
     arrival.type = Instruction::Arrival;
     arrival.node = currentRoute().last()->to();
@@ -273,7 +275,21 @@ bool StateManager::nightMode() {
     return instance()->d->nightMode;
 }
 
-StateManager::StateManager(QObject* parent) : QObject(parent) {
+StateManager::RouteOptions StateManager::routeOptions() {
+    return instance()->d->routeOptions;
+}
+
+void StateManager::setRouteOption(RouteOption option, bool on) {
+    if (on) {
+        instance()->d->routeOptions |= option;
+    } else {
+        instance()->d->routeOptions &= ~option;
+    }
+    emit instance()->routeOptionsChanged(instance()->d->routeOptions);
+}
+
+StateManager::StateManager(QObject* parent) :
+    QObject(parent) {
     d = new StateManagerPrivate();
 
     QSettings settings;
@@ -281,7 +297,7 @@ StateManager::StateManager(QObject* parent) : QObject(parent) {
 
     connect(this, &StateManager::loginChanged, this, &StateManager::calculateCurrentInstruction);
     connect(this, &StateManager::routeChanged, this, &StateManager::calculateCurrentInstruction);
-    connect(DataManager::instance(), &DataManager::playerUpdate, this, [ = ](QString player) {
+    connect(DataManager::instance(), &DataManager::playerUpdate, this, [=](QString player) {
         if (player == d->login) calculateCurrentInstruction();
     });
 }
@@ -329,7 +345,7 @@ void StateManager::calculateCurrentInstruction() {
             d->blocksToNextInstruction += edge->length();
         }
         if (player->snappedEdge() == edge) {
-            //We found it!
+            // We found it!
             d->currentInstruction = instructionIndex;
             instructionFound = true;
 
@@ -337,7 +353,7 @@ void StateManager::calculateCurrentInstruction() {
             d->blocksToNextInstruction += distance.length();
         }
     }
-    //We should never get here?
+    // We should never get here?
 
     if (instructionFound) {
         emit currentInstructionChanged();
@@ -433,7 +449,7 @@ void StateManager::Instruction::render(QPainter* painter, QRect rect, QFont font
     painter->save();
     double width = QFontMetrics(roadFont).horizontalAdvance(text);
     if (width > roadText.width()) {
-        //Scale the painter
+        // Scale the painter
         painter->scale(roadText.width() / width, 1);
         roadText.setWidth(width);
     }
@@ -540,7 +556,7 @@ QPixmap StateManager::Instruction::image(QSize size) {
 QString StateManager::InstructionVoicePrompt::speech(InstructionVoicePrompt* thenInstruction) {
     Instruction inst = StateManager::currentInstructions().at(forInstruction);
 
-    //Round the number
+    // Round the number
     int log = log10(StateManager::blocksToNextInstruction());
     int roundIncrements = pow(10, log) / 20;
     if (roundIncrements == 0) roundIncrements = 5;

@@ -691,8 +691,8 @@ var wasmMemory;
 // In the wasm backend, we polyfill the WebAssembly object,
 // so this creates a (non-native-wasm) table for us.
 var wasmTable = new WebAssembly.Table({
-  'initial': 10894,
-  'maximum': 10894 + 0,
+  'initial': 10898,
+  'maximum': 10898 + 0,
   'element': 'anyfunc'
 });
 
@@ -1293,11 +1293,11 @@ function updateGlobalBufferAndViews(buf) {
 }
 
 var STATIC_BASE = 1024,
-    STACK_BASE = 9738224,
+    STACK_BASE = 9738416,
     STACKTOP = STACK_BASE,
-    STACK_MAX = 4495344,
-    DYNAMIC_BASE = 9738224,
-    DYNAMICTOP_PTR = 4495168;
+    STACK_MAX = 4495536,
+    DYNAMIC_BASE = 9738416,
+    DYNAMICTOP_PTR = 4495360;
 
 assert(STACK_BASE % 16 === 0, 'stack must start aligned');
 assert(DYNAMIC_BASE % 16 === 0, 'heap must start aligned');
@@ -1832,7 +1832,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
 
 
 
-// STATICTOP = STATIC_BASE + 4494320;
+// STATICTOP = STATIC_BASE + 4494512;
 /* global initializers */  __ATINIT__.push({ func: function() { ___wasm_call_ctors() } });
 
 
@@ -8306,7 +8306,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
     }
 
   function _emscripten_get_sbrk_ptr() {
-      return 4495168;
+      return 4495360;
     }
 
   
@@ -12675,7 +12675,7 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
   }
   
   
-  var _fetch_work_queue=4495328;function __emscripten_get_fetch_work_queue() {
+  var _fetch_work_queue=4495520;function __emscripten_get_fetch_work_queue() {
       return _fetch_work_queue;
     }function _emscripten_start_fetch(fetch, successcb, errorcb, progresscb, readystatechangecb) {
     if (typeof noExitRuntime !== 'undefined') noExitRuntime = true; // If we are the main Emscripten runtime, we should not be closing down.
@@ -13295,10 +13295,10 @@ function say(text,lang){ text = UTF8ToString(text); lang = UTF8ToString(lang); l
     }
 
   
-  var ___tm_current=4495184;
+  var ___tm_current=4495376;
   
   
-  var ___tm_timezone=(stringToUTF8("GMT", 4495232, 4), 4495232);
+  var ___tm_timezone=(stringToUTF8("GMT", 4495424, 4), 4495424);
   
   function _tzset() {
       // TODO: Use (malleable) environment variables instead of system settings.

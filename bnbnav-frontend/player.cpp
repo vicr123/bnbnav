@@ -19,34 +19,35 @@
  * *************************************/
 #include "player.h"
 
-#include <QPointF>
-#include <QLineF>
-#include <QPen>
-#include <QJsonObject>
-#include <QTimer>
+#include "datamanager.h"
 #include "edge.h"
 #include "road.h"
-#include "datamanager.h"
 #include "statemanager.h"
+#include <QJsonObject>
+#include <QLineF>
+#include <QPen>
+#include <QPointF>
+#include <QTimer>
 
 struct PlayerPrivate {
-    QString name;
-    double x, y, z;
+        QString name;
+        double x, y, z;
 
-    Edge* snappedEdge = nullptr;
-    QList<QPair<qint64, QPointF>> posHistory;
+        Edge* snappedEdge = nullptr;
+        QList<QPair<qint64, QPointF>> posHistory;
 
-    double markerAngle = 0;
+        double markerAngle = 0;
 };
 
-Player::Player(QString name, QObject* parent) : QObject(parent) {
+Player::Player(QString name, QObject* parent) :
+    QObject(parent) {
     d = new PlayerPrivate();
     d->name = name;
 
     QTimer* timer = new QTimer();
     timer->setInterval(50);
     timer->start();
-    connect(timer, &QTimer::timeout, this, [ = ] {
+    connect(timer, &QTimer::timeout, this, [=] {
         double targetAngle;
 
         if (d->snappedEdge) {
@@ -97,12 +98,13 @@ void Player::update(QJsonObject object) {
 
     QList<Edge*> candidateEdges;
     for (Edge* edge : DataManager::edges().values()) {
+        if (!edge->canSnapTo()) continue;
         QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF() * 2);
         if (hitbox.containsPoint(QPointF(d->x, d->z), Qt::OddEvenFill)) {
             double angle = edge->line().angleTo(this->velocity());
             if (angle > 180) angle = -360 + angle;
             if (qAbs(angle) < 45) {
-                //TODO: Prepend this edge if it's part of the current route
+                // TODO: Prepend this edge if it's part of the current route
                 if (StateManager::currentRoute().contains(edge)) {
                     candidateEdges.prepend(edge);
                 } else {
@@ -112,7 +114,7 @@ void Player::update(QJsonObject object) {
         }
     }
 
-    //Decide whether to change over to a new snapped edge
+    // Decide whether to change over to a new snapped edge
     bool changeEdge = false;
     if (!d->snappedEdge) changeEdge = true;
     if (!candidateEdges.contains(d->snappedEdge)) changeEdge = true;
@@ -144,7 +146,7 @@ Edge* Player::snappedEdge() {
 
 QPointF Player::markerCoordinates() {
     if (d->snappedEdge) {
-        //Find the intersection point
+        // Find the intersection point
         QLineF playerLine(d->x, d->z, d->x + 1, d->z);
         playerLine.setAngle(d->snappedEdge->line().normalVector().angle());
 

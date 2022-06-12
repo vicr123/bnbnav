@@ -19,20 +19,22 @@
  * *************************************/
 #include "edge.h"
 
-#include "road.h"
-#include "node.h"
 #include "datamanager.h"
+#include "node.h"
+#include "road.h"
+#include "statemanager.h"
 #include <QJsonObject>
 #include <QLineF>
 #include <QPolygonF>
 
 struct EdgePrivate {
-    Road* road;
-    Node* from;
-    Node* to;
+        Road* road;
+        Node* from;
+        Node* to;
 };
 
-Edge::Edge(QJsonObject definition, QObject* parent) : QObject(parent) {
+Edge::Edge(QJsonObject definition, QObject* parent) :
+    QObject(parent) {
     d = new EdgePrivate();
     redefine(definition);
 }
@@ -47,6 +49,11 @@ QString Edge::id() {
 
 bool Edge::isTemporary() {
     return this->id().startsWith("temp");
+}
+
+bool Edge::canSnapTo() {
+    if (this->road()->type() == "duong-warp") return false;
+    return true;
 }
 
 Node* Edge::from() {
@@ -89,7 +96,11 @@ double Edge::length() {
 }
 
 double Edge::routePenalty() {
-    return length() * d->road->penalty();
+    auto penalty = length() * d->road->penalty();
+    if (StateManager::routeOptions() & StateManager::AvoidDuongWarp && d->road->type() == "duong-warp") {
+        penalty = 100000;
+    }
+    return penalty;
 }
 
 QPointF Edge::closestPointTo(QPointF point) {

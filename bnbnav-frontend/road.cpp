@@ -19,49 +19,53 @@
  * *************************************/
 #include "road.h"
 
-#include <QPen>
-#include <QJsonObject>
 #include "edge.h"
 #include "statemanager.h"
+#include <QJsonObject>
+#include <QPen>
 
 struct RoadPrivate {
-    QString name;
-    QString type;
+        QString name;
+        QString type;
 
-    const QMap<QString, QColor> roadDayColours = {
-        {"local", QColor(Qt::black)},
-        {"main", QColor(245, 179, 66)},
-        {"highway", QColor(173, 25, 9)},
-        {"motorway", QColor(105, 9, 173)},
-        {"footpath", QColor(150, 150, 150)},
-        {"waterway", QColor(0, 110, 150)},
-        {"private", QColor(100, 100, 100)},
-        {"roundabout", QColor(Qt::black)},
-    };
-    const QMap<QString, QColor> roadNightColours = {
-        {"local", QColor(QColor(0, 80, 140))},
-        {"main", QColor(150, 100, 50)},
-        {"highway", QColor(115, 15, 0)},
-        {"motorway", QColor(105, 9, 173)},
-        {"footpath", QColor(150, 150, 150)},
-        {"waterway", QColor(0, 110, 150)},
-        {"private", QColor(100, 100, 100)},
-        {"roundabout", QColor(QColor(0, 80, 140))},
-    };
+        const QMap<QString, QColor> roadDayColours = {
+            {"local",     QColor(Qt::black)  },
+            {"main",      QColor(245,          179, 66)},
+            {"highway",        QColor(173,                           25, 9)},
+            {"motorway",QColor(105,9, 173)},
+            {"footpath",           QColor(150,                     150, 150)},
+            {"waterway",          QColor(0,                                         110, 150)},
+            {"private",  QColor(100, 100, 100)},
+            {"roundabout",       QColor(Qt::black)                         },
+            {"duong-warp",QColor(Qt::transparent)},
+        };
+        const QMap<QString, QColor> roadNightColours = {
+            {"local",     QColor(QColor(0,     80, 140))},
+            {"main",      QColor(150,                         100, 50)},
+            {"highway",QColor(115,15, 0)},
+            {"motorway",           QColor(105,                      9, 173)},
+            {"footpath",         QColor(150,                                       150, 150)},
+            {"waterway",  QColor(0, 110, 150)},
+            {"private",       QColor(100,                          100, 100)},
+            {"roundabout",QColor(QColor(0,80, 140))},
+            {"duong-warp",           QColor(Qt::transparent)                    },
+        };
 
-    const QMap<QString, double> roadPenalties = {
-        {"local", 1},
-        {"main", 0.8},
-        {"highway", 0.7},
-        {"motorway", 0.6},
-        {"footpath", 1.5},
-        {"waterway", 1},
-        {"private", 2},
-        {"roundabout", 1},
-    };
+        const QMap<QString, double> roadPenalties = {
+            {"local",      1  },
+            {"main",       0.8},
+            {"highway",    0.7},
+            {"motorway",   0.6},
+            {"footpath",   1.5},
+            {"waterway",   1  },
+            {"private",    2  },
+            {"roundabout", 1  },
+            {"duong-warp", 0  },
+        };
 };
 
-Road::Road(QJsonObject definition, QObject* parent) : QObject(parent) {
+Road::Road(QJsonObject definition, QObject* parent) :
+    QObject(parent) {
     d = new RoadPrivate();
     redefine(definition);
 }
@@ -72,14 +76,15 @@ Road::~Road() {
 
 QList<QPair<QString, QString>> Road::roadTypes() {
     return {
-        {"local", tr("Local Road")},
-        {"main", tr("Main Road")},
-        {"highway", tr("Highway")},
-        {"motorway", tr("Motorway")},
-        {"footpath", tr("Footpath")},
-        {"waterway", tr("Waterway")},
-        {"private", tr("Private Use Road")},
-        {"roundabout", tr("Roundabout")}
+        {"local",      tr("Local Road")      },
+        {"main",       tr("Main Road")       },
+        {"highway",    tr("Highway")         },
+        {"motorway",   tr("Motorway")        },
+        {"footpath",   tr("Footpath")        },
+        {"waterway",   tr("Waterway")        },
+        {"private",    tr("Private Use Road")},
+        {"roundabout", tr("Roundabout")      },
+        {"duong-warp", tr("Duong Warp")      },
     };
 }
 

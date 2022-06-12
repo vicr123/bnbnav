@@ -20,24 +20,24 @@
 #include "statedialog.h"
 #include "ui_statedialog.h"
 
-#include <QPainter>
-#include <QMessageBox>
-#include <QMenu>
-#include <QMouseEvent>
-#include <QTimer>
-#include "player.h"
-#include "statemanager.h"
 #include "datamanager.h"
 #include "instructionmodel.h"
-#include "texttospeechengine.h"
 #include "landmark.h"
 #include "node.h"
+#include "player.h"
+#include "statemanager.h"
+#include "texttospeechengine.h"
+#include <QMenu>
+#include <QMessageBox>
+#include <QMouseEvent>
+#include <QPainter>
 #include <QSvgRenderer>
+#include <QTimer>
 
 struct StateDialogPrivate {
-    QTimer* recalculateTimer;
+        QTimer* recalculateTimer;
 
-    int lastPrompt = -1;
+        int lastPrompt = -1;
 };
 
 StateDialog::StateDialog(QWidget* parent) :
@@ -49,17 +49,19 @@ StateDialog::StateDialog(QWidget* parent) :
     d->recalculateTimer = new QTimer();
     d->recalculateTimer->setInterval(3000);
     d->recalculateTimer->setSingleShot(true);
-    connect(d->recalculateTimer, &QTimer::timeout, this, [ = ] {
+    connect(d->recalculateTimer, &QTimer::timeout, this, [=] {
         if (StateManager::currentInstruction() == -1 && StateManager::currentState() == StateManager::Go) recalculateRoute();
     });
+
+    this->setupRouteOptions();
 
     ui->instructionList->setModel(new InstructionModel(this));
     ui->instructionList->setItemDelegate(new InstructionDelegate(this));
 
-    connect(StateManager::instance(), &StateManager::routeChanged, this, [ = ] {
+    connect(StateManager::instance(), &StateManager::routeChanged, this, [=] {
         ui->goModeButton->setEnabled(!StateManager::currentRoute().isEmpty());
     });
-    connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
+    connect(StateManager::instance(), &StateManager::stateChanged, this, [=] {
         if (StateManager::currentState() == StateManager::Go) {
             ui->stackedWidget->setCurrentWidget(ui->goModePage);
             this->setFixedSize(400, StateManager::currentInstructions().first().height() + ui->currentRouteWidget->sizeHint().height());
@@ -69,7 +71,7 @@ StateDialog::StateDialog(QWidget* parent) :
             this->setFixedSize(QWIDGETSIZE_MAX, QWIDGETSIZE_MAX);
         }
     });
-    connect(StateManager::instance(), &StateManager::currentInstructionChanged, this, [ = ] {
+    connect(StateManager::instance(), &StateManager::currentInstructionChanged, this, [=] {
         int instruction = StateManager::currentInstruction();
 
         QPalette pal = ui->currentInstructionWidget->palette();
@@ -99,9 +101,9 @@ StateDialog::StateDialog(QWidget* parent) :
         } else if (instruction != -1) {
             StateManager::Instruction inst = StateManager::currentInstructions().at(instruction);
             if (inst.type == StateManager::Instruction::Arrival && StateManager::blocksToNextInstruction() < 20) {
-                //That's it!
-                QTimer::singleShot(3000, [ = ] {
-                    //Leave Go mode
+                // That's it!
+                QTimer::singleShot(3000, [=] {
+                    // Leave Go mode
                     StateManager::setCurrentState(StateManager::Browse);
                 });
             }
@@ -117,7 +119,7 @@ StateDialog::StateDialog(QWidget* parent) :
             ui->routeInformationLabel->setText(routeInformation.join(" · "));
 
             if (StateManager::currentState() == StateManager::Go) {
-                //TTS
+                // TTS
                 for (int i = 0; i < StateManager::voicePrompts().length(); i++) {
                     StateManager::InstructionVoicePrompt prompt = StateManager::voicePrompts().at(i);
                     if (prompt.atBlocks > blocksToDestination) {
@@ -135,7 +137,6 @@ StateDialog::StateDialog(QWidget* parent) :
                 }
             }
         }
-
     });
     connect(StateManager::instance(), &StateManager::selectedLandmarkChanged, this, &StateDialog::updateLandmark);
 
@@ -153,8 +154,12 @@ StateDialog::StateDialog(QWidget* parent) :
     ui->stackedWidget->setCurrentWidget(ui->normalModePage);
     ui->thenWidget->setVisible(false);
 
-    connect(DataManager::instance(), &DataManager::ready, this, [ = ] {
+    connect(DataManager::instance(), &DataManager::ready, this, [=] {
         if (StateManager::currentState() == StateManager::Go) recalculateRoute();
+    });
+
+    connect(StateManager::instance(), &StateManager::routeOptionsChanged, this, [=](StateManager::RouteOptions routeOptions) {
+        if (!StateManager::currentRoute().isEmpty()) recalculateRoute();
     });
 }
 
@@ -223,7 +228,7 @@ void StateDialog::on_goModeButton_clicked() {
 }
 
 void StateDialog::recalculateRoute() {
-    //Reroute!
+    // Reroute!
     Player* player = DataManager::players().value(StateManager::login());
 
     QPoint start(player->x(), player->z());
@@ -233,7 +238,7 @@ void StateDialog::recalculateRoute() {
 
     d->lastPrompt = -1;
 
-    //Recalculate every 3 seconds until on track
+    // Recalculate every 3 seconds until on track
     d->recalculateTimer->start();
 }
 
@@ -266,7 +271,7 @@ bool StateDialog::eventFilter(QObject* watched, QEvent* event) {
         } else if (event->type() == QEvent::MouseButtonRelease) {
             QMouseEvent* e = static_cast<QMouseEvent*>(event);
             QMenu* menu = new QMenu(this);
-            menu->addAction(tr("Exit Go Mode"), this, [ = ] {
+            menu->addAction(tr("Exit Go Mode"), this, [=] {
                 StateManager::setCurrentState(StateManager::Browse);
             });
             menu->popup(e->globalPos());
@@ -279,7 +284,6 @@ void StateDialog::on_directionsToLandmarkButton_clicked() {
     routeTo(QPoint(StateManager::selectedLandmark()->node()->x(), StateManager::selectedLandmark()->node()->z()));
 }
 
-
 void StateDialog::on_searchButton_clicked() {
     if (ui->searchBox->landmark()) {
         StateManager::setSelectedLandmark(ui->searchBox->landmark());
@@ -287,3 +291,17 @@ void StateDialog::on_searchButton_clicked() {
     }
 }
 
+void StateDialog::setupRouteOptions() {
+    auto* routeOptionsMenu = new QMenu();
+    auto* avoidDuongWarpAction = routeOptionsMenu->addAction(tr("Avoid Duong Warp"));
+    ui->routeOptionsButton->setMenu(routeOptionsMenu);
+
+    avoidDuongWarpAction->setCheckable(true);
+    connect(avoidDuongWarpAction, &QAction::triggered, this, [=](bool checked) {
+        StateManager::setRouteOption(StateManager::AvoidDuongWarp, checked);
+    });
+
+    connect(StateManager::instance(), &StateManager::routeOptionsChanged, this, [=](StateManager::RouteOptions routeOptions) {
+        avoidDuongWarpAction->setChecked(routeOptions & StateManager::AvoidDuongWarp);
+    });
+}

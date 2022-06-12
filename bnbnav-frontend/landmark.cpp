@@ -66,6 +66,9 @@ QString Landmark::humanReadableType() {
     for (const QPair<QString, QString>& landmark : this->landmarks()) {
         if (landmark.first == d->type) return landmark.second;
     }
+    for (const QPair<QString, QString>& landmark : this->labels()) {
+        if (landmark.first == d->type) return landmark.second;
+    }
     return tr("Unknown");
 }
 

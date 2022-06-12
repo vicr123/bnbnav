@@ -60,6 +60,7 @@ class StateDialog : public QDialog {
         Ui::StateDialog* ui;
         StateDialogPrivate* d;
 
+        void setupRouteOptions();
         void recalculateRoute();
         void updateLandmark();
 

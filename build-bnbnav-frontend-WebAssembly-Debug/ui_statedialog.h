@@ -19,6 +19,7 @@
 #include <QtWidgets/QSpacerItem>
 #include <QtWidgets/QStackedWidget>
 #include <QtWidgets/QTabWidget>
+#include <QtWidgets/QToolButton>
 #include <QtWidgets/QVBoxLayout>
 #include <QtWidgets/QWidget>
 #include "locationentrybox.h"
@@ -53,6 +54,7 @@ public:
     LocationEntryBox *startLocationBox;
     LocationEntryBox *endLocationBox;
     QHBoxLayout *horizontalLayout;
+    QToolButton *routeOptionsButton;
     QSpacerItem *horizontalSpacer;
     QPushButton *getDirectionsButton;
     QListView *instructionList;
@@ -74,7 +76,7 @@ public:
     {
         if (StateDialog->objectName().isEmpty())
             StateDialog->setObjectName(QString::fromUtf8("StateDialog"));
-        StateDialog->resize(400, 279);
+        StateDialog->resize(400, 432);
         verticalLayout = new QVBoxLayout(StateDialog);
         verticalLayout->setObjectName(QString::fromUtf8("verticalLayout"));
         verticalLayout->setContentsMargins(0, 0, 0, 0);
@@ -171,6 +173,13 @@ public:
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
         horizontalLayout->setContentsMargins(-1, -1, -1, 0);
+        routeOptionsButton = new QToolButton(directionsTab);
+        routeOptionsButton->setObjectName(QString::fromUtf8("routeOptionsButton"));
+        routeOptionsButton->setPopupMode(QToolButton::InstantPopup);
+        routeOptionsButton->setArrowType(Qt::NoArrow);
+
+        horizontalLayout->addWidget(routeOptionsButton);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
@@ -274,8 +283,8 @@ public:
         QObject::connect(endLocationBox, SIGNAL(go()), getDirectionsButton, SLOT(click()));
         QObject::connect(searchBox, SIGNAL(go()), searchButton, SLOT(click()));
 
-        stackedWidget->setCurrentIndex(1);
-        tabWidget->setCurrentIndex(0);
+        stackedWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
         discoverStack->setCurrentIndex(0);
 
 
@@ -294,6 +303,7 @@ public:
         label->setText(QCoreApplication::translate("StateDialog", "Get Directions", nullptr));
         startLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "Start Location", nullptr));
         endLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "End Location", nullptr));
+        routeOptionsButton->setText(QCoreApplication::translate("StateDialog", "Route Options", nullptr));
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
         goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(directionsTab), QCoreApplication::translate("StateDialog", "Directions", nullptr));
