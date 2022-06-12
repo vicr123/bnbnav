@@ -1,7 +1,7 @@
 /****************************************
  *
  *   INSERT-PROJECT-NAME-HERE - INSERT-GENERIC-NAME-HERE
- *   Copyright (C) 2021 Victor Tran
+ *   Copyright (C) 2022 Victor Tran
  *
  *   This program is free software: you can redistribute it and/or modify
  *   it under the terms of the GNU General Public License as published by
@@ -17,36 +17,32 @@
  *   along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  * *************************************/
-#ifndef LANDMARK_H
-#define LANDMARK_H
+#ifndef NEWLABELDIALOG_H
+#define NEWLABELDIALOG_H
 
-#include <QObject>
+#include <QDialog>
 
+namespace Ui {
+    class NewLabelDialog;
+}
+
+struct NewLabelDialogPrivate;
 class Node;
-struct LandmarkPrivate;
-class Landmark : public QObject {
+class NewLabelDialog : public QDialog {
         Q_OBJECT
+
     public:
-        explicit Landmark(QJsonObject definition, QObject* parent = nullptr);
-        ~Landmark();
+        explicit NewLabelDialog(Node* node, QWidget* parent = nullptr);
+        ~NewLabelDialog();
 
-        void redefine(QJsonObject definition);
+    private slots:
+        void on_cancelButton_clicked();
 
-        Node* node();
-        QString name();
-        QString type();
-
-        QString humanReadableType();
-
-        QRectF hitbox();
-
-        static QList<QPair<QString, QString>> landmarks();
-        static QList<QPair<QString, QString>> labels();
-
-    signals:
+        void on_okButton_clicked();
 
     private:
-        LandmarkPrivate* d;
+        Ui::NewLabelDialog* ui;
+        NewLabelDialogPrivate* d;
 };
 
-#endif // LANDMARK_H
+#endif // NEWLABELDIALOG_H

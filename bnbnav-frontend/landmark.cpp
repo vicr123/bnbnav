@@ -20,17 +20,18 @@
 #include "landmark.h"
 
 #include "datamanager.h"
+#include "node.h"
 #include <QJsonObject>
 #include <QRectF>
-#include "node.h"
 
 struct LandmarkPrivate {
-    Node* node;
-    QString name;
-    QString type;
+        Node* node;
+        QString name;
+        QString type;
 };
 
-Landmark::Landmark(QJsonObject definition, QObject* parent) : QObject(parent) {
+Landmark::Landmark(QJsonObject definition, QObject* parent) :
+    QObject(parent) {
     d = new LandmarkPrivate();
     redefine(definition);
 }
@@ -77,26 +78,33 @@ QRectF Landmark::hitbox() {
 
 QList<QPair<QString, QString>> Landmark::landmarks() {
     return {
-        {"aircs", tr("AirCS Station")},
-        {"airport", tr("Airport")},
-        {"hospital", tr("Hospital")},
-        {"squid-transit", tr("Squid Transit Station")},
-        {"parking", tr("Parking Lot")},
-        {"walnut", tr("Walnut")},
-        {"immigration-check", tr("Immigration Border")},
-        {"tourist-attraction", tr("Tourist Attraction")},
-        {"invisible", tr("Invisible")},
-        {"generic-blue", tr("Generic Blue")},
-        {"generic-green", tr("Generic Green")},
-        {"generic-red", tr("Generic Red")},
-        {"generic-gray", tr("Generic Gray")},
-        {"city-hall", tr("City Hall")},
-        {"cafe", tr("Coffee Shop")},
-        {"shopping", tr("Store")},
-        {"restaurant", tr("Restaurant")},
-        {"park", tr("Park")},
-        {"court", tr("Courthouse")},
-        {"bank", tr("Bank")},
-        {"embassy", tr("Embassy")}
+        {"aircs",              tr("AirCS Station")        },
+        {"airport",            tr("Airport")              },
+        {"hospital",           tr("Hospital")             },
+        {"squid-transit",      tr("Squid Transit Station")},
+        {"parking",            tr("Parking Lot")          },
+        {"walnut",             tr("Walnut")               },
+        {"immigration-check",  tr("Immigration Border")   },
+        {"tourist-attraction", tr("Tourist Attraction")   },
+        {"invisible",          tr("Invisible")            },
+        {"generic-blue",       tr("Generic Blue")         },
+        {"generic-green",      tr("Generic Green")        },
+        {"generic-red",        tr("Generic Red")          },
+        {"generic-gray",       tr("Generic Gray")         },
+        {"city-hall",          tr("City Hall")            },
+        {"cafe",               tr("Coffee Shop")          },
+        {"shopping",           tr("Store")                },
+        {"restaurant",         tr("Restaurant")           },
+        {"park",               tr("Park")                 },
+        {"court",              tr("Courthouse")           },
+        {"bank",               tr("Bank")                 },
+        {"embassy",            tr("Embassy")              }
+    };
+}
+
+QList<QPair<QString, QString>> Landmark::labels() {
+    return {
+        {"label-city",    tr("City")   },
+        {"label-country", tr("Country")}
     };
 }

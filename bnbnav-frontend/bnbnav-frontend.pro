@@ -25,6 +25,7 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     mapwidget.cpp \
+    newlabeldialog.cpp \
     newlandmarkdialog.cpp \
     newroaddialog.cpp \
     node.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     loginwidget.h \
     mainwindow.h \
     mapwidget.h \
+    newlabeldialog.h \
     newlandmarkdialog.h \
     newroaddialog.h \
     node.h \
@@ -65,6 +67,7 @@ HEADERS += \
 FORMS += \
     loginwidget.ui \
     mainwindow.ui \
+    newlabeldialog.ui \
     newlandmarkdialog.ui \
     newroaddialog.ui \
     nodeconnectdialog.ui \
