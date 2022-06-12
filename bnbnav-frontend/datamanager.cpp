@@ -19,33 +19,33 @@
  * *************************************/
 #include "datamanager.h"
 
-#include <QJsonObject>
+#include "datagatherer.h"
+#include "edge.h"
+#include "landmark.h"
+#include "node.h"
+#include "player.h"
+#include "road.h"
+#include "statemanager.h"
 #include <QJsonDocument>
-#include <QWebSocket>
-#include <QPoint>
+#include <QJsonObject>
 #include <QLineF>
 #include <QPen>
-#include "statemanager.h"
-#include "node.h"
-#include "road.h"
-#include "edge.h"
-#include "player.h"
-#include "landmark.h"
-#include "datagatherer.h"
+#include <QPoint>
+#include <QWebSocket>
 
 struct DataManagerPrivate {
-    QMap<QString, Node*> nodes;
-    QMap<QString, Edge*> edges;
-    QMap<QString, Road*> roads;
-    QMap<QString, Landmark*> landmarks;
-    QMap<QString, Player*> players;
-    QMap<QString, Player*> allPlayers;
+        QMap<QString, Node*> nodes;
+        QMap<QString, Edge*> edges;
+        QMap<QString, Road*> roads;
+        QMap<QString, Landmark*> landmarks;
+        QMap<QString, Player*> players;
+        QMap<QString, Player*> allPlayers;
 
-    QMap<QString, Node*> temporaryNodes;
-    QMap<QString, Edge*> temporaryEdges;
+        QMap<QString, Node*> temporaryNodes;
+        QMap<QString, Edge*> temporaryEdges;
 
-    uint currentTemporaryEdge = 0;
-    uint currentTemporaryNode = 0;
+        uint currentTemporaryEdge = 0;
+        uint currentTemporaryNode = 0;
 };
 
 DataManager* DataManager::instance() {
@@ -109,9 +109,10 @@ QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
 QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEntity, QObject* toEntity) {
     Player* fromPlayer = qobject_cast<Player*>(fromEntity);
 
-    //Find the closest edge for each point
+    // Find the closest edge for each point
     QMultiMap<double, Edge*> point1Candidates, point2Candidates;
     for (Edge* edge : edges().values()) {
+        if (edge->road()->type() == "duong-warp") continue;
         QPolygonF hitbox = edge->hitbox(edge->road()->pen(edge).widthF());
         bool ok;
         double distance = edge->distanceTo(from, &ok);
@@ -138,9 +139,9 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
     Node* fromNode = nextTemporaryNode(from.x(), point1Candidates.first()->averageY(), from.y());
     Node* toNode = nextTemporaryNode(to.x(), point2Candidates.first()->averageY(), to.y());
 
-    //Construct edges and nodes to each candiate road
+    // Construct edges and nodes to each candiate road
     if (fromPlayer && fromPlayer->snappedEdge()) {
-        //Only consider the road that the player is snapped on
+        // Only consider the road that the player is snapped on
         nextTemporaryEdge(fromNode, fromPlayer->snappedEdge()->to(), fromPlayer->snappedEdge()->road());
     } else {
         double shortest1 = point1Candidates.firstKey();
@@ -169,10 +170,10 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
     }
 
     struct SearchNode {
-        Node* node;
-        double distance = 0;
-        bool visited = false;
-        Node* via = nullptr;
+            Node* node;
+            double distance = 0;
+            bool visited = false;
+            Node* via = nullptr;
     };
 
     QList<SearchNode*> nodes;
@@ -190,8 +191,8 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
     }
 
     while (!nodes.isEmpty()) {
-        //Sort the nodes by distance
-        std::sort(nodes.begin(), nodes.end(), [ = ](SearchNode * first, SearchNode * second) {
+        // Sort the nodes by distance
+        std::sort(nodes.begin(), nodes.end(), [=](SearchNode* first, SearchNode* second) {
             if (first->visited && second->visited) {
                 return first->distance < second->distance;
             } else if (first->visited) {
@@ -203,10 +204,10 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
             }
         });
 
-        //Inspect the stations!
+        // Inspect the stations!
         SearchNode* top = nodes.takeFirst();
         if (!top->visited) {
-            //No route found; bail here.
+            // No route found; bail here.
 
             qDeleteAll(searchNodes.values());
             return QList<Edge*>();
@@ -215,12 +216,11 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
         if (top->node == toNode) {
             QList<Edge*> edges;
 
-            //We found it!
+            // We found it!
             do {
                 edges.prepend(edgeForNodes(top->via, top->node));
                 top = searchNodes.value(top->via);
             } while (top->via != nullptr);
-
 
             qDeleteAll(searchNodes.values());
             return edges;
@@ -264,9 +264,9 @@ Node* DataManager::nextTemporaryNode(int x, int y, int z) {
 
 Edge* DataManager::nextTemporaryEdge(Node* from, Node* to, Road* road) {
     QJsonObject def = {
-        {"road", instance()->d->roads.key(road)},
+        {"road",  instance()->d->roads.key(road)},
         {"node1", instance()->d->nodes.key(from)},
-        {"node2", instance()->d->nodes.key(to)}
+        {"node2", instance()->d->nodes.key(to)  }
     };
     QString edgeName = QStringLiteral("temp%1").arg(++instance()->d->currentTemporaryNode);
     if (instance()->d->temporaryEdges.contains(edgeName)) {
@@ -294,7 +294,7 @@ void DataManager::resetTemporaries() {
 }
 
 void DataManager::connectToServer() {
-    connect(new DataGatherer("/data"), &DataGatherer::ready, [ = ](QByteArray data, bool error) {
+    connect(new DataGatherer("/data"), &DataGatherer::ready, [=](QByteArray data, bool error) {
         if (error) {
             emit instance()->loadError();
             return;
@@ -341,13 +341,12 @@ void DataManager::connectToServer() {
         emit instance()->ready();
     });
 
-
     QWebSocket* ws = new QWebSocket("localhost:4000");
     ws->open(QUrl(WS_URL));
-    connect(ws, &QWebSocket::disconnected, [ = ] {
+    connect(ws, &QWebSocket::disconnected, [=] {
         emit instance()->loadError();
     });
-    connect(ws, &QWebSocket::textMessageReceived, [ = ](QString message) {
+    connect(ws, &QWebSocket::textMessageReceived, [=](QString message) {
         QJsonObject object = QJsonDocument::fromJson(message.toUtf8()).object();
         QString type = object.value("type").toString();
         QString id = object.value("id").toString();
@@ -401,7 +400,8 @@ void DataManager::connectToServer() {
     });
 }
 
-DataManager::DataManager(QObject* parent) : QObject(parent) {
+DataManager::DataManager(QObject* parent) :
+    QObject(parent) {
     d = new DataManagerPrivate();
     connectToServer();
 }
