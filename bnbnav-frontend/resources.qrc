@@ -41,5 +41,8 @@
         <file>directions/leave-roundabout.svg</file>
         <file>landmarks/bank.svg</file>
         <file>landmarks/embassy.svg</file>
+        <file>landmarks/postal-office.svg</file>
+        <file>landmarks/hotel.svg</file>
+        <file>landmarks/frivoloco.svg</file>
     </qresource>
 </RCC>

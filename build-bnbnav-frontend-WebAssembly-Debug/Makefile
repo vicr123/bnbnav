@@ -600,6 +600,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/pin.svg \
 		../bnbnav-frontend/Overpass-Regular.ttf \
 		../bnbnav-frontend/landmarks/embassy.svg \
+		../bnbnav-frontend/landmarks/hotel.svg \
 		../bnbnav-frontend/landmarks/invisible.svg \
 		../bnbnav-frontend/landmarks/immigration-check.svg \
 		../bnbnav-frontend/landmarks/generic-green.svg \
@@ -609,6 +610,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/landmarks/tourist-attraction.svg \
 		../bnbnav-frontend/landmarks/shopping.svg \
 		../bnbnav-frontend/landmarks/squid-transit.svg \
+		../bnbnav-frontend/landmarks/frivoloco.svg \
 		../bnbnav-frontend/landmarks/hospital.svg \
 		../bnbnav-frontend/landmarks/aircs.svg \
 		../bnbnav-frontend/landmarks/city-hall.svg \
@@ -616,6 +618,7 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/landmarks/airport.svg \
 		../bnbnav-frontend/landmarks/generic-blue.svg \
 		../bnbnav-frontend/landmarks/bank.svg \
+		../bnbnav-frontend/landmarks/postal-office.svg \
 		../bnbnav-frontend/landmarks/cafe.svg \
 		../bnbnav-frontend/landmarks/generic-gray.svg \
 		../bnbnav-frontend/landmarks/parking.svg \
@@ -3174,8 +3177,15 @@ datamanager.o: ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/datamanager
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
-		/opt/qt5-wasm/include/QtCore/QJsonObject \
-		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		../bnbnav-frontend/datagatherer.h \
+		../bnbnav-frontend/edge.h \
+		../bnbnav-frontend/landmark.h \
+		../bnbnav-frontend/node.h \
+		../bnbnav-frontend/player.h \
+		../bnbnav-frontend/road.h \
+		../bnbnav-frontend/statemanager.h \
+		/opt/qt5-wasm/include/QtCore/QJsonDocument \
+		/opt/qt5-wasm/include/QtCore/qjsondocument.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
 		/opt/qt5-wasm/include/QtCore/qshareddata.h \
 		/opt/qt5-wasm/include/QtCore/qhash.h \
@@ -3196,8 +3206,33 @@ datamanager.o: ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/datamanager
 		/opt/qt5-wasm/include/QtCore/qurl.h \
 		/opt/qt5-wasm/include/QtCore/qurlquery.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
-		/opt/qt5-wasm/include/QtCore/QJsonDocument \
-		/opt/qt5-wasm/include/QtCore/qjsondocument.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/QLineF \
+		/opt/qt5-wasm/include/QtCore/qline.h \
+		/opt/qt5-wasm/include/QtGui/QPen \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
+		/opt/qt5-wasm/include/QtGui/qtgui-config.h \
+		/opt/qt5-wasm/include/QtGui/qcolor.h \
+		/opt/qt5-wasm/include/QtGui/qrgb.h \
+		/opt/qt5-wasm/include/QtGui/qrgba64.h \
+		/opt/qt5-wasm/include/QtGui/qbrush.h \
+		/opt/qt5-wasm/include/QtGui/qmatrix.h \
+		/opt/qt5-wasm/include/QtGui/qpolygon.h \
+		/opt/qt5-wasm/include/QtCore/qrect.h \
+		/opt/qt5-wasm/include/QtCore/qmargins.h \
+		/opt/qt5-wasm/include/QtCore/qsize.h \
+		/opt/qt5-wasm/include/QtGui/qregion.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
+		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
+		/opt/qt5-wasm/include/QtCore/qdatastream.h \
+		/opt/qt5-wasm/include/QtGui/qtransform.h \
+		/opt/qt5-wasm/include/QtGui/qimage.h \
+		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
+		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
+		/opt/qt5-wasm/include/QtGui/qpixmap.h \
+		/opt/qt5-wasm/include/QtCore/QPoint \
 		/opt/qt5-wasm/include/QtWebSockets/QWebSocket \
 		/opt/qt5-wasm/include/QtWebSockets/qwebsocket.h \
 		/opt/qt5-wasm/include/QtCore/QUrl \
@@ -3224,39 +3259,7 @@ datamanager.o: ../bnbnav-frontend/datamanager.cpp ../bnbnav-frontend/datamanager
 		/opt/qt5-wasm/include/QtNetwork/qsslsocket.h \
 		/opt/qt5-wasm/include/QtNetwork/qtcpsocket.h \
 		/opt/qt5-wasm/include/QtWebSockets/qwebsockets_global.h \
-		/opt/qt5-wasm/include/QtWebSockets/qwebsocketprotocol.h \
-		/opt/qt5-wasm/include/QtCore/QPoint \
-		/opt/qt5-wasm/include/QtCore/QLineF \
-		/opt/qt5-wasm/include/QtCore/qline.h \
-		/opt/qt5-wasm/include/QtGui/QPen \
-		/opt/qt5-wasm/include/QtGui/qpen.h \
-		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
-		/opt/qt5-wasm/include/QtGui/qtgui-config.h \
-		/opt/qt5-wasm/include/QtGui/qcolor.h \
-		/opt/qt5-wasm/include/QtGui/qrgb.h \
-		/opt/qt5-wasm/include/QtGui/qrgba64.h \
-		/opt/qt5-wasm/include/QtGui/qbrush.h \
-		/opt/qt5-wasm/include/QtGui/qmatrix.h \
-		/opt/qt5-wasm/include/QtGui/qpolygon.h \
-		/opt/qt5-wasm/include/QtCore/qrect.h \
-		/opt/qt5-wasm/include/QtCore/qmargins.h \
-		/opt/qt5-wasm/include/QtCore/qsize.h \
-		/opt/qt5-wasm/include/QtGui/qregion.h \
-		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
-		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
-		/opt/qt5-wasm/include/QtCore/qdatastream.h \
-		/opt/qt5-wasm/include/QtGui/qtransform.h \
-		/opt/qt5-wasm/include/QtGui/qimage.h \
-		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
-		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
-		/opt/qt5-wasm/include/QtGui/qpixmap.h \
-		../bnbnav-frontend/statemanager.h \
-		../bnbnav-frontend/node.h \
-		../bnbnav-frontend/road.h \
-		../bnbnav-frontend/edge.h \
-		../bnbnav-frontend/player.h \
-		../bnbnav-frontend/landmark.h \
-		../bnbnav-frontend/datagatherer.h
+		/opt/qt5-wasm/include/QtWebSockets/qwebsocketprotocol.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datamanager.o ../bnbnav-frontend/datamanager.cpp
 
 edge.o: ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/edge.h \
@@ -3313,9 +3316,10 @@ edge.o: ../bnbnav-frontend/edge.cpp ../bnbnav-frontend/edge.h \
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
-		../bnbnav-frontend/road.h \
-		../bnbnav-frontend/node.h \
 		../bnbnav-frontend/datamanager.h \
+		../bnbnav-frontend/node.h \
+		../bnbnav-frontend/road.h \
+		../bnbnav-frontend/statemanager.h \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
@@ -4491,6 +4495,48 @@ newlabeldialog.o: ../bnbnav-frontend/newlabeldialog.cpp ../bnbnav-frontend/newla
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_newlabeldialog.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QComboBox \
+		/opt/qt5-wasm/include/QtWidgets/qcombobox.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractitemdelegate.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyleoption.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractspinbox.h \
+		/opt/qt5-wasm/include/QtGui/qvalidator.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/qslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractslider.h \
+		/opt/qt5-wasm/include/QtWidgets/qstyle.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabbar.h \
+		/opt/qt5-wasm/include/QtWidgets/qtabwidget.h \
+		/opt/qt5-wasm/include/QtWidgets/qrubberband.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtCore/qabstractitemmodel.h \
+		/opt/qt5-wasm/include/QtWidgets/QGridLayout \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/QHBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/QLineEdit \
+		/opt/qt5-wasm/include/QtWidgets/qlineedit.h \
+		/opt/qt5-wasm/include/QtGui/qtextcursor.h \
+		/opt/qt5-wasm/include/QtGui/qtextformat.h \
+		/opt/qt5-wasm/include/QtGui/qpen.h \
+		/opt/qt5-wasm/include/QtGui/qtextoption.h \
+		/opt/qt5-wasm/include/QtWidgets/QPushButton \
+		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
 		../bnbnav-frontend/landmark.h \
 		/opt/qt5-wasm/include/QtCore/QObject \
 		../bnbnav-frontend/node.h \
@@ -4502,7 +4548,6 @@ newlabeldialog.o: ../bnbnav-frontend/newlabeldialog.cpp ../bnbnav-frontend/newla
 		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
 		/opt/qt5-wasm/include/QtCore/qdatetime.h \
 		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
 		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h
@@ -5135,7 +5180,32 @@ player.o: ../bnbnav-frontend/player.cpp ../bnbnav-frontend/player.h \
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
-		/opt/qt5-wasm/include/QtCore/QPointF \
+		../bnbnav-frontend/datamanager.h \
+		../bnbnav-frontend/edge.h \
+		../bnbnav-frontend/road.h \
+		../bnbnav-frontend/statemanager.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtCore/qurl.h \
+		/opt/qt5-wasm/include/QtCore/qurlquery.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtCore/QLineF \
 		/opt/qt5-wasm/include/QtCore/qline.h \
 		/opt/qt5-wasm/include/QtGui/QPen \
@@ -5155,40 +5225,15 @@ player.o: ../bnbnav-frontend/player.cpp ../bnbnav-frontend/player.h \
 		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
 		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
 		/opt/qt5-wasm/include/QtCore/qdatastream.h \
-		/opt/qt5-wasm/include/QtCore/qiodevice.h \
 		/opt/qt5-wasm/include/QtGui/qtransform.h \
 		/opt/qt5-wasm/include/QtGui/qimage.h \
 		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
 		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
 		/opt/qt5-wasm/include/QtGui/qpixmap.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
-		/opt/qt5-wasm/include/QtCore/qshareddata.h \
-		/opt/qt5-wasm/include/QtCore/qhash.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
-		/opt/qt5-wasm/include/QtCore/QJsonObject \
-		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
-		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
-		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
-		/opt/qt5-wasm/include/QtCore/qdatetime.h \
-		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qdebug.h \
-		/opt/qt5-wasm/include/QtCore/qmap.h \
-		/opt/qt5-wasm/include/QtCore/qtextstream.h \
-		/opt/qt5-wasm/include/QtCore/qlocale.h \
-		/opt/qt5-wasm/include/QtCore/qvariant.h \
-		/opt/qt5-wasm/include/QtCore/qset.h \
-		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
-		/opt/qt5-wasm/include/QtCore/qurl.h \
-		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h \
+		/opt/qt5-wasm/include/QtCore/QPointF \
 		/opt/qt5-wasm/include/QtCore/QTimer \
 		/opt/qt5-wasm/include/QtCore/qtimer.h \
-		/opt/qt5-wasm/include/QtCore/qbasictimer.h \
-		../bnbnav-frontend/edge.h \
-		../bnbnav-frontend/road.h \
-		../bnbnav-frontend/datamanager.h \
-		../bnbnav-frontend/statemanager.h
+		/opt/qt5-wasm/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o player.o ../bnbnav-frontend/player.cpp
 
 road.o: ../bnbnav-frontend/road.cpp ../bnbnav-frontend/road.h \
@@ -5245,6 +5290,30 @@ road.o: ../bnbnav-frontend/road.cpp ../bnbnav-frontend/road.h \
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
+		../bnbnav-frontend/edge.h \
+		../bnbnav-frontend/statemanager.h \
+		/opt/qt5-wasm/include/QtCore/QJsonObject \
+		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
+		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
+		/opt/qt5-wasm/include/QtCore/qdatetime.h \
+		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
+		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
+		/opt/qt5-wasm/include/QtCore/qurl.h \
+		/opt/qt5-wasm/include/QtCore/qurlquery.h \
+		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtGui/QPen \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
@@ -5262,36 +5331,12 @@ road.o: ../bnbnav-frontend/road.cpp ../bnbnav-frontend/road.h \
 		/opt/qt5-wasm/include/QtGui/qwindowdefs.h \
 		/opt/qt5-wasm/include/QtGui/qwindowdefs_win.h \
 		/opt/qt5-wasm/include/QtCore/qdatastream.h \
-		/opt/qt5-wasm/include/QtCore/qiodevice.h \
 		/opt/qt5-wasm/include/QtCore/qline.h \
 		/opt/qt5-wasm/include/QtGui/qtransform.h \
 		/opt/qt5-wasm/include/QtGui/qimage.h \
 		/opt/qt5-wasm/include/QtGui/qpaintdevice.h \
 		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
-		/opt/qt5-wasm/include/QtGui/qpixmap.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
-		/opt/qt5-wasm/include/QtCore/qshareddata.h \
-		/opt/qt5-wasm/include/QtCore/qhash.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
-		/opt/qt5-wasm/include/QtCore/QJsonObject \
-		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
-		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
-		/opt/qt5-wasm/include/QtCore/qcborvalue.h \
-		/opt/qt5-wasm/include/QtCore/qdatetime.h \
-		/opt/qt5-wasm/include/QtCore/qcborcommon.h \
-		/opt/qt5-wasm/include/QtCore/qdebug.h \
-		/opt/qt5-wasm/include/QtCore/qmap.h \
-		/opt/qt5-wasm/include/QtCore/qtextstream.h \
-		/opt/qt5-wasm/include/QtCore/qlocale.h \
-		/opt/qt5-wasm/include/QtCore/qvariant.h \
-		/opt/qt5-wasm/include/QtCore/qset.h \
-		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
-		/opt/qt5-wasm/include/QtCore/qregularexpression.h \
-		/opt/qt5-wasm/include/QtCore/qurl.h \
-		/opt/qt5-wasm/include/QtCore/qurlquery.h \
-		/opt/qt5-wasm/include/QtCore/quuid.h \
-		../bnbnav-frontend/edge.h \
-		../bnbnav-frontend/statemanager.h
+		/opt/qt5-wasm/include/QtGui/qpixmap.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o road.o ../bnbnav-frontend/road.cpp
 
 splashwidget.o: ../bnbnav-frontend/splashwidget.cpp ../bnbnav-frontend/splashwidget.h \
@@ -5582,6 +5627,8 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtWidgets/QStackedWidget \
 		/opt/qt5-wasm/include/QtWidgets/qstackedwidget.h \
 		/opt/qt5-wasm/include/QtWidgets/QTabWidget \
+		/opt/qt5-wasm/include/QtWidgets/QToolButton \
+		/opt/qt5-wasm/include/QtWidgets/qtoolbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
 		/opt/qt5-wasm/include/QtWidgets/QWidget \
 		../bnbnav-frontend/locationentrybox.h \
@@ -5591,33 +5638,33 @@ statedialog.o: ../bnbnav-frontend/statedialog.cpp ../bnbnav-frontend/statedialog
 		/opt/qt5-wasm/include/QtGui/qtextformat.h \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \
-		/opt/qt5-wasm/include/QtGui/QPainter \
-		/opt/qt5-wasm/include/QtGui/qpainter.h \
-		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
-		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
-		/opt/qt5-wasm/include/QtWidgets/QMenu \
-		/opt/qt5-wasm/include/QtWidgets/qmenu.h \
-		/opt/qt5-wasm/include/QtWidgets/qaction.h \
-		/opt/qt5-wasm/include/QtWidgets/qactiongroup.h \
-		/opt/qt5-wasm/include/QtGui/QMouseEvent \
-		/opt/qt5-wasm/include/QtCore/QTimer \
-		/opt/qt5-wasm/include/QtCore/qtimer.h \
-		/opt/qt5-wasm/include/QtCore/qbasictimer.h \
-		../bnbnav-frontend/player.h \
-		/opt/qt5-wasm/include/QtCore/QObject \
-		../bnbnav-frontend/statemanager.h \
 		../bnbnav-frontend/datamanager.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
 		../bnbnav-frontend/instructionmodel.h \
 		/opt/qt5-wasm/include/QtCore/QAbstractListModel \
 		/opt/qt5-wasm/include/QtWidgets/QStyledItemDelegate \
 		/opt/qt5-wasm/include/QtWidgets/qstyleditemdelegate.h \
-		../bnbnav-frontend/texttospeechengine.h \
 		../bnbnav-frontend/landmark.h \
 		../bnbnav-frontend/node.h \
+		../bnbnav-frontend/player.h \
+		../bnbnav-frontend/statemanager.h \
+		../bnbnav-frontend/texttospeechengine.h \
+		/opt/qt5-wasm/include/QtWidgets/QMenu \
+		/opt/qt5-wasm/include/QtWidgets/qmenu.h \
+		/opt/qt5-wasm/include/QtWidgets/qaction.h \
+		/opt/qt5-wasm/include/QtWidgets/qactiongroup.h \
+		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
+		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
+		/opt/qt5-wasm/include/QtGui/QMouseEvent \
+		/opt/qt5-wasm/include/QtGui/QPainter \
+		/opt/qt5-wasm/include/QtGui/qpainter.h \
 		/opt/qt5-wasm/include/QtSvg/QSvgRenderer \
 		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
 		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
-		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h
+		/opt/qt5-wasm/include/QtSvg/qtsvgglobal.h \
+		/opt/qt5-wasm/include/QtCore/QTimer \
+		/opt/qt5-wasm/include/QtCore/qtimer.h \
+		/opt/qt5-wasm/include/QtCore/qbasictimer.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o statedialog.o ../bnbnav-frontend/statedialog.cpp
 
 statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemanager.h \
@@ -5674,30 +5721,15 @@ statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemana
 		/opt/qt5-wasm/include/QtCore/qvarlengtharray.h \
 		/opt/qt5-wasm/include/QtCore/qcontainerfwd.h \
 		/opt/qt5-wasm/include/QtCore/qobject_impl.h \
-		/opt/qt5-wasm/include/QtCore/QSettings \
-		/opt/qt5-wasm/include/QtCore/qsettings.h \
-		/opt/qt5-wasm/include/QtCore/qvariant.h \
-		/opt/qt5-wasm/include/QtCore/qmap.h \
-		/opt/qt5-wasm/include/QtCore/qdebug.h \
-		/opt/qt5-wasm/include/QtCore/qhash.h \
-		/opt/qt5-wasm/include/QtCore/qtextstream.h \
-		/opt/qt5-wasm/include/QtCore/qiodevice.h \
-		/opt/qt5-wasm/include/QtCore/qlocale.h \
-		/opt/qt5-wasm/include/QtCore/qshareddata.h \
-		/opt/qt5-wasm/include/QtCore/qset.h \
-		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
-		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
-		/opt/qt5-wasm/include/QtCore/QSet \
 		../bnbnav-frontend/datamanager.h \
 		../bnbnav-frontend/edge.h \
-		../bnbnav-frontend/road.h \
 		../bnbnav-frontend/node.h \
 		../bnbnav-frontend/player.h \
-		/opt/qt5-wasm/include/QtCore/QLineF \
-		/opt/qt5-wasm/include/QtCore/qline.h \
+		../bnbnav-frontend/road.h \
 		/opt/qt5-wasm/include/QtCore/QElapsedTimer \
 		/opt/qt5-wasm/include/QtCore/qelapsedtimer.h \
+		/opt/qt5-wasm/include/QtCore/QLineF \
+		/opt/qt5-wasm/include/QtCore/qline.h \
 		/opt/qt5-wasm/include/QtGui/QPainter \
 		/opt/qt5-wasm/include/QtGui/qpainter.h \
 		/opt/qt5-wasm/include/QtGui/qtguiglobal.h \
@@ -5712,6 +5744,10 @@ statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemana
 		/opt/qt5-wasm/include/QtGui/qcolor.h \
 		/opt/qt5-wasm/include/QtGui/qrgb.h \
 		/opt/qt5-wasm/include/QtGui/qrgba64.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer.h \
+		/opt/qt5-wasm/include/QtCore/qshareddata.h \
+		/opt/qt5-wasm/include/QtCore/qhash.h \
+		/opt/qt5-wasm/include/QtCore/qsharedpointer_impl.h \
 		/opt/qt5-wasm/include/QtGui/qimage.h \
 		/opt/qt5-wasm/include/QtGui/qpixelformat.h \
 		/opt/qt5-wasm/include/QtGui/qtransform.h \
@@ -5719,6 +5755,7 @@ statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemana
 		/opt/qt5-wasm/include/QtGui/qpolygon.h \
 		/opt/qt5-wasm/include/QtGui/qregion.h \
 		/opt/qt5-wasm/include/QtCore/qdatastream.h \
+		/opt/qt5-wasm/include/QtCore/qiodevice.h \
 		/opt/qt5-wasm/include/QtGui/qtextoption.h \
 		/opt/qt5-wasm/include/QtGui/qpen.h \
 		/opt/qt5-wasm/include/QtGui/qbrush.h \
@@ -5727,6 +5764,16 @@ statemanager.o: ../bnbnav-frontend/statemanager.cpp ../bnbnav-frontend/statemana
 		/opt/qt5-wasm/include/QtGui/qfontmetrics.h \
 		/opt/qt5-wasm/include/QtGui/QPalette \
 		/opt/qt5-wasm/include/QtGui/qpalette.h \
+		/opt/qt5-wasm/include/QtCore/QSet \
+		/opt/qt5-wasm/include/QtCore/qset.h \
+		/opt/qt5-wasm/include/QtCore/QSettings \
+		/opt/qt5-wasm/include/QtCore/qsettings.h \
+		/opt/qt5-wasm/include/QtCore/qvariant.h \
+		/opt/qt5-wasm/include/QtCore/qmap.h \
+		/opt/qt5-wasm/include/QtCore/qdebug.h \
+		/opt/qt5-wasm/include/QtCore/qtextstream.h \
+		/opt/qt5-wasm/include/QtCore/qlocale.h \
+		/opt/qt5-wasm/include/QtCore/qcontiguouscache.h \
 		/opt/qt5-wasm/include/QtSvg/QSvgRenderer \
 		/opt/qt5-wasm/include/QtSvg/qsvgrenderer.h \
 		/opt/qt5-wasm/include/QtCore/qxmlstream.h \
