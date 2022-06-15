@@ -57,6 +57,7 @@ public:
     QToolButton *routeOptionsButton;
     QSpacerItem *horizontalSpacer;
     QPushButton *getDirectionsButton;
+    QLabel *errorLabel;
     QListView *instructionList;
     QHBoxLayout *horizontalLayout_2;
     QSpacerItem *horizontalSpacer_2;
@@ -192,6 +193,13 @@ public:
 
         verticalLayout_2->addLayout(horizontalLayout);
 
+        errorLabel = new QLabel(directionsTab);
+        errorLabel->setObjectName(QString::fromUtf8("errorLabel"));
+        errorLabel->setEnabled(false);
+        errorLabel->setWordWrap(true);
+
+        verticalLayout_2->addWidget(errorLabel);
+
         instructionList = new QListView(directionsTab);
         instructionList->setObjectName(QString::fromUtf8("instructionList"));
 
@@ -305,6 +313,7 @@ public:
         endLocationBox->setPlaceholderText(QCoreApplication::translate("StateDialog", "End Location", nullptr));
         routeOptionsButton->setText(QCoreApplication::translate("StateDialog", "Route Options", nullptr));
         getDirectionsButton->setText(QCoreApplication::translate("StateDialog", "Go", nullptr));
+        errorLabel->setText(QCoreApplication::translate("StateDialog", "We can't find that location. Please enter a valid location.", nullptr));
         goModeButton->setText(QCoreApplication::translate("StateDialog", "Start!", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(directionsTab), QCoreApplication::translate("StateDialog", "Directions", nullptr));
         routeInformationLabel->setText(QCoreApplication::translate("StateDialog", "Calculating...", nullptr));

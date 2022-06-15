@@ -154,12 +154,14 @@ StateDialog::StateDialog(QWidget* parent) :
     ui->stackedWidget->setCurrentWidget(ui->normalModePage);
     ui->thenWidget->setVisible(false);
 
+    ui->errorLabel->setVisible(false);
+
     connect(DataManager::instance(), &DataManager::ready, this, [=] {
         if (StateManager::currentState() == StateManager::Go) recalculateRoute();
     });
 
     connect(StateManager::instance(), &StateManager::routeOptionsChanged, this, [=](StateManager::RouteOptions routeOptions) {
-        if (!StateManager::currentRoute().isEmpty()) recalculateRoute();
+        if (!StateManager::currentRoute().isEmpty()) ui->getDirectionsButton->click();
     });
 }
 
@@ -190,6 +192,7 @@ void StateDialog::showLandmark(Landmark* landmark) {
 }
 
 void StateDialog::on_getDirectionsButton_clicked() {
+    ui->errorLabel->setVisible(false);
     QPoint start = ui->startLocationBox->location();
     QPoint end = ui->endLocationBox->location();
     QObject* fromEntity = nullptr;
@@ -201,7 +204,8 @@ void StateDialog::on_getDirectionsButton_clicked() {
     }
 
     if (start.isNull() || end.isNull()) {
-        QMessageBox::warning(this, tr("Please enter a valid location"), tr("We can't find that location. Please enter a valid location."));
+        ui->errorLabel->setVisible(true);
+        //        QMessageBox::warning(this, tr("Please enter a valid location"), tr("We can't find that location. Please enter a valid location."));
         return;
     }
 
@@ -293,15 +297,21 @@ void StateDialog::on_searchButton_clicked() {
 
 void StateDialog::setupRouteOptions() {
     auto* routeOptionsMenu = new QMenu();
+    auto* avoidMotorwayAction = routeOptionsMenu->addAction(tr("Avoid Motorways"));
     auto* avoidDuongWarpAction = routeOptionsMenu->addAction(tr("Avoid Duong Warp"));
     ui->routeOptionsButton->setMenu(routeOptionsMenu);
 
+    avoidMotorwayAction->setCheckable(true);
+    connect(avoidMotorwayAction, &QAction::triggered, this, [=](bool checked) {
+        StateManager::setRouteOption(StateManager::AvoidMotorway, checked);
+    });
     avoidDuongWarpAction->setCheckable(true);
     connect(avoidDuongWarpAction, &QAction::triggered, this, [=](bool checked) {
         StateManager::setRouteOption(StateManager::AvoidDuongWarp, checked);
     });
 
     connect(StateManager::instance(), &StateManager::routeOptionsChanged, this, [=](StateManager::RouteOptions routeOptions) {
+        avoidDuongWarpAction->setChecked(routeOptions & StateManager::AvoidMotorway);
         avoidDuongWarpAction->setChecked(routeOptions & StateManager::AvoidDuongWarp);
     });
 }

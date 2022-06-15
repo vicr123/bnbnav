@@ -100,6 +100,9 @@ double Edge::routePenalty() {
     if (StateManager::routeOptions() & StateManager::AvoidDuongWarp && d->road->type() == "duong-warp") {
         penalty = 100000;
     }
+    if (StateManager::routeOptions() & StateManager::AvoidMotorway && d->road->type() == "motorway") {
+        penalty *= 100000;
+    }
     return penalty;
 }
 

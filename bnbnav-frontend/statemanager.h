@@ -38,7 +38,8 @@ class StateManager : public QObject {
         };
 
         enum RouteOption {
-            AvoidDuongWarp = 0x1
+            AvoidDuongWarp = 0x1,
+            AvoidMotorway = 0x2
         };
         typedef QFlags<RouteOption> RouteOptions;
 

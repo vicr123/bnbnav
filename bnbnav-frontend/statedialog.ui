@@ -215,6 +215,19 @@
             </layout>
            </item>
            <item>
+            <widget class="QLabel" name="errorLabel">
+             <property name="enabled">
+              <bool>false</bool>
+             </property>
+             <property name="text">
+              <string>We can't find that location. Please enter a valid location.</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item>
             <widget class="QListView" name="instructionList"/>
            </item>
            <item>
