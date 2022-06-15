@@ -101,6 +101,15 @@ router.delete("/nodes/:id", async (req, res) => {
         }
     }
 
+    if (db.data.annotations[id]) {
+        Object.keys(db.data.annotations[id]).forEach(annotation => ws.broadcast({
+            type: "annotationRemoved",
+            node: id,
+            name: annotation
+        }))
+        delete db.data.annotations[id];
+    }
+
     delete db.data.nodes[id];
     db.save();
 
@@ -278,6 +287,56 @@ router.delete("/landmarks/:id", async (req, res) => {
     ws.broadcast({
         type: "landmarkRemoved",
         id: id
+    });
+
+    res.sendStatus(200);
+});
+router.post("/nodes/:id/annotations/:name", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.nodes[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    let name = req.params.name;
+    let annotation = req.body;
+
+    if (!db.data.annotations[id]) db.data.annotations[id] = {};
+
+    db.data.annotations[id][name] = annotation;
+    db.save();
+
+    ws.broadcast({
+        type: "annotationUpdated",
+        node: id,
+        name: name,
+        annotation: annotation
+    });
+
+    res.sendStatus(200);
+});
+router.delete("/nodes/:id/annotations/:name", async (req, res) => {
+    let id = req.params.id
+    if (!db.data.nodes[id]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    let name = req.params.name;
+
+    if (!db.data.annotations[id]) db.data.annotations[id] = {};
+    if (!db.data.annotations[id][name]) {
+        res.sendStatus(404);
+        return;
+    }
+
+    delete db.data.annotations[id][name];
+    db.data.save();
+
+    ws.broadcast({
+        type: "annotationRemoved",
+        node: id,
+        name: name
     });
 
     res.sendStatus(200);
