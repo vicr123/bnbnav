@@ -331,7 +331,7 @@ router.delete("/nodes/:id/annotations/:name", async (req, res) => {
     }
 
     delete db.data.annotations[id][name];
-    db.data.save();
+    db.save();
 
     ws.broadcast({
         type: "annotationRemoved",
