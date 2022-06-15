@@ -19,6 +19,7 @@
  * *************************************/
 #include "mapwidget.h"
 #include "newlabeldialog.h"
+#include "turnrestrictioneditor.h"
 
 #include "datamanager.h"
 #include "edge.h"
@@ -642,6 +643,13 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                         dialog->open();
                     });
                 }
+                menu->addAction(tr("Turn Restrictions..."), this, [=] {
+                    // Connect these nodes!
+                    auto* dialog = new TurnRestrictionEditor(hoverNode);
+                    dialog->setWindowModality(Qt::ApplicationModal);
+                    connect(dialog, &TurnRestrictionEditor::finished, dialog, &TurnRestrictionEditor::deleteLater);
+                    dialog->open();
+                });
                 menu->addAction(tr("Delete Node"), this, [=] {
                     DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [=](bool error) {
                         if (error) {

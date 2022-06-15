@@ -26,6 +26,7 @@
 #include "player.h"
 #include "road.h"
 #include "statemanager.h"
+#include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QLineF>
@@ -106,7 +107,7 @@ QSet<QString> DataManager::roadsConnectedToNode(Node* node) {
     return roads;
 }
 
-QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEntity, QObject* toEntity) {
+QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEntity, QObject* toEntity, QList<QString> blacklistedEdges) {
     Player* fromPlayer = qobject_cast<Player*>(fromEntity);
 
     // Find the closest edge for each point
@@ -142,17 +143,21 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
     // Construct edges and nodes to each candiate road
     if (fromPlayer && fromPlayer->snappedEdge()) {
         // Only consider the road that the player is snapped on
-        nextTemporaryEdge(fromNode, fromPlayer->snappedEdge()->to(), fromPlayer->snappedEdge()->road());
+        auto edge = nextTemporaryEdge(fromNode, fromPlayer->snappedEdge()->to(), fromPlayer->snappedEdge()->road());
+        edge->defineEid(fromPlayer->snappedEdge()->eid());
     } else {
         double shortest1 = point1Candidates.firstKey();
         for (Edge* edge : point1Candidates.values(shortest1)) {
             QPointF closest = edge->closestPointTo(from);
             if (closest.isNull()) {
-                nextTemporaryEdge(fromNode, edge->to(), edge->road());
+                auto tempEdge = nextTemporaryEdge(fromNode, edge->to(), edge->road());
+                tempEdge->defineEid(edge->eid());
             } else {
                 Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
-                nextTemporaryEdge(fromNode, node, edge->road());
-                nextTemporaryEdge(node, edge->to(), edge->road());
+                auto tempEdge = nextTemporaryEdge(fromNode, node, edge->road());
+                auto tempEdge2 = nextTemporaryEdge(node, edge->to(), edge->road());
+                tempEdge->defineEid(edge->eid());
+                tempEdge2->defineEid(edge->eid());
             }
         }
     }
@@ -161,11 +166,14 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
     for (Edge* edge : point2Candidates.values(shortest2)) {
         QPointF closest = edge->closestPointTo(to);
         if (closest.isNull()) {
-            nextTemporaryEdge(edge->from(), toNode, edge->road());
+            auto tempEdge = nextTemporaryEdge(edge->from(), toNode, edge->road());
+            tempEdge->defineEid(edge->eid());
         } else {
             Node* node = nextTemporaryNode(closest.x(), edge->averageY(), closest.y());
-            nextTemporaryEdge(edge->from(), node, edge->road());
-            nextTemporaryEdge(node, toNode, edge->road());
+            auto tempEdge = nextTemporaryEdge(edge->from(), node, edge->road());
+            auto tempEdge2 = nextTemporaryEdge(node, toNode, edge->road());
+            tempEdge->defineEid(edge->eid());
+            tempEdge2->defineEid(edge->eid());
         }
     }
 
@@ -223,10 +231,39 @@ QList<Edge*> DataManager::shortestPath(QPoint from, QPoint to, QObject* fromEnti
             } while (top->via != nullptr);
 
             qDeleteAll(searchNodes.values());
+
+            // Ensure that this route does not contain any prohibited turns
+            bool addedToProhibitedEdges = false;
+            for (auto i = 0; i < edges.count() - 2; i++) {
+                auto from = edges.at(i);
+                auto to = edges.at(i + 1);
+                auto fromId = from->id();
+                auto toId = to->id();
+
+                auto turnRestrictionsRoot = from->to()->annotation("turn-restrictions");
+                if (turnRestrictionsRoot.contains("restrictions")) {
+                    auto restrictions = turnRestrictionsRoot.value("restrictions").toArray();
+                    for (auto restriction : restrictions) {
+                        auto restrictionObject = restriction.toObject();
+                        if (restrictionObject.value("from").toString() == from->eid() && restrictionObject.value("to").toString() == to->eid()) {
+                            // We are violating a turn restriction
+                            // Remove the to road from the calculation and retry
+                            blacklistedEdges.append(to->eid());
+                            addedToProhibitedEdges = true;
+                        }
+                    }
+                }
+            }
+
+            if (addedToProhibitedEdges) {
+                // Try again but remove the edges we can't turn into
+                return shortestPath(from, to, fromEntity, toEntity, blacklistedEdges);
+            }
             return edges;
         }
 
         for (Edge* edge : edgesFromNode(top->node)) {
+            if (blacklistedEdges.contains(edge->eid())) continue;
             SearchNode* otherNode = searchNodes.value(edge->to());
             double distance = edge->routePenalty();
 
@@ -302,12 +339,17 @@ void DataManager::connectToServer() {
 
         QJsonObject root = QJsonDocument::fromJson(data).object();
 
+        QJsonObject annotations = root.value("annotations").toObject();
+
         QJsonObject nodes = root.value("nodes").toObject();
         for (QString nodeId : nodes.keys()) {
             if (instance()->d->nodes.contains(nodeId)) {
                 instance()->d->nodes.value(nodeId)->redefine(nodes.value(nodeId).toObject());
             } else {
                 instance()->d->nodes.insert(nodeId, new Node(nodes.value(nodeId).toObject()));
+            }
+            if (annotations.contains(nodeId)) {
+                instance()->d->nodes.value(nodeId)->defineAnnotations(annotations.value(nodeId).toObject());
             }
         }
 

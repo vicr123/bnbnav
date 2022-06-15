@@ -32,6 +32,7 @@ class Edge : public QObject {
         ~Edge();
 
         QString id();
+        QString eid();
         bool isTemporary();
         bool canSnapTo();
 
@@ -50,6 +51,7 @@ class Edge : public QObject {
         double averageY();
 
         void redefine(QJsonObject definition);
+        void defineEid(QString eid);
 
     signals:
 

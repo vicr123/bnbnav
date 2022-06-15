@@ -37,7 +37,8 @@ SOURCES += \
     statemanager.cpp \
     texttospeechengine.cpp \
     topwidget.cpp \
-    ttsengines/dummyttsengine.cpp
+    ttsengines/dummyttsengine.cpp \
+    turnrestrictioneditor.cpp
 
 HEADERS += \
     datagatherer.h \
@@ -62,7 +63,8 @@ HEADERS += \
     statemanager.h \
     texttospeechengine.h \
     topwidget.h \
-    ttsengines/dummyttsengine.h
+    ttsengines/dummyttsengine.h \
+    turnrestrictioneditor.h
 
 FORMS += \
     loginwidget.ui \
@@ -73,7 +75,8 @@ FORMS += \
     nodeconnectdialog.ui \
     splashwidget.ui \
     statedialog.ui \
-    topwidget.ui
+    topwidget.ui \
+    turnrestrictioneditor.ui
 
 TRANSLATIONS += \
     translations/vi_VN.ts \

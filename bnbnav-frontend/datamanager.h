@@ -45,7 +45,7 @@ class DataManager : public QObject {
         static QList<Edge*> edgesToNode(Node* to);
         static QSet<QString> roadsConnectedToNode(Node* node);
 
-        static QList<Edge*> shortestPath(QPoint from, QPoint to, QObject* fromEntity = nullptr, QObject* toEntity = nullptr);
+        static QList<Edge*> shortestPath(QPoint from, QPoint to, QObject* fromEntity = nullptr, QObject* toEntity = nullptr, QList<QString> blacklistedEdges = {});
 
         static Node* nextTemporaryNode(int x, int y, int z);
         static Edge* nextTemporaryEdge(Node* from, Node* to, Road* road);

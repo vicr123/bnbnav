@@ -31,6 +31,7 @@ struct EdgePrivate {
         Road* road;
         Node* from;
         Node* to;
+        QString eid;
 };
 
 Edge::Edge(QJsonObject definition, QObject* parent) :
@@ -45,6 +46,11 @@ Edge::~Edge() {
 
 QString Edge::id() {
     return DataManager::edges().key(this);
+}
+
+QString Edge::eid() {
+    if (d->eid.isEmpty()) return this->id();
+    return d->eid;
 }
 
 bool Edge::isTemporary() {
@@ -140,4 +146,8 @@ void Edge::redefine(QJsonObject definition) {
     d->road = DataManager::roads().value(definition.value("road").toString());
     d->from = DataManager::nodes().value(definition.value("node1").toString());
     d->to = DataManager::nodes().value(definition.value("node2").toString());
+}
+
+void Edge::defineEid(QString eid) {
+    d->eid = eid;
 }
