@@ -32,6 +32,7 @@
 #include "statemanager.h"
 #include <QBuffer>
 #include <QGestureEvent>
+#include <QJsonObject>
 #include <QMap>
 #include <QMenu>
 #include <QMessageBox>

@@ -37,12 +37,19 @@ class Node : public QObject {
         int z();
         QRectF nodeRect(double scale);
 
+        QJsonObject annotation(QString name);
+        void removeAnnotation(QString name);
+        void updateAnnotation(QString name, QJsonObject annotation);
+
         void setX(int x);
         void setY(int y);
         void setZ(int z);
 
         void redefine(QJsonObject definition);
+        void defineAnnotations(QJsonObject annotations);
         void submitUpdate(int x, int y, int z, std::function<void(bool)> callback);
+        void submitAnnotationUpdate(QString name, QJsonObject annotation, std::function<void(bool)> callback);
+        void submitAnnotationDelete(QString name, std::function<void(bool)> callback);
 
     signals:
 

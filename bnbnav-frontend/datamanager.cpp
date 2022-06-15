@@ -381,6 +381,12 @@ void DataManager::connectToServer() {
         } else if (type == "roadUpdated") {
             instance()->d->roads.value(id)->redefine(object);
             emit instance()->updatedRoad();
+        } else if (type == "annotationUpdated") {
+            instance()->d->nodes.value(object.value("node").toString())->updateAnnotation(object.value("name").toString(), object.value("annotation").toObject());
+            emit instance()->updatedAnnotation();
+        } else if (type == "annotationRemoved") {
+            instance()->d->nodes.value(object.value("node").toString())->removeAnnotation(object.value("name").toString());
+            emit instance()->removedAnnotation();
         } else if (type == "playerMove") {
             if (!instance()->d->players.contains(id)) {
                 if (instance()->d->allPlayers.contains(id)) {

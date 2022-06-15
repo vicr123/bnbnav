@@ -19,16 +19,18 @@
  * *************************************/
 #include "node.h"
 
-#include <QRect>
-#include <QJsonObject>
 #include "datagatherer.h"
 #include "datamanager.h"
+#include <QJsonObject>
+#include <QRect>
 
 struct NodePrivate {
-    int x, y, z;
+        int x, y, z;
+        QMap<QString, QJsonObject> annotations;
 };
 
-Node::Node(QJsonObject definition, QObject* parent) : QObject(parent) {
+Node::Node(QJsonObject definition, QObject* parent) :
+    QObject(parent) {
     d = new NodePrivate();
     redefine(definition);
 }
@@ -64,6 +66,18 @@ QRectF Node::nodeRect(double scale) {
     return rect;
 }
 
+QJsonObject Node::annotation(QString name) {
+    return d->annotations.value(name);
+}
+
+void Node::removeAnnotation(QString name) {
+    d->annotations.remove(name);
+}
+
+void Node::updateAnnotation(QString name, QJsonObject annotation) {
+    d->annotations.insert(name, annotation);
+}
+
 void Node::setX(int x) {
     d->x = x;
 }
@@ -78,18 +92,27 @@ void Node::redefine(QJsonObject definition) {
     d->z = definition.value("z").toInt();
 }
 
-void Node::submitUpdate(int x, int y, int z, std::function<void (bool)> callback) {
+void Node::defineAnnotations(QJsonObject annotations) {
+    d->annotations.clear();
+    for (auto key : annotations.keys()) {
+        d->annotations.insert(key, annotations.value(key).toObject());
+    }
+}
+
+void Node::submitUpdate(int x, int y, int z, std::function<void(bool)> callback) {
     NodePrivate* oldPrivate = d;
     d = new NodePrivate();
     d->x = x;
     d->y = y;
     d->z = z;
+    d->annotations = oldPrivate->annotations;
 
     DataGatherer::submit(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(this)), {
-        {"x", x},
-        {"y", y},
-        {"z", z}
-    }, [ = ](QByteArray data, bool error) {
+                                                                                              {"x", x},
+                                                                                              {"y", y},
+                                                                                              {"z", z}
+    },
+        [=](QByteArray data, bool error) {
         if (error) {
             delete d;
             d = oldPrivate;
@@ -100,4 +123,20 @@ void Node::submitUpdate(int x, int y, int z, std::function<void (bool)> callback
         delete oldPrivate;
         callback(false);
     });
+}
+
+void Node::submitAnnotationUpdate(QString name, QJsonObject annotation, std::function<void(bool)> callback) {
+    DataGatherer::submit(QStringLiteral("/nodes/%1/annotations/%2").arg(DataManager::nodes().key(this)).arg(name), annotation,
+        [=](QByteArray data, bool error) {
+        if (error) {
+            callback(true);
+            return;
+        }
+
+        callback(false);
+    });
+}
+
+void Node::submitAnnotationDelete(QString name, std::function<void(bool)> callback) {
+    DataGatherer::del(QStringLiteral("/nodes/%1/annotations/%2").arg(DataManager::nodes().key(this)).arg(name), callback);
 }

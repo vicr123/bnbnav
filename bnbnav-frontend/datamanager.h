@@ -66,6 +66,8 @@ class DataManager : public QObject {
         void updatedNode();
         void updatedRoad();
         void updatedEdge();
+        void updatedAnnotation();
+        void removedAnnotation();
         void loadError();
         void playerUpdate(QString player);
         void removedPlayer();
