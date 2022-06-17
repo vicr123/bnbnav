@@ -144,6 +144,7 @@ void DataGatherer::del(QString path, std::function<void(bool)> callback) {
                 });
                 connect(dialog, &QInputDialog::finished, dialog, &QInputDialog::deleteLater);
                 dialog->open();
+                return;
             }
 
             callback(true);
