@@ -63,7 +63,7 @@ void TopWidget::setPan(int x, int y) {
 void TopWidget::on_editModeButton_toggled(bool checked) {
     if (checked && StateManager::token().isEmpty()) {
         bool ok;
-        QString token = QInputDialog::getText(this->window(), tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
+        QString token = QInputDialog::getText(nullptr, tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
         if (!ok) {
             ui->editModeButton->setChecked(false);
             return;
