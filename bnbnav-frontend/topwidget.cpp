@@ -62,14 +62,18 @@ void TopWidget::setPan(int x, int y) {
 
 void TopWidget::on_editModeButton_toggled(bool checked) {
     if (checked && StateManager::token().isEmpty()) {
-        bool ok;
-        QString token = QInputDialog::getText(nullptr, tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
-        if (!ok) {
-            ui->editModeButton->setChecked(false);
-            return;
-        }
+        auto* dialog = new QInputDialog();
+        dialog->setWindowTitle(tr("Token"));
+        dialog->setLabelText(tr("Obtain a token with /editnav to edit"));
+        connect(dialog, &QInputDialog::textValueSelected, this, [=](QString text) {
+            StateManager::setToken(text);
+            ui->editModeButton->setChecked(true);
+        });
+        connect(dialog, &QInputDialog::finished, dialog, &QInputDialog::deleteLater);
+        dialog->open();
 
-        StateManager::setToken(token);
+        ui->editModeButton->setChecked(false);
+        return;
     }
     StateManager::setCurrentState(checked ? StateManager::Edit : StateManager::Browse);
 }

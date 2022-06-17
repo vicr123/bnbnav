@@ -87,17 +87,21 @@ void DataGatherer::submit(QString path, QJsonObject object, std::function<void(Q
     connect(reply, &QNetworkReply::finished, [=] {
         if (reply->error() != QNetworkReply::NoError) {
             if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {
-                bool ok;
-                QString token = QInputDialog::getText(nullptr, tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
-                if (!ok) {
+                auto* dialog = new QInputDialog();
+                dialog->setWindowTitle(tr("Token"));
+                dialog->setLabelText(tr("Obtain a token with /editnav to edit"));
+                connect(dialog, &QInputDialog::textValueSelected, [=](QString text) {
+                    StateManager::setToken(text);
+                    submit(path, object, callback);
+                });
+                connect(dialog, &QInputDialog::rejected, [=] {
                     StateManager::setToken("");
                     if (StateManager::currentState() == StateManager::Edit) StateManager::setCurrentState(StateManager::Browse);
                     callback(QByteArray(), true);
-                    return;
-                }
+                });
+                connect(dialog, &QInputDialog::finished, dialog, &QInputDialog::deleteLater);
+                dialog->open();
 
-                StateManager::setToken(token);
-                submit(path, object, callback);
                 return;
             }
 
@@ -126,18 +130,20 @@ void DataGatherer::del(QString path, std::function<void(bool)> callback) {
     connect(reply, &QNetworkReply::finished, [=] {
         if (reply->error() != QNetworkReply::NoError) {
             if (reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt() == 401) {
-                bool ok;
-                QString token = QInputDialog::getText(nullptr, tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
-                if (!ok) {
+                auto* dialog = new QInputDialog();
+                dialog->setWindowTitle(tr("Token"));
+                dialog->setLabelText(tr("Obtain a token with /editnav to edit"));
+                connect(dialog, &QInputDialog::textValueSelected, [=](QString text) {
+                    StateManager::setToken(text);
+                    del(path, callback);
+                });
+                connect(dialog, &QInputDialog::rejected, [=] {
                     StateManager::setToken("");
                     if (StateManager::currentState() == StateManager::Edit) StateManager::setCurrentState(StateManager::Browse);
                     callback(true);
-                    return;
-                }
-
-                StateManager::setToken(token);
-                del(path, callback);
-                return;
+                });
+                connect(dialog, &QInputDialog::finished, dialog, &QInputDialog::deleteLater);
+                dialog->open();
             }
 
             callback(true);
