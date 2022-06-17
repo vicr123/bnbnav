@@ -20,15 +20,16 @@
 #include "topwidget.h"
 #include "ui_topwidget.h"
 
-#include <QSettings>
 #include "statemanager.h"
+#include <QInputDialog>
+#include <QSettings>
 
 TopWidget::TopWidget(QWidget* parent) :
     QWidget(parent),
     ui(new Ui::TopWidget) {
     ui->setupUi(this);
 
-    connect(StateManager::instance(), &StateManager::loginChanged, this, [ = ](QString login) {
+    connect(StateManager::instance(), &StateManager::loginChanged, this, [=](QString login) {
         if (login.isEmpty()) {
             ui->loginButton->setText(tr("Log In"));
         } else {
@@ -41,12 +42,12 @@ TopWidget::TopWidget(QWidget* parent) :
         ui->loginButton->setText(StateManager::login());
     }
 
-    connect(StateManager::instance(), &StateManager::stateChanged, this, [ = ] {
+    connect(StateManager::instance(), &StateManager::stateChanged, this, [=] {
         ui->editModeButton->setVisible(StateManager::currentState() != StateManager::Go);
         ui->loginButton->setEnabled(StateManager::currentState() != StateManager::Go);
         ui->editModeButton->setChecked(StateManager::currentState() == StateManager::Edit);
     });
-    connect(StateManager::instance(), &StateManager::nightModeChanged, this, [ = ] {
+    connect(StateManager::instance(), &StateManager::nightModeChanged, this, [=] {
         ui->nightModeButton->setChecked(StateManager::nightMode());
     });
 }
@@ -60,6 +61,16 @@ void TopWidget::setPan(int x, int y) {
 }
 
 void TopWidget::on_editModeButton_toggled(bool checked) {
+    if (checked && StateManager::token().isEmpty()) {
+        bool ok;
+        QString token = QInputDialog::getText(this->window(), tr("Token"), tr("Obtain a token with /editnav to edit"), QLineEdit::Normal, QString(), &ok);
+        if (!ok) {
+            ui->editModeButton->setChecked(false);
+            return;
+        }
+
+        StateManager::setToken(token);
+    }
     StateManager::setCurrentState(checked ? StateManager::Edit : StateManager::Browse);
 }
 
@@ -67,8 +78,6 @@ void TopWidget::on_loginButton_clicked() {
     emit showLoginWidget();
 }
 
-
 void TopWidget::on_nightModeButton_toggled(bool checked) {
     StateManager::setNightMode(checked);
 }
-

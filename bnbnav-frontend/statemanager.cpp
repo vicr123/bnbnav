@@ -50,6 +50,8 @@ struct StateManagerPrivate {
 
         bool followMe = false;
         bool nightMode = false;
+
+        QString token;
 };
 
 StateManager* StateManager::instance() {
@@ -286,6 +288,14 @@ void StateManager::setRouteOption(RouteOption option, bool on) {
         instance()->d->routeOptions &= ~option;
     }
     emit instance()->routeOptionsChanged(instance()->d->routeOptions);
+}
+
+QString StateManager::token() {
+    return instance()->d->token;
+}
+
+void StateManager::setToken(QString token) {
+    instance()->d->token = token;
 }
 
 StateManager::StateManager(QObject* parent) :

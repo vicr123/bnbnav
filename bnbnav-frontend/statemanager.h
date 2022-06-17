@@ -117,6 +117,9 @@ class StateManager : public QObject {
         static RouteOptions routeOptions();
         static void setRouteOption(RouteOption option, bool on = true);
 
+        static QString token();
+        static void setToken(QString token);
+
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);

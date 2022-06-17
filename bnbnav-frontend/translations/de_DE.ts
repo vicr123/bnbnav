@@ -4,103 +4,138 @@
 <context>
     <name>Landmark</name>
     <message>
-        <location filename="../landmark.cpp" line="68"/>
+        <location filename="../landmark.cpp" line="72"/>
         <source>Unknown</source>
         <translation>Unbekannt</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="80"/>
+        <location filename="../landmark.cpp" line="84"/>
         <source>AirCS Station</source>
         <translation>AirCS Station</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="81"/>
+        <location filename="../landmark.cpp" line="85"/>
         <source>Airport</source>
         <translation>Flughafen</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="82"/>
+        <location filename="../landmark.cpp" line="86"/>
         <source>Hospital</source>
         <translation>Spital</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="83"/>
+        <location filename="../landmark.cpp" line="87"/>
         <source>Squid Transit Station</source>
         <translation>Squid Transit Station</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="84"/>
+        <location filename="../landmark.cpp" line="88"/>
         <source>Parking Lot</source>
         <translation>Parkplatz</translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="85"/>
+        <location filename="../landmark.cpp" line="89"/>
         <source>Walnut</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../landmark.cpp" line="86"/>
-        <source>Immigration Border</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../landmark.cpp" line="87"/>
-        <source>Tourist Attraction</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../landmark.cpp" line="88"/>
-        <source>Invisible</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../landmark.cpp" line="89"/>
-        <source>Generic Blue</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../landmark.cpp" line="90"/>
-        <source>Generic Green</source>
+        <source>Immigration Checkpoint</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="91"/>
-        <source>Generic Red</source>
+        <source>Tourist Attraction</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="92"/>
-        <source>Generic Gray</source>
+        <source>Invisible</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="93"/>
-        <source>City Hall</source>
+        <source>Generic Blue</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="94"/>
-        <source>Coffee Shop</source>
+        <source>Generic Green</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="95"/>
-        <source>Store</source>
+        <source>Generic Red</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="96"/>
-        <source>Restaurant</source>
+        <source>Generic Gray</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="97"/>
-        <source>Park</source>
+        <source>City Hall</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../landmark.cpp" line="98"/>
+        <source>Coffee Shop</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="99"/>
+        <source>Store</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="100"/>
+        <source>Restaurant</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="101"/>
+        <source>Park</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="102"/>
         <source>Courthouse</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="103"/>
+        <source>Bank</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="104"/>
+        <source>Embassy</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="105"/>
+        <source>Post Office</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="106"/>
+        <source>Hotel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="107"/>
+        <source>FrivoloCo Chocolates</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="113"/>
+        <source>City</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../landmark.cpp" line="114"/>
+        <source>Country</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -154,93 +189,146 @@
 <context>
     <name>MapWidget</name>
     <message>
-        <location filename="../mapwidget.cpp" line="496"/>
+        <location filename="../mapwidget.cpp" line="537"/>
         <source>Could not update node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="496"/>
+        <location filename="../mapwidget.cpp" line="537"/>
         <source>Could not update the node.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="556"/>
+        <location filename="../mapwidget.cpp" line="600"/>
         <source>Route from here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="559"/>
+        <location filename="../mapwidget.cpp" line="603"/>
         <source>Route to here</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="569"/>
+        <location filename="../mapwidget.cpp" line="613"/>
         <source>Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="570"/>
+        <location filename="../mapwidget.cpp" line="614"/>
         <source>Node ID: %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="578"/>
-        <source>Detach Landmark</source>
+        <location filename="../mapwidget.cpp" line="622"/>
+        <source>Detach Landmark/Label</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="582"/>
+        <location filename="../mapwidget.cpp" line="626"/>
         <source>Could not detach landmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="582"/>
+        <location filename="../mapwidget.cpp" line="626"/>
         <source>Could not detach the landmark.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="587"/>
+        <location filename="../mapwidget.cpp" line="631"/>
         <source>Attach Landmark</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="595"/>
+        <location filename="../mapwidget.cpp" line="638"/>
+        <source>Attach Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mapwidget.cpp" line="646"/>
+        <source>Turn Restrictions...</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../mapwidget.cpp" line="653"/>
         <source>Delete Node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="598"/>
+        <location filename="../mapwidget.cpp" line="656"/>
         <source>Could not delete node</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="598"/>
+        <location filename="../mapwidget.cpp" line="656"/>
         <source>Could not delete the node.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="603"/>
+        <location filename="../mapwidget.cpp" line="661"/>
         <source>Edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="605"/>
+        <location filename="../mapwidget.cpp" line="663"/>
         <source>Edit Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="611"/>
+        <location filename="../mapwidget.cpp" line="669"/>
         <source>Delete Edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="614"/>
+        <location filename="../mapwidget.cpp" line="672"/>
         <source>Could not delete edge</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../mapwidget.cpp" line="614"/>
+        <location filename="../mapwidget.cpp" line="672"/>
         <source>Could not delete the edge.</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>NewLabelDialog</name>
+    <message>
+        <location filename="../newlabeldialog.ui" line="14"/>
+        <source>Dialog</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.ui" line="25"/>
+        <source>New Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.ui" line="32"/>
+        <source>Type</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.ui" line="42"/>
+        <source>Label</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.ui" line="67"/>
+        <source>Cancel</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.ui" line="74"/>
+        <source>OK</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.cpp" line="72"/>
+        <source>Could not submit data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../newlabeldialog.cpp" line="72"/>
+        <source>Could not submit data to the server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -375,43 +463,66 @@
 <context>
     <name>Road</name>
     <message>
-        <location filename="../road.cpp" line="72"/>
+        <location filename="../road.cpp" line="79"/>
         <source>Local Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="73"/>
+        <location filename="../road.cpp" line="80"/>
         <source>Main Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="74"/>
+        <location filename="../road.cpp" line="81"/>
         <source>Highway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="75"/>
+        <location filename="../road.cpp" line="82"/>
         <source>Motorway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="76"/>
+        <location filename="../road.cpp" line="83"/>
         <source>Footpath</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="77"/>
+        <location filename="../road.cpp" line="84"/>
         <source>Waterway</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="78"/>
+        <location filename="../road.cpp" line="85"/>
         <source>Private Use Road</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../road.cpp" line="94"/>
+        <location filename="../road.cpp" line="86"/>
+        <source>Roundabout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../road.cpp" line="87"/>
+        <source>Duong Warp</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../road.cpp" line="103"/>
         <source>Unknown</source>
+        <translation type="unfinished">Unbekannt</translation>
+    </message>
+</context>
+<context>
+    <name>SplashWidget</name>
+    <message>
+        <location filename="../splashwidget.ui" line="59"/>
+        <source>Disconnected</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../splashwidget.ui" line="84"/>
+        <source>Reconnect</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
@@ -465,23 +576,33 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.ui" line="198"/>
+        <location filename="../statedialog.ui" line="185"/>
+        <source>Route Options</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statedialog.ui" line="211"/>
         <source>Go</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.ui" line="228"/>
+        <location filename="../statedialog.ui" line="254"/>
         <source>Start!</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.ui" line="276"/>
-        <location filename="../statedialog.cpp" line="82"/>
+        <location filename="../statedialog.ui" line="323"/>
+        <location filename="../statedialog.cpp" line="99"/>
         <source>Calculating...</source>
         <translation type="unfinished"></translation>
     </message>
+    <message>
+        <location filename="../statedialog.ui" line="339"/>
+        <source>then</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../statedialog.cpp" line="100"/>
+        <location filename="../statedialog.cpp" line="117"/>
         <source>%n blocks</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -489,7 +610,7 @@
         </translation>
     </message>
     <message numerus="yes">
-        <location filename="../statedialog.cpp" line="101"/>
+        <location filename="../statedialog.cpp" line="118"/>
         <source>%n instructions</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -497,45 +618,50 @@
         </translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="169"/>
-        <source>Please enter a valid location</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../statedialog.cpp" line="169"/>
+        <location filename="../statedialog.ui" line="223"/>
         <source>We can&apos;t find that location. Please enter a valid location.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="187"/>
+        <location filename="../statedialog.cpp" line="226"/>
         <source>Please Log In</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="187"/>
+        <location filename="../statedialog.cpp" line="226"/>
         <source>Log in to use Go mode.</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="214"/>
+        <location filename="../statedialog.cpp" line="253"/>
         <source>%1 at x: %2  y: %3  z: %4</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="234"/>
+        <location filename="../statedialog.cpp" line="273"/>
         <source>Calculating route...</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statedialog.cpp" line="239"/>
+        <location filename="../statedialog.cpp" line="278"/>
         <source>Exit Go Mode</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statedialog.cpp" line="300"/>
+        <source>Avoid Motorways</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statedialog.cpp" line="301"/>
+        <source>Avoid Duong Warp</source>
         <translation type="unfinished"></translation>
     </message>
 </context>
 <context>
     <name>StateManager</name>
     <message numerus="yes">
-        <location filename="../statemanager.cpp" line="325"/>
+        <location filename="../statemanager.cpp" line="364"/>
         <source>In %n blocks, %1</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -543,87 +669,107 @@
         </translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="331"/>
+        <location filename="../statemanager.cpp" line="370"/>
         <source>Depart</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="333"/>
-        <location filename="../statemanager.cpp" line="398"/>
+        <location filename="../statemanager.cpp" line="372"/>
+        <location filename="../statemanager.cpp" line="446"/>
         <source>Arrive at the destination</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="335"/>
+        <location filename="../statemanager.cpp" line="374"/>
         <source>Continue onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="337"/>
+        <location filename="../statemanager.cpp" line="376"/>
         <source>Bear left onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="339"/>
+        <location filename="../statemanager.cpp" line="378"/>
         <source>Turn left onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="341"/>
+        <location filename="../statemanager.cpp" line="380"/>
         <source>Sharp left onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="343"/>
+        <location filename="../statemanager.cpp" line="382"/>
         <source>Perform a U-turn onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="345"/>
+        <location filename="../statemanager.cpp" line="384"/>
         <source>Sharp right onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="347"/>
+        <location filename="../statemanager.cpp" line="386"/>
         <source>Turn right onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="349"/>
+        <location filename="../statemanager.cpp" line="388"/>
         <source>Bear right onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="351"/>
+        <location filename="../statemanager.cpp" line="390"/>
         <source>Take the %1 exit on the left</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="353"/>
+        <location filename="../statemanager.cpp" line="392"/>
         <source>Take the %1 exit on the right</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="355"/>
+        <location filename="../statemanager.cpp" line="394"/>
         <source>Merge onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../statemanager.cpp" line="357"/>
+        <location filename="../statemanager.cpp" line="397"/>
+        <source>Enter the roundabout</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statemanager.cpp" line="399"/>
+        <source>At the roundabout, take exit %1 onto %2</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statemanager.cpp" line="402"/>
+        <source>Exit the roundabout onto %1</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../statemanager.cpp" line="404"/>
         <source>Get onto %1</source>
         <translation type="unfinished"></translation>
     </message>
     <message numerus="yes">
-        <location filename="../statemanager.cpp" line="372"/>
-        <location filename="../statemanager.cpp" line="375"/>
+        <location filename="../statemanager.cpp" line="419"/>
+        <location filename="../statemanager.cpp" line="422"/>
         <source>%n blk</source>
         <translation type="unfinished">
             <numerusform></numerusform>
             <numerusform></numerusform>
         </translation>
     </message>
+    <message>
+        <location filename="../statemanager.cpp" line="568"/>
+        <source>Then, %1</source>
+        <translation type="unfinished"></translation>
+    </message>
     <message numerus="yes">
-        <location filename="../statemanager.cpp" line="460"/>
+        <location filename="../statemanager.cpp" line="571"/>
         <source>Stay on %1 for %n blocks</source>
         <translation type="unfinished">
             <numerusform></numerusform>
@@ -647,6 +793,41 @@
         <location filename="../topwidget.cpp" line="33"/>
         <location filename="../topwidget.cpp" line="39"/>
         <source>Log In</source>
+        <translation type="unfinished"></translation>
+    </message>
+</context>
+<context>
+    <name>TurnRestrictionEditor</name>
+    <message>
+        <location filename="../turnrestrictioneditor.ui" line="14"/>
+        <source>Turn Restrictions</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../turnrestrictioneditor.ui" line="33"/>
+        <source>Edit a different edge</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../turnrestrictioneditor.ui" line="53"/>
+        <source>Apply Changes</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../turnrestrictioneditor.ui" line="60"/>
+        <source>Clear All</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../turnrestrictioneditor.cpp" line="185"/>
+        <location filename="../turnrestrictioneditor.cpp" line="197"/>
+        <source>Could not submit data</source>
+        <translation type="unfinished"></translation>
+    </message>
+    <message>
+        <location filename="../turnrestrictioneditor.cpp" line="185"/>
+        <location filename="../turnrestrictioneditor.cpp" line="197"/>
+        <source>Could not submit data to the server</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

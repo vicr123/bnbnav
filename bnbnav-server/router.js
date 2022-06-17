@@ -1,6 +1,7 @@
 const express = require('express');
 const db = require('./db');
 const ws = require('./ws');
+const jose = require('jose');
 let router = express.Router();
 
 router.use(express.json({
@@ -10,6 +11,36 @@ router.use(express.json({
 router.get("/data", async (req, res) => {
     res.send(db.data);
 });
+
+router.use(async (req, res, next) => {
+    if (req.originalUrl == "/data") return next();
+
+    let auth = req.header("Authorization");
+    if (!auth) return res.sendStatus(401);
+    if (!auth.startsWith("Bearer ")) return res.sendStatus(401);
+
+    let token = auth.substr(7);
+
+    try {
+        let result = await jose.jwtVerify(token, Buffer.from(process.env["BNBNAV_JWT_TOKEN"]), {
+            issuer: "bnbnav",
+            maxTokenAge: 7200 //7200 seconds = 2 hours
+        });
+
+        req.user = {
+            uuid: result.payload.sub,
+            name: result.payload.pn
+        };
+    } catch (error) {
+        if (error.code === "ERR_JWS_SIGNATURE_VERIFICATION_FAILED" || error.code === "ERR_JWT_EXPIRED" || error.code === "ERR_JWS_INVALID") {
+            return res.sendStatus(401);
+        } else {
+            return res.sendStatus(500);
+        }
+    }
+
+    next();
+})
 
 router.post("/nodes/add", async (req, res) => {
     if (req.body.x == null || req.body.y == null || req.body.z == null) {

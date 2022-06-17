@@ -1,6 +1,7 @@
 package com.vicr123.bnbnav;
 
 import com.vicr123.bnbnav.commands.AddRoadNodeCommand;
+import com.vicr123.bnbnav.commands.EditNavCommand;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
 import org.bukkit.Location;
@@ -23,6 +24,7 @@ public class BnbnavPlugin extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new EventListener(unirest), this);
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
+        this.getCommand("editnav").setExecutor(new EditNavCommand());
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, this::detectPlayers, 0, 1);
 
