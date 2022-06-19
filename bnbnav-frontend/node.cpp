@@ -21,6 +21,8 @@
 
 #include "datagatherer.h"
 #include "datamanager.h"
+#include "statemanager.h"
+#include <QColor>
 #include <QJsonObject>
 #include <QRect>
 
@@ -84,6 +86,13 @@ void Node::setX(int x) {
 
 void Node::setZ(int z) {
     d->z = z;
+}
+
+QColor Node::background() {
+    bool spyTarget = false;
+    if (StateManager::spyMode() == StateManager::SpyTurnRestrictions && d->annotations.contains("turn-restrictions")) spyTarget = true;
+
+    return spyTarget ? Qt::yellow : Qt::white;
 }
 
 void Node::redefine(QJsonObject definition) {

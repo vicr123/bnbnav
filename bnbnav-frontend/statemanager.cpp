@@ -47,6 +47,7 @@ struct StateManagerPrivate {
         Landmark* selectedLandmark;
 
         StateManager::RouteOptions routeOptions = 0;
+        StateManager::SpyMode spyMode = StateManager::SpyDisabled;
 
         bool followMe = false;
         bool nightMode = false;
@@ -66,6 +67,10 @@ StateManager::GlobalState StateManager::currentState() {
 void StateManager::setCurrentState(GlobalState state) {
     if (state == Go) {
         setFollowMe(true);
+    }
+
+    if (state != Edit) {
+        setSpyMode(SpyDisabled);
     }
 
     instance()->d->state = state;
@@ -296,6 +301,15 @@ QString StateManager::token() {
 
 void StateManager::setToken(QString token) {
     instance()->d->token = token;
+}
+
+StateManager::SpyMode StateManager::spyMode() {
+    return instance()->d->spyMode;
+}
+
+void StateManager::setSpyMode(SpyMode spyMode) {
+    instance()->d->spyMode = spyMode;
+    emit instance()->spyModeChanged(spyMode);
 }
 
 StateManager::StateManager(QObject* parent) :

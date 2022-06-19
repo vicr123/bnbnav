@@ -46,10 +46,13 @@ TopWidget::TopWidget(QWidget* parent) :
         ui->editModeButton->setVisible(StateManager::currentState() != StateManager::Go);
         ui->loginButton->setEnabled(StateManager::currentState() != StateManager::Go);
         ui->editModeButton->setChecked(StateManager::currentState() == StateManager::Edit);
+        ui->spyButton->setVisible(StateManager::currentState() == StateManager::Edit);
     });
     connect(StateManager::instance(), &StateManager::nightModeChanged, this, [=] {
         ui->nightModeButton->setChecked(StateManager::nightMode());
     });
+
+    ui->spyButton->setVisible(false);
 }
 
 TopWidget::~TopWidget() {
@@ -84,4 +87,8 @@ void TopWidget::on_loginButton_clicked() {
 
 void TopWidget::on_nightModeButton_toggled(bool checked) {
     StateManager::setNightMode(checked);
+}
+
+void TopWidget::on_spyButton_clicked() {
+    emit showSpyWidget();
 }

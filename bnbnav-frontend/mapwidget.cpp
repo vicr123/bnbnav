@@ -500,7 +500,7 @@ void MapWidget::paintEvent(QPaintEvent* event) {
                 if (node->isTemporary()) continue;
 
                 painter.setPen(QPen(Qt::black, 2 / d->scale));
-                painter.setBrush(Qt::white);
+                painter.setBrush(node->background());
                 if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
                 if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
 

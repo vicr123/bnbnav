@@ -45,6 +45,8 @@ class Node : public QObject {
         void setY(int y);
         void setZ(int z);
 
+        QColor background();
+
         void redefine(QJsonObject definition);
         void defineAnnotations(QJsonObject annotations);
         void submitUpdate(int x, int y, int z, std::function<void(bool)> callback);

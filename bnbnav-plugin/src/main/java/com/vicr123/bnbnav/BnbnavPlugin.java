@@ -12,15 +12,13 @@ public class BnbnavPlugin extends JavaPlugin {
     UnirestInstance unirest;
 
     public static final String API_BASE = "http://localhost:5813/api";
-    public static final String AUTH_TOKEN = "%NJJ8r5Dv5s8^qhurgFAXSCJS!%7#BQ$";
 
     @Override
     public void onEnable() {
         unirest = Unirest.spawnInstance();
 
         unirest.config()
-                .defaultBaseUrl(API_BASE)
-                .setDefaultHeader("Authorization", "Bearer " + AUTH_TOKEN);
+                .defaultBaseUrl(API_BASE);
 
         getServer().getPluginManager().registerEvents(new EventListener(unirest), this);
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
@@ -37,6 +35,7 @@ public class BnbnavPlugin extends JavaPlugin {
             String body = "{\"id\": \"" + player.getName() + "\", \"x\": " + loc.getX() + ", \"y\": " + loc.getY() + ", \"z\": " + loc.getZ() + "}";
             unirest.post("/player/{player}")
                     .routeParam("player", player.getName())
+                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
                     .contentType("application/json")
                     .body(body)
                     .asEmptyAsync();

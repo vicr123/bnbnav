@@ -43,6 +43,11 @@ class StateManager : public QObject {
         };
         typedef QFlags<RouteOption> RouteOptions;
 
+        enum SpyMode {
+            SpyDisabled,
+            SpyTurnRestrictions
+        };
+
         struct Instruction {
                 enum InstructionType {
                     Departure,
@@ -120,6 +125,9 @@ class StateManager : public QObject {
         static QString token();
         static void setToken(QString token);
 
+        static SpyMode spyMode();
+        static void setSpyMode(SpyMode spyMode);
+
     signals:
         void stateChanged(GlobalState state);
         void loginChanged(QString login);
@@ -129,6 +137,7 @@ class StateManager : public QObject {
         void selectedLandmarkChanged();
         void nightModeChanged();
         void routeOptionsChanged(RouteOptions options);
+        void spyModeChanged(SpyMode spyMode);
 
     private:
         explicit StateManager(QObject* parent = nullptr);

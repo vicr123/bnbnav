@@ -16,6 +16,7 @@ public class EventListener implements Listener {
     public void quitEvent(PlayerQuitEvent quitEvent) {
         unirest.delete("/player/{player}")
                 .routeParam("player", quitEvent.getPlayer().getName())
+                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
                 .asEmptyAsync();
     }
 }

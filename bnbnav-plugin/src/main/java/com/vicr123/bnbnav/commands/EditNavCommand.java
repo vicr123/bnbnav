@@ -2,6 +2,7 @@ package com.vicr123.bnbnav.commands;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
+import com.vicr123.bnbnav.JwtProvisioning;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -26,18 +27,10 @@ public class EditNavCommand implements CommandExecutor {
             return false;
         }
 
-        Algorithm algorithm = Algorithm.HMAC256(System.getenv("BNBNAV_JWT_TOKEN"));
-        String token = JWT.create()
-                .withIssuer("bnbnav")
-                .withSubject(((Player) commandSender).getUniqueId().toString())
-                .withClaim("pn", commandSender.getName())
-                .withIssuedAt(new Date())
-                .sign(algorithm);
-
         TextComponent component = new TextComponent("Click to type your token in chat.");
         component.setColor(ChatColor.GREEN);
         component.setUnderlined(true);
-        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, token));
+        component.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, JwtProvisioning.JwtFor(commandSender)));
         commandSender.spigot().sendMessage(component);
 
         return false;

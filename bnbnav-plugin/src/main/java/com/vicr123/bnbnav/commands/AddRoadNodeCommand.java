@@ -1,5 +1,6 @@
 package com.vicr123.bnbnav.commands;
 
+import com.vicr123.bnbnav.JwtProvisioning;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
 import org.bukkit.Location;
@@ -27,6 +28,7 @@ public class AddRoadNodeCommand implements CommandExecutor {
 
         unirest.post("/nodes/add")
                 .contentType("application/json")
+                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
                 .body(body)
                 .asStringAsync((response) -> {
 

@@ -25,6 +25,7 @@ public:
     QHBoxLayout *horizontalLayout;
     QLabel *panLabel;
     QSpacerItem *horizontalSpacer;
+    QPushButton *spyButton;
     QPushButton *editModeButton;
     QPushButton *nightModeButton;
     QPushButton *loginButton;
@@ -33,7 +34,7 @@ public:
     {
         if (TopWidget->objectName().isEmpty())
             TopWidget->setObjectName(QString::fromUtf8("TopWidget"));
-        TopWidget->resize(400, 94);
+        TopWidget->resize(509, 94);
         TopWidget->setWindowTitle(QString::fromUtf8("Form"));
         horizontalLayout = new QHBoxLayout(TopWidget);
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
@@ -46,6 +47,11 @@ public:
         horizontalSpacer = new QSpacerItem(230, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
+
+        spyButton = new QPushButton(TopWidget);
+        spyButton->setObjectName(QString::fromUtf8("spyButton"));
+
+        horizontalLayout->addWidget(spyButton);
 
         editModeButton = new QPushButton(TopWidget);
         editModeButton->setObjectName(QString::fromUtf8("editModeButton"));
@@ -73,6 +79,7 @@ public:
 
     void retranslateUi(QWidget *TopWidget)
     {
+        spyButton->setText(QCoreApplication::translate("TopWidget", "Spy", nullptr));
         editModeButton->setText(QCoreApplication::translate("TopWidget", "Edit Mode", nullptr));
         nightModeButton->setText(QCoreApplication::translate("TopWidget", "Night Mode", nullptr));
         (void)TopWidget;

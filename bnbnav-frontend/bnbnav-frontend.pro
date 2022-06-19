@@ -33,6 +33,7 @@ SOURCES += \
     player.cpp \
     road.cpp \
     splashwidget.cpp \
+    spywidget.cpp \
     statedialog.cpp \
     statemanager.cpp \
     texttospeechengine.cpp \
@@ -59,6 +60,7 @@ HEADERS += \
     player.h \
     road.h \
     splashwidget.h \
+    spywidget.h \
     statedialog.h \
     statemanager.h \
     texttospeechengine.h \
@@ -74,6 +76,7 @@ FORMS += \
     newroaddialog.ui \
     nodeconnectdialog.ui \
     splashwidget.ui \
+    spywidget.ui \
     statedialog.ui \
     topwidget.ui \
     turnrestrictioneditor.ui

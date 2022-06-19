@@ -37,6 +37,7 @@ class TopWidget : public QWidget {
 
     signals:
         void showLoginWidget();
+        void showSpyWidget();
 
     private slots:
 
@@ -45,6 +46,8 @@ class TopWidget : public QWidget {
         void on_loginButton_clicked();
 
         void on_nightModeButton_toggled(bool checked);
+
+        void on_spyButton_clicked();
 
     private:
         Ui::TopWidget* ui;
