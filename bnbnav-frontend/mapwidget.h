@@ -47,6 +47,7 @@ class MapWidget : public QWidget {
         void doClick();
         void followPlayer();
         void updateBaseMap();
+        void updateNodeMap();
         void zoom(double factor, QPointF origin);
 
         // QWidget interface

@@ -62,6 +62,7 @@ struct MapWidgetPrivate {
         QPoint dragNodeCoordinates;
 
         QPicture baseMap;
+        QPicture nodeMap;
 };
 
 MapWidget::MapWidget(QWidget* parent) :
@@ -76,7 +77,7 @@ MapWidget::MapWidget(QWidget* parent) :
         update();
     });
     connect(DataManager::instance(), &DataManager::newNode, this, [=] {
-        update();
+        updateNodeMap();
     });
     connect(DataManager::instance(), &DataManager::newEdge, this, [=] {
         updateBaseMap();
@@ -88,7 +89,7 @@ MapWidget::MapWidget(QWidget* parent) :
         updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::removedNode, this, [=] {
-        update();
+        updateNodeMap();
     });
     connect(DataManager::instance(), &DataManager::removedRoad, this, [=] {
         update();
@@ -101,6 +102,7 @@ MapWidget::MapWidget(QWidget* parent) :
     });
     connect(DataManager::instance(), &DataManager::updatedNode, this, [=] {
         updateBaseMap();
+        updateNodeMap();
     });
     connect(DataManager::instance(), &DataManager::updatedRoad, this, [=] {
         updateBaseMap();
@@ -111,10 +113,13 @@ MapWidget::MapWidget(QWidget* parent) :
         if (player == StateManager::login()) followPlayer();
     });
     connect(StateManager::instance(), &StateManager::stateChanged, this, [=] {
-        update();
+        updateNodeMap();
     });
     connect(StateManager::instance(), &StateManager::followMeChanged, this, [=] {
         followPlayer();
+    });
+    connect(StateManager::instance(), &StateManager::spyModeChanged, this, [=] {
+        updateNodeMap();
     });
 
     connect(StateManager::instance(), &StateManager::nightModeChanged, this, [=] {
@@ -131,6 +136,7 @@ MapWidget::MapWidget(QWidget* parent) :
     });
 
     updateBaseMap();
+    updateNodeMap();
     grabGesture(Qt::PinchGesture);
 }
 
@@ -283,6 +289,31 @@ void MapWidget::updateBaseMap() {
     this->update();
 }
 
+void MapWidget::updateNodeMap() {
+    if (StateManager::currentState() != StateManager::Edit) {
+        this->update();
+        return;
+    }
+
+    QPainter painter(&d->nodeMap);
+    for (Node* node : DataManager::nodes().values()) {
+        // Draw the node
+        // Don't draw temporary nodes
+        if (node->isTemporary()) continue;
+
+        painter.setPen(QPen(Qt::black, 2 / d->scale));
+        painter.setBrush(node->background());
+        if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
+        if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+
+        QRectF nodeRect = node->nodeRect(d->scale);
+        if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+        painter.drawRect(nodeRect);
+    }
+    painter.end();
+    this->update();
+}
+
 void MapWidget::zoom(double factor, QPointF origin) {
     double newScale = d->scale * factor;
     if (newScale < 0.1) newScale = 0.1;
@@ -292,7 +323,7 @@ void MapWidget::zoom(double factor, QPointF origin) {
     d->origin = (d->origin - origin) * factor + origin;
     d->scale = newScale;
 
-    this->update();
+    this->updateNodeMap();
 }
 
 void MapWidget::paintEvent(QPaintEvent* event) {
@@ -325,10 +356,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
                 textRect.setWidth(painter.fontMetrics().horizontalAdvance(landmark->name()));
                 textRect.moveCenter(landmark->hitbox().center());
 
-                //                if (textRect.intersects(event->rect())) {
                 painter.setPen(StateManager::nightMode() ? Qt::white : Qt::black);
                 painter.drawText(textRect, Qt::AlignCenter, landmark->name());
-                //                }
             }
         }
 
@@ -494,19 +523,23 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         }
 
         if (StateManager::currentState() == StateManager::Edit) {
-            for (Node* node : DataManager::nodes().values()) {
-                // Draw the node
-                // Don't draw temporary nodes
-                if (node->isTemporary()) continue;
+            d->nodeMap.play(&painter);
 
-                painter.setPen(QPen(Qt::black, 2 / d->scale));
-                painter.setBrush(node->background());
-                if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
-                if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+            QList<Node*> specialNodes;
+            specialNodes.append(d->firstNode);
+            specialNodes.append(d->dragNode);
+            for (auto target : d->hoverTargets) specialNodes.append(qobject_cast<Node*>(target));
+            for (Node* node : specialNodes) {
+                if (node) {
+                    painter.setPen(QPen(Qt::black, 2 / d->scale));
+                    painter.setBrush(node->background());
+                    if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
+                    if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
 
-                QRectF nodeRect = node->nodeRect(d->scale);
-                if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
-                painter.drawRect(nodeRect);
+                    QRectF nodeRect = node->nodeRect(d->scale);
+                    if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+                    painter.drawRect(nodeRect);
+                }
             }
         }
     }
