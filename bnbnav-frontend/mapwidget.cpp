@@ -643,6 +643,16 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                         dialog->open();
                     });
                 }
+                menu->addAction(tr("Autobuild..."), this, [=] {
+                    if (StateManager::login() == "") {
+                        QMessageBox::warning(this, tr("Login Required"), tr("Log in to autobuild."));
+                    } else {
+                        NodeConnectDialog* dialog = new NodeConnectDialog(hoverNode);
+                        dialog->setWindowModality(Qt::ApplicationModal);
+                        connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
+                        dialog->open();
+                    }
+                });
                 menu->addAction(tr("Turn Restrictions..."), this, [=] {
                     // Connect these nodes!
                     auto* dialog = new TurnRestrictionEditor(hoverNode);

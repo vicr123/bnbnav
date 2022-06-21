@@ -29,6 +29,7 @@ public:
     QComboBox *roadSelectionBox;
     QLabel *label_2;
     QHBoxLayout *horizontalLayout;
+    QLabel *addDirective;
     QSpacerItem *horizontalSpacer;
     QPushButton *cancelButton;
     QPushButton *okButton;
@@ -41,6 +42,7 @@ public:
         if (NodeConnectDialog->objectName().isEmpty())
             NodeConnectDialog->setObjectName(QString::fromUtf8("NodeConnectDialog"));
         NodeConnectDialog->resize(400, 175);
+        NodeConnectDialog->setWindowTitle(QString::fromUtf8("New Edge"));
         gridLayout = new QGridLayout(NodeConnectDialog);
         gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
         roadSelectionBox = new QComboBox(NodeConnectDialog);
@@ -55,17 +57,24 @@ public:
 
         horizontalLayout = new QHBoxLayout();
         horizontalLayout->setObjectName(QString::fromUtf8("horizontalLayout"));
+        addDirective = new QLabel(NodeConnectDialog);
+        addDirective->setObjectName(QString::fromUtf8("addDirective"));
+
+        horizontalLayout->addWidget(addDirective);
+
         horizontalSpacer = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
 
         horizontalLayout->addItem(horizontalSpacer);
 
         cancelButton = new QPushButton(NodeConnectDialog);
         cancelButton->setObjectName(QString::fromUtf8("cancelButton"));
+        cancelButton->setText(QString::fromUtf8("Cancel"));
 
         horizontalLayout->addWidget(cancelButton);
 
         okButton = new QPushButton(NodeConnectDialog);
         okButton->setObjectName(QString::fromUtf8("okButton"));
+        okButton->setText(QString::fromUtf8("OK"));
 
         horizontalLayout->addWidget(okButton);
 
@@ -77,6 +86,7 @@ public:
         QFont font;
         font.setPointSize(15);
         label->setFont(font);
+        label->setText(QString::fromUtf8("New Edge"));
 
         gridLayout->addWidget(label, 0, 0, 1, 2);
 
@@ -102,13 +112,11 @@ public:
 
     void retranslateUi(QDialog *NodeConnectDialog)
     {
-        NodeConnectDialog->setWindowTitle(QCoreApplication::translate("NodeConnectDialog", "New Edge", nullptr));
         label_2->setText(QCoreApplication::translate("NodeConnectDialog", "Road", nullptr));
-        cancelButton->setText(QCoreApplication::translate("NodeConnectDialog", "Cancel", nullptr));
-        okButton->setText(QCoreApplication::translate("NodeConnectDialog", "OK", nullptr));
-        label->setText(QCoreApplication::translate("NodeConnectDialog", "New Edge", nullptr));
+        addDirective->setText(QCoreApplication::translate("NodeConnectDialog", "Use /addroadnode to add edges", nullptr));
         newRoadButton->setText(QCoreApplication::translate("NodeConnectDialog", "Create New Road", nullptr));
         twoWayBox->setText(QCoreApplication::translate("NodeConnectDialog", "Two Way", nullptr));
+        (void)NodeConnectDialog;
     } // retranslateUi
 
 };

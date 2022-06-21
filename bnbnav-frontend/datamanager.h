@@ -55,7 +55,7 @@ class DataManager : public QObject {
 
     signals:
         void ready();
-        void newNode();
+        void newNode(Node* node, QString player);
         void newRoad();
         void newEdge();
         void newLandmark();

@@ -33,6 +33,7 @@ class NodeConnectDialog : public QDialog {
 
     public:
         explicit NodeConnectDialog(Node* first, Node* second, QWidget* parent = nullptr);
+        explicit NodeConnectDialog(Node* autoFrom, QWidget* parent = nullptr);
         ~NodeConnectDialog();
 
     private slots:
@@ -45,6 +46,8 @@ class NodeConnectDialog : public QDialog {
     private:
         Ui::NodeConnectDialog* ui;
         NodeConnectDialogPrivate* d;
+
+        void doConnect(Node* first, Node* second, QString road, bool twoWay, std::function<void(bool)> callback);
 };
 
 #endif // NODECONNECTDIALOG_H

@@ -394,8 +394,9 @@ void DataManager::connectToServer() {
         QString id = object.value("id").toString();
 
         if (type == "newNode") {
-            instance()->d->nodes.insert(id, new Node(object));
-            emit instance()->newNode();
+            auto node = new Node(object);
+            instance()->d->nodes.insert(id, node);
+            emit instance()->newNode(node, object.value("player").toString());
         } else if (type == "newRoad") {
             instance()->d->roads.insert(id, new Road(object));
             emit instance()->newRoad();

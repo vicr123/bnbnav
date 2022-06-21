@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>New Edge</string>
+   <string notr="true">New Edge</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
@@ -26,6 +26,13 @@
    </item>
    <item row="4" column="0" colspan="2">
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QLabel" name="addDirective">
+       <property name="text">
+        <string>Use /addroadnode to add edges</string>
+       </property>
+      </widget>
+     </item>
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
@@ -42,14 +49,14 @@
      <item>
       <widget class="QPushButton" name="cancelButton">
        <property name="text">
-        <string>Cancel</string>
+        <string notr="true">Cancel</string>
        </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="okButton">
        <property name="text">
-        <string>OK</string>
+        <string notr="true">OK</string>
        </property>
        <property name="default">
         <bool>true</bool>
@@ -66,7 +73,7 @@
       </font>
      </property>
      <property name="text">
-      <string>New Edge</string>
+      <string notr="true">New Edge</string>
      </property>
     </widget>
    </item>
