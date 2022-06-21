@@ -66,7 +66,8 @@ router.post("/nodes/add", async (req, res) => {
         id: id,
         x: req.body.x,
         y: req.body.y,
-        z: req.body.z
+        z: req.body.z,
+        player: req.body.player
     });
 
     res.send({

@@ -24,7 +24,7 @@ public class AddRoadNodeCommand implements CommandExecutor {
         }
 
         Location location = ((Player) commandSender).getLocation();
-        String body = "{\"x\": " + location.getBlockX() + ", \"y\": " + location.getBlockY()  +", \"z\": " + location.getBlockZ() + "}";
+        String body = String.format("{\"x\": %d, \"y\": %d, \"z\": %d, \"player\": \"%s\", \"uuid\": \"%s\"}", location.getBlockX(), location.getBlockY(), location.getBlockZ(), commandSender.getName(), ((Player) commandSender).getUniqueId());
 
         unirest.post("/nodes/add")
                 .contentType("application/json")
