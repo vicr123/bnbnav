@@ -22,6 +22,7 @@
 
 #include <QWidget>
 
+class Edge;
 class Landmark;
 struct MapWidgetPrivate;
 class MapWidget : public QWidget {
@@ -62,6 +63,7 @@ class MapWidget : public QWidget {
         // QObject interface
     public:
         bool event(QEvent* event);
+        void spliceNodes(Edge* edge, QString spliceAt);
 };
 
 #endif // MAPWIDGET_H

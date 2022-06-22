@@ -69,6 +69,7 @@ MapWidget::MapWidget(QWidget* parent) :
     QWidget(parent) {
     d = new MapWidgetPrivate();
     this->setMouseTracking(true);
+    this->setAttribute(Qt::WA_OpaquePaintEvent);
 
     connect(DataManager::instance(), &DataManager::ready, this, [=] {
         updateBaseMap();
@@ -709,12 +710,23 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                     connect(d, &NewRoadDialog::finished, d, &QDialog::deleteLater);
                     d->open();
                 });
-                menu->addAction(tr("Delete Edge"), this, [=] {
-                    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [=](bool error) {
-                        if (error) {
-                            QMessageBox::warning(this, tr("Could not delete edge"), tr("Could not delete the edge."));
-                        }
-                    });
+                menu->addAction(tr("Splice at selected node"), this, [=] {
+                    if (!d->firstNode) {
+                        QMessageBox::warning(this, tr("Node Required"), tr("To splice this edge, select a node and then try to splice the edge again."));
+                        return;
+                    }
+
+                    if (hoverEdge->from() == d->firstNode || hoverEdge->to() == d->firstNode) {
+                        QMessageBox::warning(this, tr("Can't splice"), tr("Can't splice the edge at this node. Select another node to try again."));
+                        return;
+                    }
+
+                    spliceNodes(hoverEdge, DataManager::nodes().key(d->firstNode));
+                    auto oppositeEdge = DataManager::edgeForNodes(hoverEdge->to(), hoverEdge->from());
+                    if (oppositeEdge) {
+                        spliceNodes(oppositeEdge, DataManager::nodes().key(d->firstNode));
+                    }
+                    d->firstNode = nullptr;
                 });
             }
         }
@@ -733,4 +745,41 @@ bool MapWidget::event(QEvent* event) {
         }
     }
     return QWidget::event(event);
+}
+
+void MapWidget::spliceNodes(Edge* edge, QString spliceAt) {
+    auto first = DataManager::nodes().key(edge->from());
+    auto second = DataManager::nodes().key(edge->to());
+    auto road = DataManager::roads().key(edge->road());
+
+    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(edge)), [=](bool error) {
+        if (error) {
+            QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+            return;
+        }
+
+        DataGatherer::submit("/edges/add", {
+                                               {"road",  road    },
+                                               {"node1", first   },
+                                               {"node2", spliceAt}
+        },
+            [=](QByteArray, bool error) {
+            if (error) {
+                QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+                return;
+            }
+
+            DataGatherer::submit("/edges/add", {
+                                                   {"road",  road    },
+                                                   {"node1", spliceAt},
+                                                   {"node2", second  }
+            },
+                [=](QByteArray, bool error) {
+                if (error) {
+                    QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+                    return;
+                }
+            });
+        });
+    });
 }
