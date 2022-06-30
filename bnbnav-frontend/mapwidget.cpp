@@ -728,6 +728,13 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                     }
                     d->firstNode = nullptr;
                 });
+                menu->addAction(tr("Delete Edge"), this, [=] {
+                    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [=](bool error) {
+                        if (error) {
+                            QMessageBox::warning(this, tr("Could not delete edge"), tr("Could not delete the edge."));
+                        }
+                    });
+                });
             }
         }
     }
