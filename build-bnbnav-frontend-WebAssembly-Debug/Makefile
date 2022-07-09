@@ -621,6 +621,8 @@ qrc_resources.cpp: ../bnbnav-frontend/resources.qrc \
 		../bnbnav-frontend/landmarks/restaurant.svg \
 		../bnbnav-frontend/landmarks/tourist-attraction.svg \
 		../bnbnav-frontend/landmarks/shopping.svg \
+		../bnbnav-frontend/landmarks/tesco.svg \
+		../bnbnav-frontend/landmarks/elc.svg \
 		../bnbnav-frontend/landmarks/squid-transit.svg \
 		../bnbnav-frontend/landmarks/frivoloco.svg \
 		../bnbnav-frontend/landmarks/hospital.svg \
@@ -5410,7 +5412,13 @@ nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtWidgets/QPushButton \
 		/opt/qt5-wasm/include/QtWidgets/qpushbutton.h \
 		/opt/qt5-wasm/include/QtWidgets/QSpacerItem \
-		/opt/qt5-wasm/include/QtCore/QSet \
+		../bnbnav-frontend/datagatherer.h \
+		/opt/qt5-wasm/include/QtCore/QObject \
+		../bnbnav-frontend/datamanager.h \
+		../bnbnav-frontend/newroaddialog.h \
+		../bnbnav-frontend/node.h \
+		../bnbnav-frontend/road.h \
+		../bnbnav-frontend/statemanager.h \
 		/opt/qt5-wasm/include/QtCore/QJsonObject \
 		/opt/qt5-wasm/include/QtCore/qjsonobject.h \
 		/opt/qt5-wasm/include/QtCore/qjsonvalue.h \
@@ -5420,11 +5428,7 @@ nodeconnectdialog.o: ../bnbnav-frontend/nodeconnectdialog.cpp ../bnbnav-frontend
 		/opt/qt5-wasm/include/QtCore/quuid.h \
 		/opt/qt5-wasm/include/QtWidgets/QMessageBox \
 		/opt/qt5-wasm/include/QtWidgets/qmessagebox.h \
-		../bnbnav-frontend/datagatherer.h \
-		/opt/qt5-wasm/include/QtCore/QObject \
-		../bnbnav-frontend/road.h \
-		../bnbnav-frontend/datamanager.h \
-		../bnbnav-frontend/newroaddialog.h
+		/opt/qt5-wasm/include/QtCore/QSet
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o nodeconnectdialog.o ../bnbnav-frontend/nodeconnectdialog.cpp
 
 player.o: ../bnbnav-frontend/player.cpp ../bnbnav-frontend/player.h \
@@ -5886,6 +5890,26 @@ spywidget.o: ../bnbnav-frontend/spywidget.cpp ../bnbnav-frontend/spywidget.h \
 		/opt/qt5-wasm/include/QtGui/qvector2d.h \
 		/opt/qt5-wasm/include/QtGui/qtouchdevice.h \
 		ui_spywidget.h \
+		/opt/qt5-wasm/include/QtCore/QVariant \
+		/opt/qt5-wasm/include/QtWidgets/QApplication \
+		/opt/qt5-wasm/include/QtWidgets/qapplication.h \
+		/opt/qt5-wasm/include/QtCore/qcoreapplication.h \
+		/opt/qt5-wasm/include/QtCore/qeventloop.h \
+		/opt/qt5-wasm/include/QtWidgets/qdesktopwidget.h \
+		/opt/qt5-wasm/include/QtGui/qguiapplication.h \
+		/opt/qt5-wasm/include/QtGui/qinputmethod.h \
+		/opt/qt5-wasm/include/QtWidgets/QLabel \
+		/opt/qt5-wasm/include/QtWidgets/qlabel.h \
+		/opt/qt5-wasm/include/QtWidgets/qframe.h \
+		/opt/qt5-wasm/include/QtWidgets/QRadioButton \
+		/opt/qt5-wasm/include/QtWidgets/qradiobutton.h \
+		/opt/qt5-wasm/include/QtWidgets/qabstractbutton.h \
+		/opt/qt5-wasm/include/QtGui/qicon.h \
+		/opt/qt5-wasm/include/QtWidgets/QVBoxLayout \
+		/opt/qt5-wasm/include/QtWidgets/qboxlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayout.h \
+		/opt/qt5-wasm/include/QtWidgets/qlayoutitem.h \
+		/opt/qt5-wasm/include/QtWidgets/qgridlayout.h \
 		../bnbnav-frontend/statemanager.h \
 		/opt/qt5-wasm/include/QtCore/QObject
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o spywidget.o ../bnbnav-frontend/spywidget.cpp

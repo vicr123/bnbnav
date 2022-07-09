@@ -44,5 +44,7 @@
         <file>landmarks/postal-office.svg</file>
         <file>landmarks/hotel.svg</file>
         <file>landmarks/frivoloco.svg</file>
+        <file>landmarks/elc.svg</file>
+        <file>landmarks/tesco.svg</file>
     </qresource>
 </RCC>

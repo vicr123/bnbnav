@@ -105,6 +105,8 @@ QList<QPair<QString, QString>> Landmark::landmarks() {
         {"postal-office",      tr("Post Office")           },
         {"hotel",              tr("Hotel")                 },
         {"frivoloco",          tr("FrivoloCo Chocolates")  },
+        {"elc",                tr("ELC")                   },
+        {"tesco",              tr("TESCO")                 },
     };
 }
 
