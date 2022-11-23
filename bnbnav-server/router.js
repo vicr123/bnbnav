@@ -2,9 +2,13 @@ const express = require('express');
 const db = require('./db');
 const ws = require('./ws');
 const jose = require('jose');
+const compression = require("compression");
 let router = express.Router();
 
 router.use(express.json({
+
+}));
+router.use(compression({
 
 }));
 
