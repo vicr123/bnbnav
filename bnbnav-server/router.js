@@ -388,7 +388,25 @@ router.post("/player/:player", async (req, res) => {
 router.delete("/player/:player", async (req, res) => {
     ws.broadcast({
         type: "playerGone",
-        id: req.params.player
+        id: req.params.player,
+    });
+
+    res.sendStatus(200);
+});
+router.post("/player/:player/join", async (req, res) => {
+    ws.broadcast({
+        type: "playerJoin",
+        id: req.params.player,
+        ...req.body
+    });
+
+    res.sendStatus(200);
+});
+router.post("/chat/:player", async (req, res) => {
+    ws.broadcast({
+        type: "chat",
+        id: req.params.player,
+        ...req.body
     });
 
     res.sendStatus(200);

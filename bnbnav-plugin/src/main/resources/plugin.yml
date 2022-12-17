@@ -1,6 +1,8 @@
 name: BnbNav
 version: 1.0
 main: com.vicr123.bnbnav.BnbnavPlugin
+depend:
+  - DiscordSRV
 commands:
   addroadnode:
     description: Adds a node to the map

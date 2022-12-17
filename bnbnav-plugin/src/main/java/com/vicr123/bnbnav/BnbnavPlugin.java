@@ -2,6 +2,7 @@ package com.vicr123.bnbnav;
 
 import com.vicr123.bnbnav.commands.AddRoadNodeCommand;
 import com.vicr123.bnbnav.commands.EditNavCommand;
+import github.scarsz.discordsrv.DiscordSRV;
 import kong.unirest.Unirest;
 import kong.unirest.UnirestInstance;
 import org.bukkit.Location;
@@ -16,6 +17,8 @@ public class BnbnavPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         unirest = Unirest.spawnInstance();
+
+        DiscordSRV.getPlugin().getAccountLinkManager();
 
         unirest.config()
                 .defaultBaseUrl(API_BASE);
