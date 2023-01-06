@@ -2,6 +2,7 @@ const express = require('express');
 const db = require('./db');
 const ws = require('./ws');
 const jose = require('jose');
+const cors = require('cors');
 const compression = require("compression");
 let router = express.Router();
 
@@ -11,6 +12,7 @@ router.use(express.json({
 router.use(compression({
 
 }));
+router.use(cors());
 
 router.get("/data", async (req, res) => {
     res.send(db.data);
