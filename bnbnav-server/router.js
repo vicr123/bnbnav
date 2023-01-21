@@ -4,7 +4,10 @@ const ws = require('./ws');
 const jose = require('jose');
 const cors = require('cors');
 const compression = require("compression");
+const Mutex = require("async-mutex").Mutex;
 let router = express.Router();
+
+const mutex = new Mutex();
 
 router.use(express.json({
 
@@ -48,7 +51,18 @@ router.use(async (req, res, next) => {
     next();
 })
 
-router.post("/nodes/add", async (req, res) => {
+router.use(async (req, res, next) => {
+    let releaseMutex = await mutex.acquire();
+    res.on("finish", releaseMutex);
+    await next();
+})
+
+router.post("/nodes/add", async (req, res, next) => {
+    if (req.user.uuid !== "bnbnav") {
+        res.sendStatus(403);
+        return;
+    }
+
     if (req.body.x == null || req.body.y == null || req.body.z == null) {
         res.sendStatus(400);
         return;
@@ -65,7 +79,7 @@ router.post("/nodes/add", async (req, res) => {
         y: req.body.y,
         z: req.body.z
     };
-    db.save();
+    await db.save(`added node ${id} at ${req.body.x},${req.body.y},${req.body.z}`, req.user);
 
     ws.broadcast({
         type: "newNode",
@@ -79,8 +93,10 @@ router.post("/nodes/add", async (req, res) => {
     res.send({
         id: id
     });
+
+    next()
 });
-router.post("/nodes/:id", async (req, res) => {
+router.post("/nodes/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.nodes[id]) {
         res.sendStatus(404);
@@ -98,7 +114,7 @@ router.post("/nodes/:id", async (req, res) => {
     }
 
     db.data.nodes[id] = node;
-    db.save();
+    await db.save(`updated node ${id} to ${node.x},${node.y},${node.z}`, req.user);
 
     ws.broadcast({
         type: "nodeUpdated",
@@ -109,8 +125,10 @@ router.post("/nodes/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.delete("/nodes/:id", async (req, res) => {
+router.delete("/nodes/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.nodes[id]) {
         res.sendStatus(404);
@@ -149,7 +167,7 @@ router.delete("/nodes/:id", async (req, res) => {
     }
 
     delete db.data.nodes[id];
-    db.save();
+    await db.save(`deleted node ${id}`, req.user);
 
     ws.broadcast({
         type: "nodeRemoved",
@@ -157,8 +175,10 @@ router.delete("/nodes/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.post("/roads/add", async (req, res) => {
+router.post("/roads/add", async (req, res, next) => {
     if (req.body.name == null || req.body.type == null) {
         res.sendStatus(400);
         return;
@@ -169,7 +189,7 @@ router.post("/roads/add", async (req, res) => {
         name: req.body.name,
         type: req.body.type
     };
-    db.save();
+    await db.save(`added road ${id}: ${req.body.name} (${req.body.type})`, req.user);
 
     ws.broadcast({
         type: "newRoad",
@@ -181,8 +201,10 @@ router.post("/roads/add", async (req, res) => {
     res.send({
         id: id
     });
+
+    next()
 });
-router.post("/roads/:id", async (req, res) => {
+router.post("/roads/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.roads[id]) {
         res.sendStatus(404);
@@ -194,7 +216,7 @@ router.post("/roads/:id", async (req, res) => {
     if (req.body.type != null) road.type = req.body.type;
 
     db.data.roads[id] = road;
-    db.save();
+    await db.save(`updated road ${id}: ${road.name} (${road.type})`, req.user);
 
     ws.broadcast({
         type: "roadUpdated",
@@ -204,8 +226,10 @@ router.post("/roads/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.delete("/roads/:id", async (req, res) => {
+router.delete("/roads/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.roads[id]) {
         res.sendStatus(404);
@@ -223,8 +247,8 @@ router.delete("/roads/:id", async (req, res) => {
         }
     }
 
-    delete db.data.nodes[id];
-    db.save();
+    delete db.data.roads[id];
+    await db.save(`deleted road ${id}`, req.user);
 
     ws.broadcast({
         type: "roadRemoved",
@@ -232,8 +256,10 @@ router.delete("/roads/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.post("/edges/add", async (req, res) => {
+router.post("/edges/add", async (req, res, next) => {
     if (req.body.road == null || req.body.node1 == null || req.body.node2 == null) {
         res.sendStatus(400);
         return;
@@ -250,7 +276,7 @@ router.post("/edges/add", async (req, res) => {
         node1: req.body.node1.toString(),
         node2: req.body.node2.toString()
     };
-    db.save();
+    await db.save(`added edge ${id} for ${req.body.road} from ${req.body.node1} to ${req.body.node2}`, req.user);
 
     ws.broadcast({
         type: "newEdge",
@@ -263,8 +289,10 @@ router.post("/edges/add", async (req, res) => {
     res.send({
         id: id.toString()
     });
+
+    next()
 });
-router.delete("/edges/:id", async (req, res) => {
+router.delete("/edges/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.edges[id]) {
         res.sendStatus(404);
@@ -272,7 +300,7 @@ router.delete("/edges/:id", async (req, res) => {
     }
 
     delete db.data.edges[id];
-    db.save();
+    await db.save(`deleted edge ${id}`, req.user);
 
     ws.broadcast({
         type: "edgeRemoved",
@@ -280,8 +308,10 @@ router.delete("/edges/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.post("/landmarks/add", async (req, res) => {
+router.post("/landmarks/add", async (req, res, next) => {
     if (req.body.node == null || req.body.name == null || req.body.type == null) {
         res.sendStatus(400);
         return;
@@ -298,7 +328,7 @@ router.post("/landmarks/add", async (req, res) => {
         type: req.body.type,
         node: req.body.node.toString()
     };
-    db.save();
+    await db.save(`added landmark ${id}: ${req.body.name} (${req.body.type}) on ${req.body.node}`, req.user);
 
     ws.broadcast({
         type: "newLandmark",
@@ -311,8 +341,10 @@ router.post("/landmarks/add", async (req, res) => {
     res.send({
         id: id
     });
+
+    next()
 });
-router.delete("/landmarks/:id", async (req, res) => {
+router.delete("/landmarks/:id", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.landmarks[id]) {
         res.sendStatus(404);
@@ -320,7 +352,7 @@ router.delete("/landmarks/:id", async (req, res) => {
     }
 
     delete db.data.landmarks[id];
-    db.save();
+    await db.save(`deleted landmark ${id}`, req.user);
 
     ws.broadcast({
         type: "landmarkRemoved",
@@ -328,8 +360,10 @@ router.delete("/landmarks/:id", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.post("/nodes/:id/annotations/:name", async (req, res) => {
+router.post("/nodes/:id/annotations/:name", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.nodes[id]) {
         res.sendStatus(404);
@@ -342,7 +376,7 @@ router.post("/nodes/:id/annotations/:name", async (req, res) => {
     if (!db.data.annotations[id]) db.data.annotations[id] = {};
 
     db.data.annotations[id][name] = annotation;
-    db.save();
+    await db.save(`added annotation ${name} on ${id}`, req.user);
 
     ws.broadcast({
         type: "annotationUpdated",
@@ -352,8 +386,10 @@ router.post("/nodes/:id/annotations/:name", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.delete("/nodes/:id/annotations/:name", async (req, res) => {
+router.delete("/nodes/:id/annotations/:name", async (req, res, next) => {
     let id = req.params.id
     if (!db.data.nodes[id]) {
         res.sendStatus(404);
@@ -369,7 +405,7 @@ router.delete("/nodes/:id/annotations/:name", async (req, res) => {
     }
 
     delete db.data.annotations[id][name];
-    db.save();
+    await db.save(`added deleted ${name} on ${id}`, req.user);
 
     ws.broadcast({
         type: "annotationRemoved",
@@ -378,24 +414,31 @@ router.delete("/nodes/:id/annotations/:name", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next()
 });
-router.post("/player/:player", async (req, res) => {
+router.post("/player/:player", async (req, res, next) => {
     ws.broadcast({
         type: "playerMove",
         ...req.body
     });
 
     res.sendStatus(200);
+
+    next();
+
 });
-router.delete("/player/:player", async (req, res) => {
+router.delete("/player/:player", async (req, res, next) => {
     ws.broadcast({
         type: "playerGone",
         id: req.params.player,
     });
 
     res.sendStatus(200);
+
+    next();
 });
-router.post("/player/:player/join", async (req, res) => {
+router.post("/player/:player/join", async (req, res, next) => {
     ws.broadcast({
         type: "playerJoin",
         id: req.params.player,
@@ -403,8 +446,10 @@ router.post("/player/:player/join", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next();
 });
-router.post("/chat/:player", async (req, res) => {
+router.post("/chat/:player", async (req, res, next) => {
     ws.broadcast({
         type: "chat",
         id: req.params.player,
@@ -412,6 +457,9 @@ router.post("/chat/:player", async (req, res) => {
     });
 
     res.sendStatus(200);
+
+    next();
 });
+
 
 module.exports = router;
