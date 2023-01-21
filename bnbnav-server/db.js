@@ -46,7 +46,7 @@ class Database {
     async save(message, user) {
         let contents = JSON.stringify(this.data, null, 4);
         await fs.writeFile("repo/data.json", contents);
-        await this.git.commit(message, "data.json", {
+        await this.git.add("data.json").commit(message, "data.json", {
             "--author": `"${user.name} <${user.uuid}@bnbnav.vicr123.com>"`
         });
     }
