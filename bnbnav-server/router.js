@@ -93,8 +93,6 @@ router.post("/nodes/add", async (req, res, next) => {
     res.send({
         id: id
     });
-
-    next()
 });
 router.post("/nodes/:id", async (req, res, next) => {
     let id = req.params.id
@@ -125,8 +123,6 @@ router.post("/nodes/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.delete("/nodes/:id", async (req, res, next) => {
     let id = req.params.id
@@ -175,8 +171,6 @@ router.delete("/nodes/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.post("/roads/add", async (req, res, next) => {
     if (req.body.name == null || req.body.type == null) {
@@ -201,8 +195,6 @@ router.post("/roads/add", async (req, res, next) => {
     res.send({
         id: id
     });
-
-    next()
 });
 router.post("/roads/:id", async (req, res, next) => {
     let id = req.params.id
@@ -226,8 +218,6 @@ router.post("/roads/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.delete("/roads/:id", async (req, res, next) => {
     let id = req.params.id
@@ -256,8 +246,6 @@ router.delete("/roads/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.post("/edges/add", async (req, res, next) => {
     if (req.body.road == null || req.body.node1 == null || req.body.node2 == null) {
@@ -289,8 +277,6 @@ router.post("/edges/add", async (req, res, next) => {
     res.send({
         id: id.toString()
     });
-
-    next()
 });
 router.delete("/edges/:id", async (req, res, next) => {
     let id = req.params.id
@@ -308,8 +294,6 @@ router.delete("/edges/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.post("/landmarks/add", async (req, res, next) => {
     if (req.body.node == null || req.body.name == null || req.body.type == null) {
@@ -341,8 +325,6 @@ router.post("/landmarks/add", async (req, res, next) => {
     res.send({
         id: id
     });
-
-    next()
 });
 router.delete("/landmarks/:id", async (req, res, next) => {
     let id = req.params.id
@@ -360,8 +342,6 @@ router.delete("/landmarks/:id", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.post("/nodes/:id/annotations/:name", async (req, res, next) => {
     let id = req.params.id
@@ -386,8 +366,6 @@ router.post("/nodes/:id/annotations/:name", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.delete("/nodes/:id/annotations/:name", async (req, res, next) => {
     let id = req.params.id
@@ -414,8 +392,6 @@ router.delete("/nodes/:id/annotations/:name", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next()
 });
 router.post("/player/:player", async (req, res, next) => {
     ws.broadcast({
@@ -424,9 +400,6 @@ router.post("/player/:player", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next();
-
 });
 router.delete("/player/:player", async (req, res, next) => {
     ws.broadcast({
@@ -435,8 +408,6 @@ router.delete("/player/:player", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next();
 });
 router.post("/player/:player/join", async (req, res, next) => {
     ws.broadcast({
@@ -446,8 +417,6 @@ router.post("/player/:player/join", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next();
 });
 router.post("/chat/:player", async (req, res, next) => {
     ws.broadcast({
@@ -457,8 +426,6 @@ router.post("/chat/:player", async (req, res, next) => {
     });
 
     res.sendStatus(200);
-
-    next();
 });
 
 
