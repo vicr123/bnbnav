@@ -3,6 +3,7 @@ const db = require('./db');
 const expressws = require('express-ws');
 
 const router = require("./router");
+const git = require("./git");
 const WebSocket = require("./ws");
 
 (async () => {
@@ -12,6 +13,7 @@ const WebSocket = require("./ws");
     expressws(app);
 
     app.use("/api", router);
+    app.use("/git", git);
     app.ws("/ws", (ws, req) => {
         new WebSocket(ws);
     });
