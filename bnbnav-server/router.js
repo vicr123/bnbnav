@@ -20,9 +20,24 @@ router.use(cors());
 router.get("/data", async (req, res) => {
     res.send(db.data);
 });
+router.get("/data/labels", async (req, res) => {
+    // Get all the labels with coordinates
+    let retval = Object.values(db.data.landmarks).filter(ld => ld.type.startsWith("label-")).map(ld => {
+        let node = db.data.nodes[ld.node];
+        return {
+            name: ld.name,
+            type: ld.type,
+            x: node.x,
+            y: node.y,
+            z: node.z
+        }
+    });
+
+    res.send(retval);
+});
 
 router.use(async (req, res, next) => {
-    if (req.originalUrl == "/data") return next();
+    if (req.originalUrl.startsWith("/data")) return next();
 
     let auth = req.header("Authorization");
     if (!auth) return res.sendStatus(401);
