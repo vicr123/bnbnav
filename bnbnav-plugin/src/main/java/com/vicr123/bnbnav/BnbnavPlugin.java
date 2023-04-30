@@ -11,6 +11,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class BnbnavPlugin extends JavaPlugin {
     UnirestInstance unirest;
+    BluemapIntegration bluemap;
 
     public static final String API_BASE = "http://localhost:5813/api";
 
@@ -28,6 +29,8 @@ public class BnbnavPlugin extends JavaPlugin {
         this.getCommand("editnav").setExecutor(new EditNavCommand());
 
         getServer().getScheduler().scheduleSyncRepeatingTask(this, this::detectPlayers, 0, 1);
+
+        bluemap = new BluemapIntegration(this, unirest);
 
         getLogger().info("bnbnav is ready!");
     }
