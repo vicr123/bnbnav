@@ -22,11 +22,13 @@ router.get("/data", async (req, res) => {
 });
 router.get("/data/labels", async (req, res) => {
     // Get all the labels with coordinates
-    let retval = Object.values(db.data.landmarks).filter(ld => ld.type.startsWith("label-")).map(ld => {
+    let retval = Object.keys(db.data.landmarks).map(k => [k, db.data.landmarks[k]]).filter(ld => ld[1].type.startsWith("label-")).map(tuple => {
+        let [k, ld] = tuple;
         let node = db.data.nodes[ld.node];
         return {
             name: ld.name,
             type: ld.type,
+            id: k,
             x: node.x,
             y: node.y,
             z: node.z
