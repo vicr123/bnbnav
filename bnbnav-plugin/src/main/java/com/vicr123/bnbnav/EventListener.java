@@ -1,22 +1,24 @@
 package com.vicr123.bnbnav;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import github.scarsz.discordsrv.DiscordSRV;
 import kong.unirest.UnirestInstance;
-import org.bukkit.entity.Player;
+import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventListener implements Listener {
+    private BnbnavPlugin plugin;
     UnirestInstance unirest;
 
-    EventListener(UnirestInstance unirest) {
+    EventListener(BnbnavPlugin plugin, UnirestInstance unirest) {
+        this.plugin = plugin;
         this.unirest = unirest;
     }
 
@@ -46,24 +48,33 @@ public class EventListener implements Listener {
                 .asEmptyAsync();
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.LOWEST)
     public void chatEvent(AsyncPlayerChatEvent chatEvent) {
-        var discordId = DiscordSRV.getPlugin().getAccountLinkManager().getDiscordId(chatEvent.getPlayer().getUniqueId());
-        Gson gson = new Gson();
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+            var discordId = DiscordSRV.getPlugin().getAccountLinkManager().getDiscordId(chatEvent.getPlayer().getUniqueId());
+            Gson gson = new Gson();
 
-        var root = new JsonObject();
-        if (discordId == null) {
-            root.add("discordId", JsonNull.INSTANCE);
-        } else {
-            root.addProperty("discordId", discordId + "");
+            var root = new JsonObject();
+            if (discordId == null) {
+                root.add("discordId", JsonNull.INSTANCE);
+            } else {
+                root.addProperty("discordId", discordId + "");
+            }
+            root.addProperty("message", chatEvent.getMessage());
+
+            unirest.post("/chat/{player}")
+                    .routeParam("player", chatEvent.getPlayer().getName())
+                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
+                    .contentType("application/json")
+                    .body(gson.toJson(root))
+                    .asEmptyAsync();
+        });
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    public void preChatEvent(AsyncPlayerChatEvent chatEvent) {
+        if (JwtProvisioning.isValidJwt(chatEvent.getMessage())) {
+            chatEvent.setMessage("Oh no, I wanted to send my bnbnav token but the server was smarter! What a shame!");
         }
-        root.addProperty("message", chatEvent.getMessage());
-
-        unirest.post("/chat/{player}")
-                .routeParam("player", chatEvent.getPlayer().getName())
-                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
-                .contentType("application/json")
-                .body(gson.toJson(root))
-                .asEmptyAsync();
     }
 }

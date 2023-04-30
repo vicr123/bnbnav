@@ -23,7 +23,7 @@ public class BnbnavPlugin extends JavaPlugin {
         unirest.config()
                 .defaultBaseUrl(API_BASE);
 
-        getServer().getPluginManager().registerEvents(new EventListener(unirest), this);
+        getServer().getPluginManager().registerEvents(new EventListener(this, unirest), this);
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
         this.getCommand("editnav").setExecutor(new EditNavCommand());
 

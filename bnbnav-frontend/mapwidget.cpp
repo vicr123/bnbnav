@@ -71,55 +71,71 @@ MapWidget::MapWidget(QWidget* parent) :
     this->setMouseTracking(true);
     this->setAttribute(Qt::WA_OpaquePaintEvent);
 
-    connect(DataManager::instance(), &DataManager::ready, this, [=] {
+    connect(DataManager::instance(), &DataManager::ready, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::newRoad, this, [=] {
+    connect(DataManager::instance(), &DataManager::newRoad, this,
+        [=] {
         update();
     });
-    connect(DataManager::instance(), &DataManager::newNode, this, [=] {
+    connect(DataManager::instance(), &DataManager::newNode, this,
+        [=] {
         updateNodeMap();
     });
-    connect(DataManager::instance(), &DataManager::newEdge, this, [=] {
+    connect(DataManager::instance(), &DataManager::newEdge, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::newLandmark, this, [=] {
+    connect(DataManager::instance(), &DataManager::newLandmark, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::removedEdge, this, [=] {
+    connect(DataManager::instance(), &DataManager::removedEdge, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::removedNode, this, [=] {
+    connect(DataManager::instance(), &DataManager::removedNode, this,
+        [=] {
         updateNodeMap();
     });
-    connect(DataManager::instance(), &DataManager::removedRoad, this, [=] {
+    connect(DataManager::instance(), &DataManager::removedRoad, this,
+        [=] {
         update();
     });
-    connect(DataManager::instance(), &DataManager::removedLandmark, this, [=] {
+    connect(DataManager::instance(), &DataManager::removedLandmark, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::updatedEdge, this, [=] {
+    connect(DataManager::instance(), &DataManager::updatedEdge, this,
+        [=] {
         updateBaseMap();
     });
     connect(DataManager::instance(), &DataManager::updatedNode, this, [=] {
         updateBaseMap();
         updateNodeMap();
     });
-    connect(DataManager::instance(), &DataManager::updatedRoad, this, [=] {
+    connect(DataManager::instance(), &DataManager::updatedRoad, this,
+        [=] {
         updateBaseMap();
     });
-    connect(DataManager::instance(), &DataManager::playerUpdate, this, [=](QString player) {
+    connect(DataManager::instance(), &DataManager::playerUpdate, this,
+        [=](QString player) {
         update();
 
-        if (player == StateManager::login()) followPlayer();
+        if (player == StateManager::login())
+            followPlayer();
     });
-    connect(StateManager::instance(), &StateManager::stateChanged, this, [=] {
+    connect(StateManager::instance(), &StateManager::stateChanged, this,
+        [=] {
         updateNodeMap();
     });
-    connect(StateManager::instance(), &StateManager::followMeChanged, this, [=] {
+    connect(StateManager::instance(), &StateManager::followMeChanged, this,
+        [=] {
         followPlayer();
     });
-    connect(StateManager::instance(), &StateManager::spyModeChanged, this, [=] {
+    connect(StateManager::instance(), &StateManager::spyModeChanged, this,
+        [=] {
         updateNodeMap();
     });
 
@@ -142,16 +158,19 @@ MapWidget::MapWidget(QWidget* parent) :
 }
 
 void MapWidget::focusMap(QPoint point) {
-    if (StateManager::followMe()) StateManager::setFollowMe(false);
+    if (StateManager::followMe())
+        StateManager::setFollowMe(false);
 
     QVariantAnimation* anim = new QVariantAnimation();
     anim->setStartValue(d->origin);
-    anim->setEndValue(QPointF(-point * d->scale + QPoint(this->width() / 2, this->height() / 2)));
+    anim->setEndValue(QPointF(-point * d->scale +
+                              QPoint(this->width() / 2, this->height() / 2)));
     connect(anim, &QVariantAnimation::valueChanged, this, [=](QVariant value) {
         d->origin = value.toPointF();
         this->update();
     });
-    connect(anim, &QVariantAnimation::finished, anim, &QVariantAnimation::deleteLater);
+    connect(anim, &QVariantAnimation::finished, anim,
+        &QVariantAnimation::deleteLater);
     anim->setEasingCurve(QEasingCurve::InOutCubic);
     anim->setDuration(500);
     anim->start();
@@ -184,13 +203,16 @@ void MapWidget::doClick() {
                     Node* second = hoverNode;
                     d->firstNode = nullptr;
 
-                    if (first == second) return;
-                    if (DataManager::edgeForNodes(first, second)) return;
+                    if (first == second)
+                        return;
+                    if (DataManager::edgeForNodes(first, second))
+                        return;
 
                     // Connect these nodes!
                     NodeConnectDialog* dialog = new NodeConnectDialog(first, second);
                     dialog->setWindowModality(Qt::ApplicationModal);
-                    connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
+                    connect(dialog, &NodeConnectDialog::finished, dialog,
+                        &NodeConnectDialog::deleteLater);
                     dialog->open();
                 } else {
                     d->firstNode = hoverNode;
@@ -210,9 +232,11 @@ void MapWidget::doClick() {
 }
 
 void MapWidget::followPlayer() {
-    if (!StateManager::followMe()) return;
+    if (!StateManager::followMe())
+        return;
 
-    d->origin = -StateManager::loggedInPlayer()->markerCoordinates() * d->scale + QPointF(this->width() / 2, this->height() / 2);
+    d->origin = -StateManager::loggedInPlayer()->markerCoordinates() * d->scale +
+                QPointF(this->width() / 2, this->height() / 2);
 }
 
 void MapWidget::updateBaseMap() {
@@ -222,7 +246,8 @@ void MapWidget::updateBaseMap() {
     QList<Edge*> edges = DataManager::edges().values();
     // Sort edges by average Y height
     std::stable_sort(edges.begin(), edges.end(), [=](Edge* first, Edge* second) {
-        if (StateManager::currentRoute().contains(first) == StateManager::currentRoute().contains(second)) {
+        if (StateManager::currentRoute().contains(first) ==
+            StateManager::currentRoute().contains(second)) {
             return first->averageY() < second->averageY();
         } else if (StateManager::currentRoute().contains(first)) {
             return false;
@@ -232,8 +257,10 @@ void MapWidget::updateBaseMap() {
     });
     for (Edge* edge : qAsConst(edges)) {
         // Draw the edge
-        if (drawnEdges.contains(edge)) continue;
-        if (edge->isTemporary()) continue;
+        if (drawnEdges.contains(edge))
+            continue;
+        if (edge->isTemporary())
+            continue;
 
         QPolygonF poly;
         poly.append(QPointF(edge->from()->x(), edge->from()->z()));
@@ -246,7 +273,9 @@ void MapWidget::updateBaseMap() {
         do {
             trackingEdges = DataManager::edgesToNode(tracking->from());
             for (Edge* edge : trackingEdges) {
-                if (edge->road() == tracking->road() && edge->line().angle() == tracking->line().angle() && !drawnEdges.contains(edge)) {
+                if (edge->road() == tracking->road() &&
+                    edge->line().angle() == tracking->line().angle() &&
+                    !drawnEdges.contains(edge)) {
                     poly.prepend(QPointF(edge->from()->x(), edge->from()->z()));
                     tracking = edge;
                     drawnEdges.insert(edge);
@@ -260,7 +289,9 @@ void MapWidget::updateBaseMap() {
         do {
             trackingEdges = DataManager::edgesFromNode(tracking->to());
             for (Edge* edge : trackingEdges) {
-                if (edge->road() == tracking->road() && edge->line().angle() == tracking->line().angle() && !drawnEdges.contains(edge)) {
+                if (edge->road() == tracking->road() &&
+                    edge->line().angle() == tracking->line().angle() &&
+                    !drawnEdges.contains(edge)) {
                     poly.append(QPointF(edge->to()->x(), edge->to()->z()));
                     tracking = edge;
                     drawnEdges.insert(edge);
@@ -280,7 +311,8 @@ void MapWidget::updateBaseMap() {
 
     for (Landmark* landmark : DataManager::landmarks().values()) {
         if (!landmark->type().startsWith("label-")) {
-            QSvgRenderer renderer(QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
+            QSvgRenderer renderer(
+                QStringLiteral(":/landmarks/%1.svg").arg(landmark->type()));
             renderer.render(&painter, landmark->hitbox());
         }
     }
@@ -300,15 +332,19 @@ void MapWidget::updateNodeMap() {
     for (Node* node : DataManager::nodes().values()) {
         // Draw the node
         // Don't draw temporary nodes
-        if (node->isTemporary()) continue;
+        if (node->isTemporary())
+            continue;
 
         painter.setPen(QPen(Qt::black, 2 / d->scale));
         painter.setBrush(node->background());
-        if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
-        if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+        if (d->firstNode == node)
+            painter.setPen(QPen(Qt::red, 0.1));
+        if (d->hoverTargets.contains(node))
+            painter.setPen(QPen(Qt::blue, 0.1));
 
         QRectF nodeRect = node->nodeRect(d->scale);
-        if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+        if (d->dragNode == node)
+            nodeRect.moveCenter(d->dragNodeCoordinates);
         painter.drawRect(nodeRect);
     }
     painter.end();
@@ -317,8 +353,10 @@ void MapWidget::updateNodeMap() {
 
 void MapWidget::zoom(double factor, QPointF origin) {
     double newScale = d->scale * factor;
-    if (newScale < 0.1) newScale = 0.1;
-    if (newScale > 50) newScale = 50;
+    if (newScale < 0.1)
+        newScale = 0.1;
+    if (newScale > 50)
+        newScale = 50;
     factor = newScale / d->scale;
 
     d->origin = (d->origin - origin) * factor + origin;
@@ -344,9 +382,11 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             if (landmark->type().startsWith("label-")) {
                 QFont textFont = font;
                 if (landmark->type() == "label-city") {
-                    if (d->scale < 0.3 || d->scale > 1.15) continue;
+                    if (d->scale < 0.3 || d->scale > 1.15)
+                        continue;
                 } else if (landmark->type() == "label-country") {
-                    if (d->scale > 0.3) continue;
+                    if (d->scale > 0.3)
+                        continue;
                     textFont.setPointSizeF(40 / d->scale);
                 }
 
@@ -354,7 +394,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
                 QRectF textRect;
                 textRect.setHeight(painter.fontMetrics().height());
-                textRect.setWidth(painter.fontMetrics().horizontalAdvance(landmark->name()));
+                textRect.setWidth(
+                    painter.fontMetrics().horizontalAdvance(landmark->name()));
                 textRect.moveCenter(landmark->hitbox().center());
 
                 painter.setPen(StateManager::nightMode() ? Qt::white : Qt::black);
@@ -382,10 +423,13 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         }
 
         if (StateManager::currentInstruction() != -1) {
-            StateManager::Instruction inst = StateManager::currentInstructions().at(StateManager::currentInstruction());
+            StateManager::Instruction inst = StateManager::currentInstructions().at(
+                StateManager::currentInstruction());
             if (inst.fromEdge && inst.toEdge) {
                 QPolygonF arrow;
-                QLineF fromLine(inst.fromEdge->line().p2(), inst.fromEdge->line().p2() + QPointF(100, 0) / d->scale);
+                QLineF fromLine(inst.fromEdge->line().p2(),
+                    inst.fromEdge->line().p2() +
+                        QPointF(100, 0) / d->scale);
                 fromLine.setAngle(inst.fromEdge->line().angle());
 
                 arrow.append(fromLine.pointAt(-1));
@@ -393,13 +437,16 @@ void MapWidget::paintEvent(QPaintEvent* event) {
                 fromLine.setAngle(inst.toEdge->line().angle());
                 arrow.append(fromLine.pointAt(1));
 
-                painter.setPen(QPen(QColor(100, 50, 150), inst.fromEdge->road()->pen(inst.fromEdge).widthF(), Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
+                painter.setPen(QPen(QColor(100, 50, 150),
+                    inst.fromEdge->road()->pen(inst.fromEdge).widthF(),
+                    Qt::SolidLine, Qt::RoundCap, Qt::RoundJoin));
                 painter.setBrush(QColor(100, 50, 150));
 
                 QPolygonF arrowHead;
                 arrowHead.append(fromLine.pointAt(1));
 
-                QLineF arrowHeadBase(fromLine.pointAt(1), fromLine.pointAt(1) + QPointF(50, 0) / d->scale);
+                QLineF arrowHeadBase(fromLine.pointAt(1),
+                    fromLine.pointAt(1) + QPointF(50, 0) / d->scale);
                 arrowHeadBase.setAngle(fromLine.normalVector().angle());
 
                 fromLine.setLength(fromLine.length() + 50 / d->scale);
@@ -422,7 +469,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         QPainter painter(this);
 
         // Draw the background
-        painter.fillRect(0, 0, this->width(), this->height(), this->palette().color(QPalette::Window));
+        painter.fillRect(0, 0, this->width(), this->height(),
+            this->palette().color(QPalette::Window));
 
         painter.setWorldTransform(currentTransform());
         painter.setRenderHint(QPainter::Antialiasing);
@@ -433,7 +481,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             playerTransform.rotate(player->markerAngle() - 90);
             playerTransform.scale(d->scale, d->scale);
 
-            QRect viewport(goModeOrigin.toPoint(), QSize(this->width(), this->height()));
+            QRect viewport(goModeOrigin.toPoint(),
+                QSize(this->width(), this->height()));
             painter.setViewport(viewport);
 
             painter.setTransform(playerTransform);
@@ -448,7 +497,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
         painter.save();
         QSvgRenderer playerMarkRenderer(QStringLiteral(":/playermark.svg"));
         for (Player* player : DataManager::players()) {
-            if (goMode && player != StateManager::loggedInPlayer()) continue;
+            if (goMode && player != StateManager::loggedInPlayer())
+                continue;
 
             QRectF circle;
             circle.setSize(QSizeF(15, 15) * d->scale);
@@ -488,15 +538,19 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             text.setWidth(painter.fontMetrics().horizontalAdvance(player->name()));
             text.moveCenter(circle.center());
             text.moveTop(circle.bottom() + 10 / scale);
-            if (!goMode) painter.drawText(text, player->name());
+            if (!goMode)
+                painter.drawText(text, player->name());
 
             if (player->snappedEdge()) {
                 QRectF roadText;
                 roadText.setHeight(painter.fontMetrics().height());
-                roadText.setWidth(painter.fontMetrics().horizontalAdvance(player->snappedEdge()->road()->name()) + 20 / scale);
+                roadText.setWidth(painter.fontMetrics().horizontalAdvance(
+                                      player->snappedEdge()->road()->name()) +
+                                  20 / scale);
                 roadText.moveCenter(text.center());
 
-                QRectF roadBacking = roadText.adjusted(-20 / scale, -5 / scale, 20 / scale, 5 / scale);
+                QRectF roadBacking =
+                    roadText.adjusted(-20 / scale, -5 / scale, 20 / scale, 5 / scale);
                 if (goMode) {
                     roadBacking.moveTop(text.bottom() + 10 * d->scale);
                 } else {
@@ -505,11 +559,13 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
                 painter.setBrush(QColor(0, 130, 120));
                 painter.setPen(Qt::transparent);
-                painter.drawRoundedRect(roadBacking, roadBacking.height() / 2, roadBacking.height() / 2, Qt::AbsoluteSize);
+                painter.drawRoundedRect(roadBacking, roadBacking.height() / 2,
+                    roadBacking.height() / 2, Qt::AbsoluteSize);
 
                 roadText.moveCenter(roadBacking.center());
                 painter.setPen(Qt::white);
-                painter.drawText(roadText, Qt::AlignCenter, player->snappedEdge()->road()->name());
+                painter.drawText(roadText, Qt::AlignCenter,
+                    player->snappedEdge()->road()->name());
             }
         }
         painter.restore();
@@ -529,16 +585,20 @@ void MapWidget::paintEvent(QPaintEvent* event) {
             QList<Node*> specialNodes;
             specialNodes.append(d->firstNode);
             specialNodes.append(d->dragNode);
-            for (auto target : d->hoverTargets) specialNodes.append(qobject_cast<Node*>(target));
+            for (auto target : d->hoverTargets)
+                specialNodes.append(qobject_cast<Node*>(target));
             for (Node* node : specialNodes) {
                 if (node) {
                     painter.setPen(QPen(Qt::black, 2 / d->scale));
                     painter.setBrush(node->background());
-                    if (d->firstNode == node) painter.setPen(QPen(Qt::red, 0.1));
-                    if (d->hoverTargets.contains(node)) painter.setPen(QPen(Qt::blue, 0.1));
+                    if (d->firstNode == node)
+                        painter.setPen(QPen(Qt::red, 0.1));
+                    if (d->hoverTargets.contains(node))
+                        painter.setPen(QPen(Qt::blue, 0.1));
 
                     QRectF nodeRect = node->nodeRect(d->scale);
-                    if (d->dragNode == node) nodeRect.moveCenter(d->dragNodeCoordinates);
+                    if (d->dragNode == node)
+                        nodeRect.moveCenter(d->dragNodeCoordinates);
                     painter.drawRect(nodeRect);
                 }
             }
@@ -548,7 +608,8 @@ void MapWidget::paintEvent(QPaintEvent* event) {
 
 void MapWidget::mousePressEvent(QMouseEvent* event) {
     if (event->button() == Qt::LeftButton) {
-        if (!d->firstNode && !d->hoverTargets.isEmpty() && qobject_cast<Node*>(d->hoverTargets.first())) {
+        if (!d->firstNode && !d->hoverTargets.isEmpty() &&
+            qobject_cast<Node*>(d->hoverTargets.first())) {
             d->dragNode = qobject_cast<Node*>(d->hoverTargets.first());
             d->initialNodeCoordinates = QPoint(d->dragNode->x(), d->dragNode->z());
             d->dragNodeCoordinates = d->initialNodeCoordinates;
@@ -566,11 +627,14 @@ void MapWidget::mouseReleaseEvent(QMouseEvent* event) {
             if (d->dragNodeCoordinates == d->initialNodeCoordinates) {
                 doClick();
             } else {
-                d->dragNode->submitUpdate(d->dragNodeCoordinates.x(), d->dragNode->y(), d->dragNodeCoordinates.y(), [=](bool error) {
-                    if (error) {
-                        QMessageBox::warning(this, tr("Could not update node"), tr("Could not update the node."));
-                    }
-                });
+                d->dragNode->submitUpdate(d->dragNodeCoordinates.x(), d->dragNode->y(),
+                    d->dragNodeCoordinates.y(), [=](bool error) {
+                        if (error) {
+                            QMessageBox::warning(
+                                this, tr("Could not update node"),
+                                tr("Could not update the node."));
+                        }
+                    });
             }
             d->dragNode = nullptr;
         } else if (d->dragging) {
@@ -587,7 +651,8 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
     if (d->dragNode) {
         d->dragNodeCoordinates = toMapCoordinates(event->pos()).toPoint();
     } else if (d->dragging) {
-        if (StateManager::followMe()) StateManager::setFollowMe(false);
+        if (StateManager::followMe())
+            StateManager::setFollowMe(false);
         d->origin += event->globalPos() - d->dragStart;
         d->dragStart = event->globalPos();
     } else {
@@ -597,19 +662,24 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
         if (StateManager::currentState() == StateManager::Edit) {
             for (Node* node : DataManager::nodes().values()) {
-                if (node->isTemporary()) continue;
-                if (node->nodeRect(d->scale).contains(mapPos)) d->hoverTargets.append(node);
+                if (node->isTemporary())
+                    continue;
+                if (node->nodeRect(d->scale).contains(mapPos))
+                    d->hoverTargets.append(node);
             }
 
             for (Edge* edge : DataManager::edges().values()) {
-                if (edge->isTemporary()) continue;
+                if (edge->isTemporary())
+                    continue;
                 double width = edge->road()->pen(edge).widthF();
-                if (edge->hitbox(width).containsPoint(mapPos, Qt::OddEvenFill)) d->hoverTargets.append(edge);
+                if (edge->hitbox(width).containsPoint(mapPos, Qt::OddEvenFill))
+                    d->hoverTargets.append(edge);
             }
         }
 
         for (Landmark* landmark : DataManager::landmarks().values()) {
-            if (landmark->hitbox().contains(mapPos)) d->hoverTargets.append(landmark);
+            if (landmark->hitbox().contains(mapPos))
+                d->hoverTargets.append(landmark);
         }
     }
 
@@ -619,6 +689,7 @@ void MapWidget::mouseMoveEvent(QMouseEvent* event) {
 
 void MapWidget::wheelEvent(QWheelEvent* event) {
     if (event->phase() == Qt::NoScrollPhase) {
+        auto angleDelta = event->angleDelta();
         double factor = 1.0 + 10 * (event->angleDelta().y() / 12000.0);
         zoom(factor, event->position());
     } else {
@@ -645,19 +716,26 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
 
             if (hoverNode) {
                 menu->addSection(tr("Node"));
-                menu->addAction(tr("Node ID: %1").arg(DataManager::nodes().key(hoverNode)))->setEnabled(false);
+                menu->addAction(
+                        tr("Node ID: %1").arg(DataManager::nodes().key(hoverNode)))
+                    ->setEnabled(false);
 
                 Landmark* attached = nullptr;
                 for (Landmark* landmark : DataManager::landmarks().values()) {
-                    if (landmark->node() == hoverNode) attached = landmark;
+                    if (landmark->node() == hoverNode)
+                        attached = landmark;
                 }
 
                 if (attached) {
                     menu->addAction(tr("Detach Landmark/Label"), this, [=] {
                         // Detach this landmark!
-                        DataGatherer::del(QStringLiteral("/landmarks/%1").arg(DataManager::landmarks().key(attached)), [=](bool error) {
+                        DataGatherer::del(QStringLiteral("/landmarks/%1")
+                                              .arg(DataManager::landmarks().key(attached)),
+                            [=](bool error) {
                             if (error) {
-                                QMessageBox::warning(this, tr("Could not detach landmark"), tr("Could not detach the landmark."));
+                                QMessageBox::warning(
+                                    this, tr("Could not detach landmark"),
+                                    tr("Could not detach the landmark."));
                             }
                         });
                     });
@@ -666,24 +744,28 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                         // Connect these nodes!
                         NewLandmarkDialog* dialog = new NewLandmarkDialog(hoverNode);
                         dialog->setWindowModality(Qt::ApplicationModal);
-                        connect(dialog, &NewLandmarkDialog::finished, dialog, &NewLandmarkDialog::deleteLater);
+                        connect(dialog, &NewLandmarkDialog::finished, dialog,
+                            &NewLandmarkDialog::deleteLater);
                         dialog->open();
                     });
                     menu->addAction(tr("Attach Label"), this, [=] {
                         // Connect these nodes!
                         NewLabelDialog* dialog = new NewLabelDialog(hoverNode);
                         dialog->setWindowModality(Qt::ApplicationModal);
-                        connect(dialog, &NewLabelDialog::finished, dialog, &NewLabelDialog::deleteLater);
+                        connect(dialog, &NewLabelDialog::finished, dialog,
+                            &NewLabelDialog::deleteLater);
                         dialog->open();
                     });
                 }
                 menu->addAction(tr("Autobuild..."), this, [=] {
                     if (StateManager::login() == "") {
-                        QMessageBox::warning(this, tr("Login Required"), tr("Log in to autobuild."));
+                        QMessageBox::warning(this, tr("Login Required"),
+                            tr("Log in to autobuild."));
                     } else {
                         NodeConnectDialog* dialog = new NodeConnectDialog(hoverNode);
                         dialog->setWindowModality(Qt::ApplicationModal);
-                        connect(dialog, &NodeConnectDialog::finished, dialog, &NodeConnectDialog::deleteLater);
+                        connect(dialog, &NodeConnectDialog::finished, dialog,
+                            &NodeConnectDialog::deleteLater);
                         dialog->open();
                     }
                 });
@@ -691,13 +773,18 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                     // Connect these nodes!
                     auto* dialog = new TurnRestrictionEditor(hoverNode);
                     dialog->setWindowModality(Qt::ApplicationModal);
-                    connect(dialog, &TurnRestrictionEditor::finished, dialog, &TurnRestrictionEditor::deleteLater);
+                    connect(dialog, &TurnRestrictionEditor::finished, dialog,
+                        &TurnRestrictionEditor::deleteLater);
                     dialog->open();
                 });
                 menu->addAction(tr("Delete Node"), this, [=] {
-                    DataGatherer::del(QStringLiteral("/nodes/%1").arg(DataManager::nodes().key(hoverNode)), [=](bool error) {
+                    DataGatherer::del(QStringLiteral("/nodes/%1")
+                                          .arg(DataManager::nodes().key(hoverNode)),
+                        [=](bool error) {
                         if (error) {
-                            QMessageBox::warning(this, tr("Could not delete node"), tr("Could not delete the node."));
+                            QMessageBox::warning(
+                                this, tr("Could not delete node"),
+                                tr("Could not delete the node."));
                         }
                     });
                 });
@@ -705,33 +792,44 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
                 menu->addSection(tr("Edge"));
                 menu->addAction(hoverEdge->road()->name())->setEnabled(false);
                 menu->addAction(tr("Edit Road"), this, [=] {
-                    NewRoadDialog* d = new NewRoadDialog(DataManager::roads().key(hoverEdge->road()), this);
+                    NewRoadDialog* d = new NewRoadDialog(
+                        DataManager::roads().key(hoverEdge->road()), this);
                     d->setWindowModality(Qt::ApplicationModal);
                     connect(d, &NewRoadDialog::finished, d, &QDialog::deleteLater);
                     d->open();
                 });
                 menu->addAction(tr("Splice at selected node"), this, [=] {
                     if (!d->firstNode) {
-                        QMessageBox::warning(this, tr("Node Required"), tr("To splice this edge, select a node and then try to splice the edge again."));
+                        QMessageBox::warning(this, tr("Node Required"),
+                            tr("To splice this edge, select a node and "
+                               "then try to splice the edge again."));
                         return;
                     }
 
-                    if (hoverEdge->from() == d->firstNode || hoverEdge->to() == d->firstNode) {
-                        QMessageBox::warning(this, tr("Can't splice"), tr("Can't splice the edge at this node. Select another node to try again."));
+                    if (hoverEdge->from() == d->firstNode ||
+                        hoverEdge->to() == d->firstNode) {
+                        QMessageBox::warning(this, tr("Can't splice"),
+                            tr("Can't splice the edge at this node. "
+                               "Select another node to try again."));
                         return;
                     }
 
                     spliceNodes(hoverEdge, DataManager::nodes().key(d->firstNode));
-                    auto oppositeEdge = DataManager::edgeForNodes(hoverEdge->to(), hoverEdge->from());
+                    auto oppositeEdge =
+                        DataManager::edgeForNodes(hoverEdge->to(), hoverEdge->from());
                     if (oppositeEdge) {
                         spliceNodes(oppositeEdge, DataManager::nodes().key(d->firstNode));
                     }
                     d->firstNode = nullptr;
                 });
                 menu->addAction(tr("Delete Edge"), this, [=] {
-                    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(hoverEdge)), [=](bool error) {
+                    DataGatherer::del(QStringLiteral("/edges/%1")
+                                          .arg(DataManager::edges().key(hoverEdge)),
+                        [=](bool error) {
                         if (error) {
-                            QMessageBox::warning(this, tr("Could not delete edge"), tr("Could not delete the edge."));
+                            QMessageBox::warning(
+                                this, tr("Could not delete edge"),
+                                tr("Could not delete the edge."));
                         }
                     });
                 });
@@ -746,7 +844,8 @@ void MapWidget::contextMenuEvent(QContextMenuEvent* event) {
 bool MapWidget::event(QEvent* event) {
     if (event->type() == QEvent::Gesture) {
         QGestureEvent* e = static_cast<QGestureEvent*>(event);
-        QPinchGesture* gesture = qobject_cast<QPinchGesture*>(e->gesture(Qt::PinchGesture));
+        QPinchGesture* gesture =
+            qobject_cast<QPinchGesture*>(e->gesture(Qt::PinchGesture));
         if (gesture) {
             zoom(gesture->scaleFactor(), gesture->centerPoint());
         }
@@ -759,34 +858,43 @@ void MapWidget::spliceNodes(Edge* edge, QString spliceAt) {
     auto second = DataManager::nodes().key(edge->to());
     auto road = DataManager::roads().key(edge->road());
 
-    DataGatherer::del(QStringLiteral("/edges/%1").arg(DataManager::edges().key(edge)), [=](bool error) {
+    DataGatherer::del(
+        QStringLiteral("/edges/%1").arg(DataManager::edges().key(edge)),
+        [=](bool error) {
         if (error) {
-            QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+            QMessageBox::warning(this, tr("Could not splice edge"),
+                tr("Could not splice the edge."));
             return;
         }
 
-        DataGatherer::submit("/edges/add", {
-                                               {"road",  road    },
-                                               {"node1", first   },
-                                               {"node2", spliceAt}
+        DataGatherer::submit(
+            "/edges/add",
+            {
+                {"road",  road    },
+                {"node1", first   },
+                {"node2", spliceAt}
         },
             [=](QByteArray, bool error) {
             if (error) {
-                QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+                QMessageBox::warning(this, tr("Could not splice edge"),
+                    tr("Could not splice the edge."));
                 return;
             }
 
-            DataGatherer::submit("/edges/add", {
-                                                   {"road",  road    },
-                                                   {"node1", spliceAt},
-                                                   {"node2", second  }
+            DataGatherer::submit(
+                "/edges/add",
+                {
+                    {"road",  road    },
+                    {"node1", spliceAt},
+                    {"node2", second  }
             },
                 [=](QByteArray, bool error) {
                 if (error) {
-                    QMessageBox::warning(this, tr("Could not splice edge"), tr("Could not splice the edge."));
+                    QMessageBox::warning(this, tr("Could not splice edge"),
+                        tr("Could not splice the edge."));
                     return;
                 }
+                });
             });
         });
-    });
 }
