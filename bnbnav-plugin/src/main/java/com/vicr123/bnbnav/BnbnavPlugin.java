@@ -14,6 +14,7 @@ public class BnbnavPlugin extends JavaPlugin {
     BluemapIntegration bluemap;
 
     public static final String API_BASE = "http://localhost:5813/api";
+    public static final int SERVER_API_VERSION = 2;
 
     @Override
     public void onEnable() {
@@ -22,7 +23,8 @@ public class BnbnavPlugin extends JavaPlugin {
         DiscordSRV.getPlugin().getAccountLinkManager();
 
         unirest.config()
-                .defaultBaseUrl(API_BASE);
+                .defaultBaseUrl(API_BASE)
+                .setDefaultHeader("X-Bnbnav-Api-Version", String.valueOf(SERVER_API_VERSION));
 
         getServer().getPluginManager().registerEvents(new EventListener(this, unirest), this);
         this.getCommand("addroadnode").setExecutor(new AddRoadNodeCommand(unirest));
@@ -38,10 +40,10 @@ public class BnbnavPlugin extends JavaPlugin {
     void detectPlayers() {
         for (Player player : getServer().getOnlinePlayers()) {
             Location loc = player.getLocation();
-            String body = "{\"id\": \"" + player.getName() + "\", \"x\": " + loc.getX() + ", \"y\": " + loc.getY() + ", \"z\": " + loc.getZ() + "}";
+            String body = "{\"id\": \"%s\", \"x\": %s, \"y\": %s, \"z\": %s, \"world\": \"%s\"}".formatted(player.getName(), loc.getX(), loc.getY(), loc.getZ(), loc.getWorld().getName());
             unirest.post("/player/{player}")
                     .routeParam("player", player.getName())
-                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
+                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null, true))
                     .contentType("application/json")
                     .body(body)
                     .asEmptyAsync();

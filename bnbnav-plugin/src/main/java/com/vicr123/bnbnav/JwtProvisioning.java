@@ -9,7 +9,7 @@ import org.bukkit.entity.Player;
 import java.util.Date;
 
 public class JwtProvisioning {
-    public static String JwtFor(CommandSender sender) {
+    public static String JwtFor(CommandSender sender, boolean withServerPerms) {
         String subject = "bnbnav";
         String pn = "bnbnav";
         if (sender instanceof Player player) {
@@ -21,6 +21,7 @@ public class JwtProvisioning {
                 .withIssuer("bnbnav")
                 .withSubject(subject)
                 .withClaim("pn", pn)
+                .withClaim("server", withServerPerms)
                 .withIssuedAt(new Date())
                 .sign(algorithm);
     }

@@ -8,6 +8,8 @@ import kong.unirest.UnirestInstance;
 import org.apache.commons.lang.StringEscapeUtils;
 import org.bukkit.Bukkit;
 
+import java.util.Arrays;
+
 public class BluemapIntegration {
 
     private static class Label {
@@ -17,6 +19,7 @@ public class BluemapIntegration {
         private int y;
         private int z;
         private String id;
+        private String world;
 
         public String getName() {
             return name;
@@ -65,6 +68,14 @@ public class BluemapIntegration {
         public void setId(String id) {
             this.id = id;
         }
+
+        public String getWorld() {
+            return world;
+        }
+
+        public void setWorld(String world) {
+            this.world = world;
+        }
     }
 
     final String CITY_LABEL = "<div style=\"font-size: 20pt; color: white; transform: translate(-50%%, -50%%);\">%s</div>";
@@ -80,9 +91,7 @@ public class BluemapIntegration {
         BlueMapAPI.getInstance().ifPresent(this::updateBluemap);
 
         var interval = 20 * 60 * 5;
-        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> {
-            BlueMapAPI.getInstance().ifPresent(this::updateBluemap);
-        }, interval, interval);
+        Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, () -> BlueMapAPI.getInstance().ifPresent(this::updateBluemap), interval, interval);
     }
 
     void updateBluemap(BlueMapAPI api) {
@@ -94,39 +103,45 @@ public class BluemapIntegration {
                 return;
             }
 
-            var citySet = MarkerSet.builder().label("Cities").build();
-            var countrySet = MarkerSet.builder().label("Countries").build();
             var labels = new Gson().fromJson(response.getBody(), Label[].class);
-            for (var label : labels) {
-                var cleanLabel = StringEscapeUtils.escapeHtml(label.getName());
+            var worlds = Arrays.stream(labels).map(Label::getWorld).distinct();
+            for (var world : worlds.toArray()) {
+                var citySet = MarkerSet.builder().label("Cities").build();
+                var countrySet = MarkerSet.builder().label("Countries").build();
 
-                var markerBuilder = HtmlMarker.builder()
-                        .position(label.getX(), label.getY(), (double) label.getZ())
-                        .label(label.getName());
+                for (var label : labels) {
+                    if (!label.getWorld().equals(world)) continue;
 
-                if (label.getType().equals("label-city")) {
-                    citySet.getMarkers().put(label.getId(), markerBuilder
-                                    .html(String.format(CITY_LABEL, cleanLabel))
-                                    .maxDistance(1000)
-                                    .build());
-                } else if (label.getType().equals("label-country")) {
-                    countrySet.getMarkers().put(label.getId(), markerBuilder
-                                    .html(String.format(COUNTRY_LABEL, cleanLabel))
-                                    .minDistance(1000)
-                                    .build());
-                } else {
-                    plugin.getLogger().warning("No handler for label \"%s\"".formatted(label.getType()));
+                    var cleanLabel = StringEscapeUtils.escapeHtml(label.getName());
+
+                    var markerBuilder = HtmlMarker.builder()
+                            .position(label.getX(), label.getY(), (double) label.getZ())
+                            .label(label.getName());
+
+                    if (label.getType().equals("label-city")) {
+                        citySet.getMarkers().put(label.getId(), markerBuilder
+                                .html(String.format(CITY_LABEL, cleanLabel))
+                                .maxDistance(1000)
+                                .build());
+                    } else if (label.getType().equals("label-country")) {
+                        countrySet.getMarkers().put(label.getId(), markerBuilder
+                                .html(String.format(COUNTRY_LABEL, cleanLabel))
+                                .minDistance(1000)
+                                .build());
+                    } else {
+                        plugin.getLogger().warning("No handler for label \"%s\"".formatted(label.getType()));
+                    }
                 }
+
+                api.getWorlds().stream().filter(w -> w.getSaveFolder().equals(world)).findFirst().ifPresentOrElse(bluemapWorld -> {
+                    for (var map : bluemapWorld.getMaps()) {
+                        map.getMarkerSets().put("bnbnav-country", countrySet);
+                        map.getMarkerSets().put("bnbnav-city", citySet);
+                    }
+                }, () -> plugin.getLogger().warning("No world called \"%s\"".formatted(world)));
+
             }
 
-            api.getWorlds().stream().filter(w -> w.getSaveFolder().endsWith("world")).findFirst().ifPresentOrElse(world -> {
-                for (var map : world.getMaps()) {
-                    map.getMarkerSets().put("bnbnav-country", countrySet);
-                    map.getMarkerSets().put("bnbnav-city", citySet);
-                }
-            }, () -> {
-                plugin.getLogger().warning("No world called \"world\"");
-            });
         });
     }
 }

@@ -14,7 +14,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 public class EventListener implements Listener {
-    private BnbnavPlugin plugin;
+    private final BnbnavPlugin plugin;
     UnirestInstance unirest;
 
     EventListener(BnbnavPlugin plugin, UnirestInstance unirest) {
@@ -29,7 +29,7 @@ public class EventListener implements Listener {
 
         unirest.delete("/player/{player}")
                 .routeParam("player", quitEvent.getPlayer().getName())
-                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
+                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null, true))
                 .contentType("application/json")
                 .body(body)
                 .asEmptyAsync();
@@ -42,7 +42,7 @@ public class EventListener implements Listener {
 
         unirest.post("/player/{player}/join")
                 .routeParam("player", joinEvent.getPlayer().getName())
-                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
+                .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null, true))
                 .contentType("application/json")
                 .body(body)
                 .asEmptyAsync();
@@ -58,13 +58,13 @@ public class EventListener implements Listener {
             if (discordId == null) {
                 root.add("discordId", JsonNull.INSTANCE);
             } else {
-                root.addProperty("discordId", discordId + "");
+                root.addProperty("discordId", discordId);
             }
             root.addProperty("message", chatEvent.getMessage());
 
             unirest.post("/chat/{player}")
                     .routeParam("player", chatEvent.getPlayer().getName())
-                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null))
+                    .header("Authorization", "Bearer " + JwtProvisioning.JwtFor(null, true))
                     .contentType("application/json")
                     .body(gson.toJson(root))
                     .asEmptyAsync();
