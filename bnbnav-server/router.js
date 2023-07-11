@@ -7,7 +7,13 @@ const compression = require("compression");
 const Mutex = require("async-mutex").Mutex;
 let router = express.Router();
 
+const SERVER_API_VERSION = 2;
+
 const mutex = new Mutex();
+
+function isSameWorld(world1, world2) {
+    return world1 === world2;
+}
 
 router.use(express.json({
 
@@ -31,7 +37,8 @@ router.get("/data/labels", async (req, res) => {
             id: k,
             x: node.x,
             y: node.y,
-            z: node.z
+            z: node.z,
+            world: node.world
         }
     });
 
@@ -41,11 +48,23 @@ router.get("/data/labels", async (req, res) => {
 router.use(async (req, res, next) => {
     if (req.originalUrl.startsWith("/data")) return next();
 
+    // Ensure that the client is using a supported version of bnbnav
+    res.set("X-Bnbnav-Api-Version", `${SERVER_API_VERSION}`);
+    const bnbnavApiVersion = req.header("X-Bnbnav-Api-Version");
+    if (!bnbnavApiVersion) {
+        return res.sendStatus(400);
+    }
+
+    const bnbnavApiVersionNumber = parseInt(bnbnavApiVersion);
+    if (bnbnavApiVersionNumber < SERVER_API_VERSION) {
+        return res.sendStatus(400);
+    }
+
     let auth = req.header("Authorization");
     if (!auth) return res.sendStatus(401);
     if (!auth.startsWith("Bearer ")) return res.sendStatus(401);
 
-    let token = auth.substr(7);
+    let token = auth.substring(7);
 
     try {
         let result = await jose.jwtVerify(token, Buffer.from(process.env["BNBNAV_JWT_TOKEN"]), {
@@ -55,7 +74,8 @@ router.use(async (req, res, next) => {
 
         req.user = {
             uuid: result.payload.sub,
-            name: result.payload.pn
+            name: result.payload.pn,
+            server: result.payload.server
         };
     } catch (error) {
         if (error.code === "ERR_JWS_SIGNATURE_VERIFICATION_FAILED" || error.code === "ERR_JWT_EXPIRED" || error.code === "ERR_JWS_INVALID") {
@@ -75,17 +95,17 @@ router.use(async (req, res, next) => {
 })
 
 router.post("/nodes/add", async (req, res, next) => {
-    if (req.user.uuid !== "bnbnav") {
+    if (!req.user.server) {
         res.sendStatus(403);
         return;
     }
 
-    if (req.body.x == null || req.body.y == null || req.body.z == null) {
+    if (req.body.x == null || req.body.y == null || req.body.z == null || req.body.world == null) {
         res.sendStatus(400);
         return;
     }
 
-    if (Object.values(db.data.nodes).find(item => item.x == req.body.x && item.y == req.body.y && item.z == req.body.z)) {
+    if (Object.values(db.data.nodes).find(item => item.x === req.body.x && item.y === req.body.y && item.z === req.body.z && isSameWorld(item.world, req.body.world))) {
         res.sendStatus(400);
         return;
     }
@@ -94,9 +114,10 @@ router.post("/nodes/add", async (req, res, next) => {
     db.data.nodes[id] = {
         x: req.body.x,
         y: req.body.y,
-        z: req.body.z
+        z: req.body.z,
+        world: req.body.world
     };
-    await db.save(`added node ${id} at ${req.body.x},${req.body.y},${req.body.z}`, req.user);
+    await db.save(`added node ${id} at ${req.body.world}:${req.body.x},${req.body.y},${req.body.z}`, req.user);
 
     ws.broadcast({
         type: "newNode",
@@ -104,6 +125,7 @@ router.post("/nodes/add", async (req, res, next) => {
         x: req.body.x,
         y: req.body.y,
         z: req.body.z,
+        world: req.body.world,
         player: req.body.player
     });
 
@@ -122,21 +144,23 @@ router.post("/nodes/:id", async (req, res, next) => {
     if (req.body.x != null) node.x = req.body.x;
     if (req.body.y != null) node.y = req.body.y;
     if (req.body.z != null) node.z = req.body.z;
+    if (req.body.world != null) node.world = req.body.world;
 
-    if (Object.values(db.data.nodes).find(item => item.x == node.x && item.y == node.y && item.z == node.z)) {
+    if (Object.values(db.data.nodes).find(item => item.x == node.x && item.y == node.y && item.z == node.z && isSameWorld(item.world, node.world))) {
         res.sendStatus(400);
         return;
     }
 
     db.data.nodes[id] = node;
-    await db.save(`updated node ${id} to ${node.x},${node.y},${node.z}`, req.user);
+    await db.save(`updated node ${id} to ${node.world}:${node.x},${node.y},${node.z}`, req.user);
 
     ws.broadcast({
         type: "nodeUpdated",
         id: id,
         x: node.x,
         y: node.y,
-        z: node.z
+        z: node.z,
+        world: node.world
     });
 
     res.sendStatus(200);

@@ -36,6 +36,14 @@ class Database {
             });
         }
 
+        this.migrate();
+    }
+
+    migrate() {
+        // Ensure the database is updated
+        for (const id of Object.keys(this.data.nodes)) {
+            if (!this.data.nodes[id].world) this.data.nodes[id].world = "world";
+        }
     }
     
     uniqueId(item) {
